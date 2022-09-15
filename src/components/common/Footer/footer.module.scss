@@ -1,0 +1,14 @@
+.footer {
+    position: fixed;
+    bottom: 0;
+    border-top: 1px solid var(--border);
+    width: 100%;
+    background-color: rgb(236, 231, 231);
+    box-shadow: 0px -2px 10px 3px rgba(0,0,0,0.18);
+}
+
+.wrap_footer {
+    display: flex;
+    padding: 14px 0;
+    justify-content: space-between;
+}

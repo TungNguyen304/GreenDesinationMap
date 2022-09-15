@@ -1,0 +1,21 @@
+
+.left {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    box-shadow: 0 2px 8px 0 rgb(0 0 0 / 16%);
+    background-color: white;
+    padding: 8px;
+    cursor: pointer;
+    user-select: none;
+    border: 1px solid var(--border);
+}
+
+.left:hover {
+    filter: brightness(0.9);
+}
+
+.left:active {
+    transform: translateY(-48%);
+}

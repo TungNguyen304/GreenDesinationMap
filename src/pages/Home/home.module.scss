@@ -1,0 +1,8 @@
+.header_virtual {
+    height: var(--height_header);
+    width: 100%;
+    position: fixed;
+    top: 20px;
+    background-color: white;
+    z-index: 1;
+}

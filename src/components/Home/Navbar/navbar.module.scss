@@ -1,0 +1,31 @@
+.navbar {
+    position: fixed;
+    top: var(--height_header);
+    width: 100%;
+    height: var(--height_navbar);
+    background-color: white;
+    z-index: 2;
+    margin-top: 20px;
+}
+
+.filter {
+    border: 1px solid var(--border);
+    &:hover {
+        box-shadow: 0 2px 4px rgba(0,0,0,0.18);
+    }
+}
+
+.navlist {
+    overflow: hidden;
+    width: calc(var(--size_nav_item)* 12);
+    transition: all 0.2;
+
+    li {
+        transition: all 0.4s ease-out;
+    }
+}
+
+.active {
+    color: var(--primary);
+    border-bottom: 2px solid var(--primary);
+}

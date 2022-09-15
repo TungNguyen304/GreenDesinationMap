@@ -1,0 +1,40 @@
+:root {
+    --primary: #1fb155;
+    --border: #DDDDDD;
+    --color_nav_item: #717171;
+    --size_nav_item: 100px;
+    --height_header: 80px;
+    --height_navbar: 80px;
+    --backgroundBlack: #000;
+    --color_heart: #FF385C;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    // font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.wrap {
+    width: 1360px;
+    margin: auto;
+}
+
+.small_wrap {
+    width: 1120px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.oneline {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+}
+
+input:checked {
+    accent-color: var(--primary);
+    cursor: pointer;
+}
