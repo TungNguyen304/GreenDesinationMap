@@ -7,7 +7,12 @@ function Top({list}) {
 
     function handleLogin() {
         value.handleDisplayBigBox()
-        value.handleSetBigBox('Đăng Nhập hoặc đăng ký', 'login')
+        value.handleSetBigBox('Đăng Nhập', 'login')
+    }
+
+    function handleRegister() {
+        value.handleDisplayBigBox()
+        value.handleSetBigBox('Đăng ký', 'register')
     }
 
     function handleNavigateInterest() {
@@ -15,7 +20,7 @@ function Top({list}) {
     }
 
     return ( <div className="py-2">
-        {list && list.map((item, index) => <div onClick={item==='Đăng nhập' || item==='Đăng ký' ? handleLogin : item==='Danh sách yêu thích' ? handleNavigateInterest : () => {}} className="px-4 py-2 hover:bg-[rgba(0,0,0,0.1)]" key={index}>{item}</div>)}
+        {list && list.map((item, index) => <div onClick={item==='Đăng nhập' ? handleLogin : item==='Đăng ký' ? handleRegister : item==='Danh sách yêu thích' ? handleNavigateInterest : () => {}} className="px-4 py-2 hover:bg-[rgba(0,0,0,0.1)]" key={index}>{item}</div>)}
     </div> );
 }
 

@@ -38,3 +38,7 @@ input:checked {
     accent-color: var(--primary);
     cursor: pointer;
 }
+
+input {
+    outline: none;
+}

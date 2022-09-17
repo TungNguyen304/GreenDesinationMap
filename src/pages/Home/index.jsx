@@ -5,6 +5,7 @@ import { setshowdisplay } from "../../store/actions/bigbox";
 import { setshowhidden } from "../../store/actions/bigbox";
 import Header from "../../components/common/Header";
 import Footer from "../../components/common/Footer";
+import Map from "../../components/common/Map";
 import Navbar from "../../components/Home/Navbar";
 import Service from "../../components/Home/Service";
 import BigBox from "../../components/Home/BigBox";
@@ -22,6 +23,7 @@ function Home() {
     const show = useSelector(state => state.bigboxReducer.show)
     const [title, setTitle] = useState('')
     const [type, setType] = useState('')
+    const [subPage, setSubPage] = useState('map')
     function handleDisplayBigBox() {
         if(show) {
             dispatch(setshowhidden(false))
@@ -29,6 +31,11 @@ function Home() {
         else
             dispatch(setshowdisplay(true))
     }
+
+    function handleSetSubPage(type) {
+        setSubPage(type)
+    }
+
     function handleSetBigBox(title, type) {
         setTitle(title)
         setType(type)
@@ -47,10 +54,10 @@ function Home() {
             {show && <div>
                 <BigBox title={title} type={type} handleDisplayBigBox={handleDisplayBigBox}/>
             </div>}
-            <Service typeService={typeService}/>
+            {subPage === "map" ? <Map/> : <Service typeService={typeService}/>}
             <div className="h-10">
             </div>
-            <ButtonMap/>
+            <ButtonMap handleSetSubPage={handleSetSubPage} content={subPage === "map" ? "Hiện danh sách" : "Hiện bản đồ"} type={subPage}/>
             <Footer/>
         </bigBoxContext.Provider>
     </div> );
