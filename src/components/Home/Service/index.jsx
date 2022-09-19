@@ -36,7 +36,7 @@ function Service({typeService}) {
             <div className="wrap">
                 <Suspense fallback={<Loader/>}>
                     <div className="grid grid-cols-4 mx-[-13px]">
-                        {services.map(item => {
+                        {services && services.map(item => {
                             if(typeService ==='noibat') {
                                 return <ServiceItem serviceItem={item} key={item.id} typeService={item.type} name={item.name} phone={item.phone} star={item.star} address={item.address} img={item.images}/>
                             }

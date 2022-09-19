@@ -13,8 +13,23 @@ body {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    scroll-behavior: smooth;
+    &::-webkit-scrollbar-track {
+        box-shadow: inset 0 0 5px grey; 
+    }
+    &::-webkit-scrollbar {
+        background: rgb(202, 198, 198);
+        width: 13px;
+        border-radius: 15px;
+    }
+    &::-webkit-scrollbar-thumb {
+        background: green;
+        border-radius: 10px;
+    }
     // font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
+
+
 
 .wrap {
     width: 1360px;

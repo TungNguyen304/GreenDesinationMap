@@ -95,13 +95,13 @@ const initState = {
 const serviceReducer = (state=initState, action) => {
     switch(action.type) {
         case 'SET_SERVICETYPE': 
-            {
-                const newType = action.payload
-                return {
-                    ...state,
-                    serviceType: newType
-                }
+        {
+            const newType = action.payload
+            return {
+                ...state,
+                serviceType: newType
             }
+        }
         case 'SET_SERVICE': 
         {
             const service = action.payload

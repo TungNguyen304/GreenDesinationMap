@@ -1,15 +1,113 @@
 import {BiSearch} from 'react-icons/bi'
-
+import {BsSearch} from 'react-icons/bs'
+import React, { useEffect, useState } from "react";
+import OutlinedInput from "@material-ui/core/OutlinedInput";
+import Button from "@material-ui/core/Button";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
+import Divider from "@material-ui/core/Divider";
+import { useRef } from 'react';
 import style from './searchbar.module.scss'
 import classNames from 'classnames/bind';
 const cx = classNames.bind(style)
 
-function SearchBar({hidden}) {
-    return ( <div className={`flex-1 ${cx('search_bar')} ${hidden!==''? hidden : 'flex'}`}>
-        <input style={{'paddingBottom': '2px'}} className='flex-1 mx-4 outline-none text-sm font-medium' type="text" placeholder='Bắt đầu tìm kiếm'/>
-        <div className='active:scale-[0.9] select-none'>
-            <BiSearch className='text-white'/>
+const NOMINATIM_BASE_URL = "https://nominatim.openstreetmap.org/search?";
+
+function SearchBar({hidden, ...props}) {
+    const { setSelectPosition, positionList } = props;
+    const [searchText, setSearchText] = useState("");
+    const [listPlace, setListPlace] = useState([]);
+    const recomment = useRef()
+    function removeClass() {
+        recomment.current && recomment.current.classList.add('hidden')
+        window.removeEventListener('click', removeClass)
+    }
+    function handleDisplayTippy(even) {
+        const newArr = [...recomment.current.classList]
+        if(newArr.includes('hidden')) {
+            recomment.current && recomment.current.classList.remove('hidden')
+            even.stopPropagation();
+            window.addEventListener('click', removeClass)
+        }
+    }
+
+    return ( <div style={{ display: "flex", position: "relative", flexDirection: "column"}}>
+      <div style={{ display: "flex", justifyContent: "space-between", borderRadius: "50px", padding: "8px 10px 8px 20px", height: "100%", border: "1px solid var(--border)"}}>
+        <div className='w-[400px]'>
+          <input
+            className='placeholder:italic'
+            placeholder='Tìm kiếm ở đây ...'
+            style={{ width: "100%",height: "100%"}}
+            value={searchText}
+            onChange={(event) => {
+              setSearchText(event.target.value);
+            }}
+          />
         </div>
+        <div
+          style={{ display: "flex", alignItems: "center", borderRadius: "100%", overflow: "hidden", width: "38px"}}
+        >
+          <button
+            variant="contained"
+            style={{backgroundColor: "var(--primary)", padding: '6px'}}
+            className='h-full rounded-full w-full flex justify-center items-center hover:opacity-90 active:scale-[0.9]'
+            onClick={(e) => {
+              // Search
+              searchText && handleDisplayTippy(e)
+              const params = {
+                q: searchText,
+                format: "json",
+                addressdetails: 1,
+                polygon_geojson: 0,
+              };
+              const queryString = new URLSearchParams(params).toString();
+              const requestOptions = {
+                method: "GET",
+                redirect: "follow",
+              };
+              fetch(`${NOMINATIM_BASE_URL}${queryString}`, requestOptions)
+                .then((response) => response.text())
+                .then((result) => {
+                  console.log(JSON.parse(result));
+                  setListPlace(JSON.parse(result));
+                })
+                .catch((err) => console.log("err: ", err));
+            }}
+          >
+              <BiSearch className='text-white w-full font-bold text-2xl flex justify-center'/>
+          </button>
+        </div>
+      </div>
+      <div ref={recomment} className='bg-white hidden absolute top-[130%] w-[150%] left-[-25%] h-[60vh] overflow-scroll border border-solid border-normal rounded-2xl'>
+        <List className='h-full' component="nav" aria-label="main mailbox folders">
+          {listPlace && listPlace.length ? listPlace.map((item) => {
+            return (
+              <div key={item?.place_id}>
+                <ListItem
+                  button
+                  onClick={() => {
+                    console.log(item);
+                    recomment.current.classList.add("hidden")
+                    setSelectPosition(item);
+                  }}
+                >
+                  <ListItemIcon>
+                    <img
+                      src={positionList.some((element) => element.id === item.place_id) ? "https://png.pngtree.com/png-clipart/20220530/original/pngtree-drop-in-house-location-icon-png-image_7769293.png" : "https://png.pngtree.com/png-vector/20220706/ourmid/pngtree-vector-location-icon-free-and-png-png-image_5708678.png"}
+                      alt="Placeholder"
+                      style={{ width: 38, height: 38 }}
+                    />
+                  </ListItemIcon>
+                  <ListItemText primary={item?.display_name} />
+                </ListItem>
+                <Divider />
+              </div>
+            );
+          }) : <div className='h-full flex justify-center items-center'>Không tìm thấy kết quả tìm kiếm</div>}
+        </List>
+      </div>
     </div>);
 }
 

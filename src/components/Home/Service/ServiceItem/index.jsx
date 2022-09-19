@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import { setService } from '../../../../store/actions/service'
 import { useValueContext } from '../../../../hook'
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import Left from '../../../common/Left'
 import Right from '../../../common/Right'
 import ServiceSlide from "../ServiceSlide";
@@ -20,6 +21,7 @@ function ServiceItem({img, name, phone, address, star, typeService, serviceItem}
     const left = useRef()
     const right = useRef()
     const navigate = useNavigate()
+    const homePage = useSelector(state => state.homePageReducer.type)
     let imgList
 
     useEffect(() => {
@@ -101,8 +103,8 @@ function ServiceItem({img, name, phone, address, star, typeService, serviceItem}
     }
 
 
-    return ( <div onMouseOver={handelDisplay} onMouseLeave={handelHidden} onClick={handleNavigateToRoom} className={`${cx('service_item')} cursor-pointer`}>
-        <div className="relative mb-3">
+    return ( <div onMouseOver={handelDisplay} onMouseLeave={handelHidden} onClick={handleNavigateToRoom} className={`${cx('service_item')} ${homePage === "map" ? "hover:scale-1 w-[90%]" : "hover:scale-[1.01]"} cursor-pointer`}>
+        <div className={`relative mb-3 flex justify-center`}>
             <ServiceSlide ref={imgRef} img={img}/>
             <BsHeartFill style={{'fill': 'rgba(0, 0, 0, 0.6)', 'stroke': 'white', 'strokeWidth': '1px'}} onClick={(e) => handleLike(e)} className={`absolute text-base w-[30px] h-[24px] top-3 right-3 select-none active:scale-[0.8]`}/>
             <Left ref={left} className={hidden && 'hidden'}/>

@@ -10,7 +10,7 @@ import style from './header.module.scss'
 import classNames from 'classnames/bind';
 const cx = classNames.bind(style)
 
-function Header() {
+function Header(props) {
     let topList = ['Đăng nhập', 'Đăng ký']
     let bottomList1 = ['Cung cấp dịch vụ', 'Tổ chức trải nghiệm', 'Trợ giúp']
     let bottomList2
@@ -39,7 +39,7 @@ function Header() {
             <div className='text-primary flex items-center flex-1'>
                 <a href="/"><Logo/></a>
             </div>
-            <SearchBar hidden={window.location.pathname !== '/' ? 'hidden' : ''}/>
+            <SearchBar {...props} hidden={window.location.pathname !== '/' ? 'hidden' : ''}/>
             <div className='flex justify-end items-center flex-1'>
                 <div className='p-3 text-sm font-medium rounded-full cursor-pointer hover:bg-gray-100'>Trở thành nhà cung cấp</div>
                 <div className='p-3 mr-2 rounded-full hover:bg-gray-100 cursor-pointer'><AiFillSetting/></div>

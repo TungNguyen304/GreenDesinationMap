@@ -1,23 +1,19 @@
 import Header from "../../components/common/Header";
 import Footer from "../../components/common/Footer";
+import BigBox from "../../components/Home/BigBox";
 import { useSelector } from "react-redux";
 import { AiFillStar } from 'react-icons/ai'
 import { TiHeartFullOutline, TiLocation } from 'react-icons/ti'
 import { MdVerifiedUser } from 'react-icons/md'
-
+import { useValueContext } from "../../hook";
 import style from './room.module.scss'
 import classNames from 'classnames/bind';
-import { useEffect } from "react";
 const cx = classNames.bind(style)
 
-function Room() {
+function Room({type, title}) {
+    const value = useValueContext()
     const service = JSON.parse(localStorage.getItem('service'))
-    useEffect(() => {
-        localStorage.setItem('service', JSON.stringify(service))
-        return () => {
-            localStorage.removeItem('service')
-        }
-    })
+    const show = useSelector(state => state.bigboxReducer.show)
     return ( <div className={`${cx("room")}`}>
         <Header/>
         <div className={`small_wrap my-[100px]`}>
@@ -45,7 +41,7 @@ function Room() {
             </div>
             <div className="flex h-[390px] rounded-xl overflow-hidden">
                 <div className="flex-1 h-full mr-2">
-                    <img className="h-full w-full" src={service.images[0]} alt="" />
+                    <img className="h-full w-full" src={service && service.images[0]} alt="" />
                 </div>
                 <div className="flex-1 flex flex-col h-full">
                     <div className="flex-1 flex h-[50%] mb-2">
@@ -66,19 +62,49 @@ function Room() {
                     </div>
                 </div>
             </div>
-            <div className="w-[50%]">
-                <div className="flex justify-between items-center mt-9">
-                    <div className="text-2xl font-semibold mb-3">
-                        <span>Người đăng ký: {service.host}</span>
+            
+            <div className="flex mt-9 mx-[-20px]">
+                <div className="w-[50%] px-5">
+                    <div className="flex justify-between items-center">
+                        <div className="text-2xl font-semibold mb-3">
+                            <span>Người đăng ký: {service.host}</span>
+                        </div>
+                        <div>
+                            <div className="inline-block rounded-full overflow-hidden">
+                                <img className="w-[56px] h-[56px] " src="https://a0.muscache.com/im/pictures/user/237512e2-5c40-40e9-86de-6a7c84e6882b.jpg?im_w=240" alt="" />
+                            </div>
+                        </div>
                     </div>
-                    <div>
-                        <img className="w-[56px] h-[56px] rounded-full" src="https://a0.muscache.com/im/pictures/user/237512e2-5c40-40e9-86de-6a7c84e6882b.jpg?im_w=240" alt="" />
+                    <div className="border-b border-solid border-normal pb-6">
+                        {service.description}
                     </div>
                 </div>
-                <div className="border-b border-solid border-normal pb-6">
-                    {service.description}
+
+
+                <div className="w-[50%] px-5">
+                    <div>
+                        <div className="flex items-center mb-6">
+                            <div className="mr-5 text-xl font-semibold italic">Tùng Nguyễn</div>
+                            <div>
+                                <img className="w-[56px] h-[56px] rounded-full" src="https://scontent.fdad3-6.fna.fbcdn.net/v/t39.30808-6/277776849_113191581360624_2792228990289081119_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=i7xLQGNzYNwAX_dsghq&_nc_ht=scontent.fdad3-6.fna&oh=00_AT_-bbgNThyCjvfwIyh4bnI6TmnB1-6rDkx0-6pr8WPPAg&oe=632B96F2" alt="" />
+                            </div>
+                        </div>
+                        <div>
+                            <div><label htmlFor="comment" className="text-[#5c5959] text-start">Nhận xét của bạn</label></div>
+                            <div className="flex justify-between items-center w-full">
+                                <textarea id="comment" type="text" placeholder="Comment ..." className="outline-none mr-5 py-2 px-4 flex-1 border border-solid border-normal placeholder:italic" />
+                                <div className="flex flex-col">
+                                    <button style={{'backgroundColor': 'var(--primary)', "backgroundImage": "linear-gradient(to right, #07D5DF, #7F6DEF, #F408FE)"}} className="hover:brightness-90 active:scale-[0.98] text-white py-2 px-4 rounded-full italic mb-3">Gửi đi</button>
+                                    <button style={{'backgroundColor': 'var(--primary)', "backgroundImage": "linear-gradient(to right, #07D5DF, #7F6DEF, #F408FE)"}} className="hover:brightness-90 active:scale-[0.98] text-white py-2 px-4 rounded-full italic">Đến trang đánh giá</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
                 </div>
             </div>
+
+
             <div className="mt-6">
                 <div className="flex items-center">
                     <div className="mr-5">
@@ -101,6 +127,9 @@ function Room() {
                 </div>
             </div>
         </div>
+        {show && <div>
+                <BigBox title={title} type={type} handleDisplayBigBox={value.handleDisplayBigBox}/>
+        </div>}
         <Footer/>
     </div> );
 }

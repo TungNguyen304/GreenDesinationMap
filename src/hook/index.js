@@ -1,4 +1,4 @@
-import { bigBoxContext } from "../pages/Home"
+import { bigBoxContext } from "../App"
 import { useContext } from "react"
 
 export const useValueContext = () => {
