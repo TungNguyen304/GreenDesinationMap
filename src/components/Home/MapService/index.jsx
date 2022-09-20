@@ -42,16 +42,16 @@ function MapService(props) {
         })()
     }, [])
     return ( <div className={`${cx('map_service')}`}>
-        <div className="wrap h-[70vh]">
+        <div className="wrap h-[67vh]">
             <div className="grid grid-cols-4 h-full">
                 <Suspense fallback={<Loader/>}>
-                    <div className={`h-full mt-3 ${cx('wrap_list')}`}>
-                        <div className='flex flex-col items-center'>
+                    <div className={`h-full ${cx('wrap_list')}`}>
+                        <div className='flex flex-col items-center mt-[10px]'>
                             {serviceList && serviceList.map((item, index) => {
                                 if(props.typeService === "noibat") {
                                     return <ServiceItem key={index} img={item.images} name={item.name} phone={item.phone} address={item.address} star={item.star} typeService={item.type} serviceItem={item}/>
                                 }
-                                else if(props.typeService == item.type) {
+                                else if(props.typeService === item.type) {
                                     return <ServiceItem key={index} img={item.images} name={item.name} phone={item.phone} address={item.address} star={item.star} typeService={item.type} serviceItem={item}/>
                                 }
                             })}

@@ -27,7 +27,6 @@ function Home({type, title}) {
     
     const homePage = useSelector(state => state.homePageReducer.type)
 
-
     const [selectPosition, setSelectPosition] = useState(null);
     const [positionList, setPositionList] = useState()
 

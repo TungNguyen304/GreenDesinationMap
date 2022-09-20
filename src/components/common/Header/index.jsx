@@ -5,6 +5,7 @@ import {AiFillSetting} from 'react-icons/ai'
 import {IoMenuOutline} from 'react-icons/io5'
 import Tippy from '../Tippy';
 import { useRef } from 'react';
+import { Link } from 'react-router-dom';
 import Avt2 from '../../../assets/images/user_picuiaysdduiasydh232739sadhajksdhjh-50x50.png'
 import style from './header.module.scss'
 import classNames from 'classnames/bind';
@@ -41,7 +42,9 @@ function Header(props) {
             </div>
             <SearchBar {...props} hidden={window.location.pathname !== '/' ? 'hidden' : ''}/>
             <div className='flex justify-end items-center flex-1'>
-                <div className='p-3 text-sm font-medium rounded-full cursor-pointer hover:bg-gray-100'>Trở thành nhà cung cấp</div>
+                <div className='text-sm font-medium rounded-full cursor-pointer hover:bg-gray-100'>
+                    <Link className='block p-3' to={window.location.pathname.includes('host') ? '/' : '/host'}>{window.location.pathname.includes('host') ? 'Trở thành người dùng' : 'Trở thành nhà cung cấp'}</Link>
+                </div>
                 <div className='p-3 mr-2 rounded-full hover:bg-gray-100 cursor-pointer'><AiFillSetting/></div>
                 <div onClick={(e) => handleDisplayTippy(e)} className={`flex justify-between relative items-center select-none cursor-pointer ${cx('avt')}`}>
                     <div ><IoMenuOutline/></div>

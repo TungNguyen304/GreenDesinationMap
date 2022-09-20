@@ -1,11 +1,11 @@
 .map_service {
-    margin-top: calc(var(--height_header) + var(--height_navbar) + 10px);
+    margin-top: calc(var(--height_header) + var(--height_navbar) + 30px);
     // min-height: 100vh;
     z-index: -1;
 }
 
 .wrap_list {
-    overflow: scroll;
+    overflow-y: scroll;
     margin-right: 20px;
     scroll-behavior: smooth;
     &::-webkit-scrollbar-track {

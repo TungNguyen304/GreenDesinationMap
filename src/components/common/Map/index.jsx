@@ -53,14 +53,14 @@ export default function Maps(props) {
   const locationSelection = [selectPosition?.lat, selectPosition?.lon];
   return (
     <MapContainer
-      className="z-0"
+      className="z-0 rounded-lg"
       center={position}
       zoom={12}
       style={{ width: "100%", height: "100%" }}
     >
       <TileLayer
         attribution='<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>'
-        url="https://api.maptiler.com/maps/basic-v2/256/{z}/{x}/{y}.png?key=Xx2LVdpWdk1UyVYRKzN0"
+        url="https://tile.thunderforest.com/cycle/{z}/{x}/{y}.png?apikey=dc7b1a0cad224960856bf063075338d8"
       />
 
       {selectPosition && positionList.every((item) => item.id !== selectPosition.place_id) ? (
