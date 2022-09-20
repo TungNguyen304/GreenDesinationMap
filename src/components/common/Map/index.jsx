@@ -60,7 +60,7 @@ export default function Maps(props) {
     >
       <TileLayer
         attribution='<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>'
-        url="https://tile.thunderforest.com/cycle/{z}/{x}/{y}.png?apikey=dc7b1a0cad224960856bf063075338d8"
+        url="https://api.maptiler.com/maps/bright/256/{z}/{x}/{y}.png?key=Xx2LVdpWdk1UyVYRKzN0"
       />
 
       {selectPosition && positionList.every((item) => item.id !== selectPosition.place_id) ? (
