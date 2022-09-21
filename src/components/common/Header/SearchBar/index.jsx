@@ -1,9 +1,7 @@
 import {BiSearch} from 'react-icons/bi'
-import {BsSearch} from 'react-icons/bs'
 import React, { useEffect, useState } from "react";
-import OutlinedInput from "@material-ui/core/OutlinedInput";
-import Button from "@material-ui/core/Button";
 import List from "@material-ui/core/List";
+import serviceApi from '../../../../api/serviceApi';
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
@@ -16,7 +14,14 @@ const cx = classNames.bind(style)
 const NOMINATIM_BASE_URL = "https://nominatim.openstreetmap.org/search?";
 
 function SearchBar({hidden, ...props}) {
-    const { setSelectPosition, positionList } = props;
+    const { setSelectPosition } = props;
+    const [positionList, setPositionList] = useState()
+    useEffect(() => {
+      (async() => {
+          const data = await serviceApi.getAll()
+          setPositionList(data.data)
+      })()
+  }, [])
     const [searchText, setSearchText] = useState("");
     const [listPlace, setListPlace] = useState([]);
     const recomment = useRef()

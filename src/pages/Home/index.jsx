@@ -1,4 +1,3 @@
-
 import { useSelector } from 'react-redux';
 import { useDispatch } from "react-redux";
 import { useValueContext } from '../../hook';
@@ -11,10 +10,8 @@ import Service from "../../components/Home/Service";
 import BigBox from "../../components/Home/BigBox";
 import ButtonMap from "../../components/common/ButtonMap";
 import { useState } from "react";
-import greenLocationApi from "../../api/greenLocationApi"
 import style from './home.module.scss'
 import classNames from 'classnames/bind';
-import { useEffect } from "react";
 const cx = classNames.bind(style)
 
 
@@ -28,14 +25,8 @@ function Home({type, title}) {
     const homePage = useSelector(state => state.homePageReducer.type)
 
     const [selectPosition, setSelectPosition] = useState(null);
-    const [positionList, setPositionList] = useState()
 
-    useEffect(() => {
-        (async() => {
-            const data = await greenLocationApi.getAll()
-            setPositionList(data.data)
-          })()
-    }, [])
+    
     function handleSetSubPage() {
         if(homePage === 'map')
             dispatch(setHomePage('list'))
@@ -46,13 +37,13 @@ function Home({type, title}) {
     
     return ( <div>
         <div>
-            <Header selectPosition={selectPosition} setSelectPosition={setSelectPosition} positionList={positionList}/>
+            <Header selectPosition={selectPosition} setSelectPosition={setSelectPosition}/>
             <div className={`${cx('header_virtual')}`}></div>
             <Navbar handleDisplayBigBox={handleDisplayBigBox} handleSetBigBox={handleSetBigBox}/>
             {show && <div>
                 <BigBox title={title} type={type} handleDisplayBigBox={handleDisplayBigBox}/>
             </div>}
-            {homePage === "map" ? <MapService selectPosition={selectPosition} setSelectPosition={setSelectPosition} positionList={positionList} typeService={typeService}/> : <Service typeService={typeService}/>}
+            {homePage === "map" ? <MapService selectPosition={selectPosition} setSelectPosition={setSelectPosition} typeService={typeService}/> : <Service typeService={typeService}/>}
             <div className="h-10">
             </div>
             <ButtonMap handleSetSubPage={handleSetSubPage} content={homePage === "map" ? "Hiện danh sách" : "Hiện bản đồ"} type={homePage}/>

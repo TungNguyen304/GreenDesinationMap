@@ -25,7 +25,7 @@ function MapService(props) {
     useEffect(() => {
         setTimeout(() => {
             serviceListElement = document.querySelector(`.${style.wrap_list}`)
-            serviceListElement.scrollTo({
+            serviceListElement && serviceListElement.scrollTo({
                 top: 0,
                 behavior: 'smooth'
             })
@@ -59,7 +59,7 @@ function MapService(props) {
                     </div>
                 </Suspense>
                 <div className="col-span-3">
-                    <Map default={true} {...props}/>
+                    <Map default={true} positionList={serviceList} {...props}/>
                 </div>
             </div>
         </div>

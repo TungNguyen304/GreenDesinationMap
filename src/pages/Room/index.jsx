@@ -1,16 +1,29 @@
 import Header from "../../components/common/Header";
 import Footer from "../../components/common/Footer";
 import BigBox from "../../components/Home/BigBox";
+import Map from '../../components/common/Map'
+import Comment from "./Comment";
 import { useSelector } from "react-redux";
+import {GrStar} from 'react-icons/gr'
 import { AiFillStar } from 'react-icons/ai'
 import { TiHeartFullOutline, TiLocation } from 'react-icons/ti'
 import { MdVerifiedUser } from 'react-icons/md'
 import { useValueContext } from "../../hook";
+import Scroll from 'react-scroll'
 import style from './room.module.scss'
 import classNames from 'classnames/bind';
+import { useEffect } from "react";
 const cx = classNames.bind(style)
 
 function Room({type, title}) {
+    const arr = [1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9]
+    useEffect(() => {
+        var scroll = Scroll.animateScroll;
+        scroll.scrollToTop({
+            duration: 500,
+            smooth: true
+        });
+    })
     const value = useValueContext()
     const service = JSON.parse(localStorage.getItem('service'))
     const show = useSelector(state => state.bigboxReducer.show)
@@ -20,6 +33,7 @@ function Room({type, title}) {
             <div className="text-2xl font-semibold">
                 {service.name}
             </div>
+
             <div className="flex justify-between cursor-pointer mt-3 mb-5">
                 <div className="flex">
                     <div className="flex items-center mr-5">
@@ -39,32 +53,33 @@ function Room({type, title}) {
                     <span>Lưu</span>
                 </div>
             </div>
+
             <div className="flex h-[390px] rounded-xl overflow-hidden">
                 <div className="flex-1 h-full mr-2">
-                    <img className="h-full w-full" src={service && service.images[0]} alt="" />
+                    <img className="h-full w-full hover:brightness-[0.8] cursor-pointer" src={service && service.images[0]} alt="" />
                 </div>
                 <div className="flex-1 flex flex-col h-full">
                     <div className="flex-1 flex h-[50%] mb-2">
                         <div className="flex-1 h-full mr-2">
-                            <img className="h-full w-full" src={service.images[1]} alt="" />
+                            <img className="h-full w-full hover:brightness-[0.8] cursor-pointer" src={service.images[1]} alt="" />
                         </div>
                         <div className="flex-1">
-                            <img className="h-full w-full" src={service.images[2]} alt="" />
+                            <img className="h-full w-full hover:brightness-[0.8] cursor-pointer" src={service.images[2]} alt="" />
                         </div>
                     </div>
                     <div className="flex-1 flex h-50%">
                         <div className="flex-1 h-full mr-2">
-                            <img className="h-full w-full" src={service.images[3]} alt="" />
+                            <img className="h-full w-full hover:brightness-[0.8] cursor-pointer" src={service.images[3]} alt="" />
                         </div>
                         <div className="flex-1">
-                            <img className="h-full w-full" src={service.images[4]} alt="" />
+                            <img className="h-full w-full hover:brightness-[0.8] cursor-pointer" src={service.images[4]} alt="" />
                         </div>
                     </div>
                 </div>
             </div>
             
-            <div className="flex mt-9 mx-[-20px]">
-                <div className="w-[50%] px-5">
+            <div className="flex mt-9">
+                <div className="w-[50%] border-t border-solid border-normal pt-6">
                     <div className="flex justify-between items-center">
                         <div className="text-2xl font-semibold mb-3">
                             <span>Người đăng ký: {service.host}</span>
@@ -75,13 +90,37 @@ function Room({type, title}) {
                             </div>
                         </div>
                     </div>
-                    <div className="border-b border-solid border-normal pb-6">
+                    <div className=" pb-6">
                         {service.description}
                     </div>
                 </div>
 
 
-                <div className="w-[50%] px-5">
+                <div className="w-[50%]"></div>
+            </div>
+
+            <div className={`${cx('comment')} mt-6 border-t border-solid border-normal pt-9`}>
+                <div className="flex items-center text-2xl mb-4">
+                    <div className="flex items-center">
+                        <GrStar/>
+                        {service.star}
+                    </div>
+                    <div className="px-3"> - </div>
+                    <div>{arr.length} Đánh giá</div>
+                </div>
+                <div className="mb-5">
+                    <div className="grid grid-cols-2">
+                        {arr.map((item, index) => {
+                            if(index<6) {
+                                return <Comment name="Tyra" date="tháng 9 năm 2022"/>
+                            }
+                        })}
+                    </div>
+                    {arr.length >= 6 && <div className="border border-solid border-black rounded-xl inline-block py-3 px-5 cursor-pointer hover:bg-slate-100 active:scale-[0.98] font-semibold">
+                        Hiển thị tất cả {arr.length} đánh giá
+                    </div>}
+                </div>
+                <div className={`w-[50%]`}>
                     <div>
                         <div className="flex items-center mb-6">
                             <div className="mr-5 text-xl font-semibold italic">Tùng Nguyễn</div>
@@ -92,18 +131,20 @@ function Room({type, title}) {
                         <div>
                             <div><label htmlFor="comment" className="text-[#5c5959] text-start">Nhận xét của bạn</label></div>
                             <div className="flex justify-between items-center w-full">
-                                <textarea id="comment" type="text" placeholder="Comment ..." className="outline-none mr-5 py-2 px-4 flex-1 border border-solid border-normal placeholder:italic" />
+                                <textarea id="comment" type="text" placeholder="Comment ..." className="outline-none mr-5 py-3 px-4 flex-1 border border-solid border-normal placeholder:italic" />
                                 <div className="flex flex-col">
                                     <button style={{'backgroundColor': 'var(--primary)', "backgroundImage": "linear-gradient(to right, #07D5DF, #7F6DEF, #F408FE)"}} className="hover:brightness-90 active:scale-[0.98] text-white py-2 px-4 rounded-full italic mb-3">Gửi đi</button>
-                                    <button style={{'backgroundColor': 'var(--primary)', "backgroundImage": "linear-gradient(to right, #07D5DF, #7F6DEF, #F408FE)"}} className="hover:brightness-90 active:scale-[0.98] text-white py-2 px-4 rounded-full italic">Đến trang đánh giá</button>
+                                    <button style={{'backgroundColor': 'var(--primary)', "backgroundImage": "linear-gradient(to right, #07D5DF, #7F6DEF, #F408FE)"}} className="hover:brightness-90 active:scale-[0.98] text-white py-2 px-4 rounded-full italic">Vào trang đánh giá</button>
                                 </div>
                             </div>
                         </div>
-                        
                     </div>
                 </div>
             </div>
 
+            <div className="w-full h-[70vh] mt-6">
+                <Map serviceRoom={service}/>
+            </div>
 
             <div className="mt-6">
                 <div className="flex items-center">

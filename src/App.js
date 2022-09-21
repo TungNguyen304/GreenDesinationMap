@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { setshowdisplay } from './store/actions/bigbox';
 import { setshowhidden } from './store/actions/bigbox';
-import { createContext } from "react";
+import { createContext, useEffect } from "react";
 import { useState } from 'react';
 
 
@@ -12,6 +12,10 @@ import { useState } from 'react';
 export const bigBoxContext = createContext()
 
 function App() {
+  useEffect(() => {
+    window.scroll(0, 0)
+  })
+  
   const dispatch = useDispatch()
   const show = useSelector(state => state.bigboxReducer.show)
   const [title, setTitle] = useState('')
