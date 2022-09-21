@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { MapContainer, Marker, Popup, TileLayer, useMap } from "react-leaflet";
+import { useSelector } from "react-redux";
 import green from '../../../greenIcon.svg'
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
@@ -30,7 +31,7 @@ const position = [16.055267597927582, 108.06918916070053];
 
 
 function ResetCenterView(props) {
-  const { selectPosition } = props;
+  const { selectPosition, serviceRoom } = props;
   const map = useMap()
 
   useEffect(() => {
@@ -42,20 +43,32 @@ function ResetCenterView(props) {
           animate: true
         }
       )
-    }})
+    }
+    else if(serviceRoom) {
+      map.setView(
+        L.latLng(serviceRoom?.lat, serviceRoom?.lon),
+        map.getZoom(),
+        {
+          animate: true
+        }
+      )
+    }
+  })
   return null;
 }
 
 
 
 export default function Maps(props) {
-  const { selectPosition, positionList } = props;
+  const serviceType = useSelector(state => state.serviceReducer.serviceType)
+  const { selectPosition, positionList, serviceRoom } = props;
   const locationSelection = [selectPosition?.lat, selectPosition?.lon];
+  const locationServiceRoom = [serviceRoom?.lat, serviceRoom?.lon];
   return (
     <MapContainer
       className="z-0 rounded-lg"
       center={position}
-      zoom={12}
+      zoom={window.location.pathname === 'room' ? 10 : 12}
       style={{ width: "100%", height: "100%" }}
     >
       <TileLayer
@@ -63,7 +76,7 @@ export default function Maps(props) {
         url="https://api.maptiler.com/maps/bright/256/{z}/{x}/{y}.png?key=Xx2LVdpWdk1UyVYRKzN0"
       />
 
-      {selectPosition && positionList.every((item) => item.id !== selectPosition.place_id) ? (
+      {selectPosition && (positionList && positionList.every((item) => item.id !== selectPosition.place_id)) ? (
         <Marker position={locationSelection} icon={icon}>
           <Popup>
             <div>Hello</div>
@@ -71,19 +84,39 @@ export default function Maps(props) {
         </Marker>
       ) : <></> }
 
+      {serviceRoom && (
+        <Marker position={locationServiceRoom} icon={greenIcon2}>
+          <Popup>
+            <div>Hello</div>
+          </Popup>
+        </Marker>
+      )}
+
       {positionList && (
         positionList.map((item, index) => {
-          return (
-            <Marker key={index} position={item} icon={selectPosition && item.id === selectPosition.place_id ? greenIcon2 : greenIcon}>
-              <Popup>
-                <div>Hello</div>
-            </Popup>
-            </Marker>
-          )
+          if(serviceType === 'noibat')
+          {
+            return (
+              <Marker key={index} position={item} icon={selectPosition && item.id === selectPosition.place_id ? greenIcon2 : greenIcon}>
+                <Popup>
+                  <div>Hello</div>
+              </Popup>
+              </Marker>
+            )
+          }
+          else if(serviceType === item.type) {
+            return (
+              <Marker key={index} position={item} icon={selectPosition && item.id === selectPosition.place_id ? greenIcon2 : greenIcon}>
+                <Popup>
+                  <div>Hello</div>
+              </Popup>
+              </Marker>
+            )
+          }
         })
       )}
 
-      <ResetCenterView selectPosition={selectPosition} />
+      <ResetCenterView selectPosition={selectPosition} serviceRoom={serviceRoom} />
     </MapContainer>
   );
 }
