@@ -1,12 +1,12 @@
 import {ReactComponent as Logo} from '../../../assets/logo/logo.svg'
 import Avt from '../../../assets/logo/avt.svg'
+import Avt2 from '../../../assets/images/user_picuiaysdduiasydh232739sadhajksdhjh-50x50.png'
 import SearchBar from './SearchBar';
 import {AiFillSetting} from 'react-icons/ai'
 import {IoMenuOutline} from 'react-icons/io5'
 import Tippy from '../Tippy';
 import { useRef } from 'react';
 import { Link } from 'react-router-dom';
-import Avt2 from '../../../assets/images/user_picuiaysdduiasydh232739sadhajksdhjh-50x50.png'
 import style from './header.module.scss'
 import classNames from 'classnames/bind';
 const cx = classNames.bind(style)
@@ -14,8 +14,9 @@ const cx = classNames.bind(style)
 function Header(props) {
     let topList = ['Đăng nhập', 'Đăng ký']
     let bottomList1 = ['Cung cấp dịch vụ', 'Tổ chức trải nghiệm', 'Trợ giúp']
+    var account = JSON.parse(localStorage.getItem('account'))
     let bottomList2
-    if(localStorage.getItem('phone')) {
+    if(localStorage.getItem('account')) {
         topList = ['Tin nhắn', 'Thông báo', 'Danh sách yêu thích']
         bottomList1 = ['Tổ chức trải nghiệm', 'Giới thiệu chủ nhà']
         bottomList2 = ['Tài khoản', 'Trợ giúp', 'Đăng xuất']
@@ -49,7 +50,7 @@ function Header(props) {
                 <div onClick={(e) => handleDisplayTippy(e)} className={`flex justify-between relative items-center select-none cursor-pointer ${cx('avt')}`}>
                     <div ><IoMenuOutline/></div>
                     <div className='w-7 rounded-full overflow-hidden h-7 ml-3'>
-                        <img src={localStorage.getItem('phone') ? Avt2 : Avt} alt="" />
+                        <img src={account && account.image!=="" ? account.image : account ? Avt2 : Avt} alt="" />
                     </div>
                     <div ref={tippyRef} onClick={(e) => {e.stopPropagation()}} className={`${'tippy'} hidden`}>
                         <Tippy topList={topList} bottomList1={bottomList1} bottomList2={bottomList2}/>

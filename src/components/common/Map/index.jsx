@@ -76,7 +76,7 @@ export default function Maps(props) {
         url="https://api.maptiler.com/maps/bright/256/{z}/{x}/{y}.png?key=Xx2LVdpWdk1UyVYRKzN0"
       />
 
-      {selectPosition && (positionList && positionList.every((item) => item.id !== selectPosition.place_id)) ? (
+      {selectPosition && (positionList && positionList.every((item) => item.mapid !== selectPosition.place_id)) ? (
         <Marker position={locationSelection} icon={icon}>
           <Popup>
             <div>Hello</div>
@@ -97,7 +97,7 @@ export default function Maps(props) {
           if(serviceType === 'noibat')
           {
             return (
-              <Marker key={index} position={item} icon={selectPosition && item.id === selectPosition.place_id ? greenIcon2 : greenIcon}>
+              <Marker key={index} position={item} icon={selectPosition && item.mapid === selectPosition.place_id ? greenIcon2 : greenIcon}>
                 <Popup>
                   <div>Hello</div>
               </Popup>
@@ -106,7 +106,7 @@ export default function Maps(props) {
           }
           else if(serviceType === item.type) {
             return (
-              <Marker key={index} position={item} icon={selectPosition && item.id === selectPosition.place_id ? greenIcon2 : greenIcon}>
+              <Marker key={index} position={item} icon={selectPosition && item.mapid === selectPosition.place_id ? greenIcon2 : greenIcon}>
                 <Popup>
                   <div>Hello</div>
               </Popup>

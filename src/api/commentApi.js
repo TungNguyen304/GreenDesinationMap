@@ -1,11 +1,11 @@
 import axiosClient from "./axiosApi";
-const greenLocationApi = {
+const commentApi = {
     getAll: (params) => {
-        const url = '/listService'
+        const url = '/comments'
         return axiosClient.get(url, { 
             params
         })
     }
 }
 
-export default greenLocationApi
+export default commentApi

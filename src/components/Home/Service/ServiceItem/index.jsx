@@ -81,7 +81,7 @@ function ServiceItem({img, name, phone, address, star, typeService, serviceItem}
 
     function handleLike(even) {
         even.stopPropagation()
-        if(localStorage.getItem('phone')) {
+        if(localStorage.getItem('account')) {
             if(even.target.style.fill !== 'var(--color_heart)'){
                 value.handleSetBigBox('Danh sách yêu thích của bạn', 'interests')
                 value.handleDisplayBigBox()

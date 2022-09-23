@@ -5,66 +5,136 @@ import {AiFillWarning, AiFillGoogleCircle, AiFillTwitterCircle} from 'react-icon
 import { useValueContext } from "../../../../hook";
 import { useRef } from "react";
 import { useEffect } from "react";
+import accountApi from '../../../../api/accountApi'
+import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 
 
 function Login() {
+    const [accountList, setAccountList] = useState()
+    const navigate = useNavigate()
     const value = useValueContext()
-    const phone = useRef()
-    const warning = useRef()
-    const loginRef = useRef()
+    const warning1 = useRef()
+    const warning2 = useRef()
+    const warning3 = useRef()
+    const passwordRef = useRef()
+    const usernameRef = useRef()
 
     useEffect(() => {
-        // handleHiddenWarn()
-    })
-
+        (async () => {
+            const data = await accountApi.getAll()
+            setAccountList(data.data)
+        })()
+    }, [])
+    console.log(accountList);
     function handleConditionLogin() {
-        // if(phone.current.value.length === 10 && Number.isInteger(Number(phone.current.value))) {
-        //     localStorage.setItem('phone', phone.current.value)
-        //     value.handleDisplayBigBox()
-        //     window.location.reload()
-        // }
-        // else {
-        //     handleDisplayWarn()
-        // }
+        let isYourAccount = false
+        let account = {}
+        accountList && accountList.map((item) => {
+            if(item.username === usernameRef.current.value && item.password === passwordRef.current.value) {
+                isYourAccount = true
+                account = item
+            }
+        })
+        if(isYourAccount) {
+            localStorage.setItem('account', JSON.stringify(account))
+            value.handleDisplayBigBox()
+            navigate('/')
+            window.location.reload()
+        }
+        else {
+            warning3.current.classList.remove('hidden')
+            warning3.current.classList.add('flex')
+        }
     }
 
-    // function handleDisplayWarn() {
-    //     if(phone.current.value.length !== 10 || !Number.isInteger(Number(phone.current.value)))
-    //     {
-    //         warning.current.classList.remove('hidden')
-    //         warning.current.classList.add('flex')
-    //         phone.current.classList.add('border-red-600')
-    //     }
-    // }
+    function handleDisplayWarn(event, type) {
+        if(event.target.value === "")
+        {
+            event.nativeEvent.path[1].classList.remove('border-b-2')
+            event.nativeEvent.path[1].classList.add('border')
+            event.nativeEvent.path[1].classList.add('px-3')
+            event.nativeEvent.path[1].classList.add('border-solid')
+            event.nativeEvent.path[1].classList.add('border-red-600')
+            event.nativeEvent.path[1].classList.add('rounded-lg')
+            if(type === 1) {
+                warning1.current.classList.remove('hidden')
+                warning1.current.classList.add('flex')
+            }
+            else {
+                warning2.current.classList.remove('hidden')
+                warning2.current.classList.add('flex')
+            }
+        }
+    }
 
-    // function handleHiddenWarn() {
-    //     warning.current.classList.add('hidden')
-    //     warning.current.classList.remove('flex')
-    //     phone.current.classList.remove('border-red-600')
-    // }
+    function handleHiddenWarn(event, type) {
+        event.nativeEvent.path[1].classList.add('border-b-2')
+        event.nativeEvent.path[1].classList.remove('border')
+        event.nativeEvent.path[1].classList.remove('px-3')
+        event.nativeEvent.path[1].classList.remove('border-solid')
+        event.nativeEvent.path[1].classList.remove('border-red-600')
+        event.nativeEvent.path[1].classList.remove('rounded-lg')
+        if(type === 1) {
+            warning1.current.classList.add('hidden')
+            warning1.current.classList.remove('flex')
+        }
+        else {
+            warning2.current.classList.add('hidden')
+            warning2.current.classList.remove('flex')
+        }
+        warning3.current.classList.add('hidden')
+        warning3.current.classList.remove('flex')
+    }
 
-    return ( <div ref={loginRef} className="px-5">
+    function handleDisplayPassword(event) {
+        if(event.target.checked) {
+            passwordRef.current.type = "text"
+        }
+        else {
+            passwordRef.current.type = "password"
+        }
+    }
+
+    function handleDisplayRegister() {
+        value.handleSetBigBox('Đăng ký', 'register')
+    }
+
+    return ( <div className="px-5">
         <h2 className="text-xl mt-3 font-semibold mb-6 text-slate-900 italic">
             Chào mừng bạn đến với GreenMap
         </h2>
-        <div ref={warning} className="items-center mb-1 hidden">
-            <AiFillWarning className="text-red-600 mr-2"/>
-            <span className="text-sm text-red-600">Số điện thoại của bạn không hợp lệ</span>
-        </div>
-        <label htmlFor="username" className="text-sm italic">Username</label>
-        <div className="flex items-center border-b-2 border-solid border-normal mb-5 ">
+        
+        <label htmlFor="username" className="text-sm italic inline-block mb-1">Username</label>
+        <div className="flex items-center border-b-2 border-solid border-normal">
             <FiUser className="text-color_nav_item text-xl"/>
-            <input id="username" ref={phone} className={` w-full outline-none py-4 px-5 rounded-xl placeholder:italic`}  type="text" placeholder="Type your username"/>
+            <input ref={usernameRef} onBlur={(e) => handleDisplayWarn(e, 1)} onFocus={(e) => handleHiddenWarn(e, 1)} id="username" className={` w-full outline-none py-3 px-5 rounded-xl placeholder:italic`}  type="text" placeholder="Type your username"/>
         </div>
-        <label htmlFor="password" className="text-sm italic">Password</label>
-        <div className="flex items-center border-b-2 border-solid border-normal mb-2">
+        <div ref={warning1} className="hidden items-center mb-1 mt-1">
+            <AiFillWarning className="text-red-600 mr-1 pb-[1px] text-sm"/>
+            <span className="text-xs text-red-600">Vui lòng nhập tên tài khoản của bạn</span>
+        </div>
+
+
+        <label htmlFor="password" className="text-sm italic mt-5 inline-block mb-1">Password</label>
+        <div className="flex items-center border-b-2 border-solid border-normal mb-1 ">
             <MdLockOutline className="text-color_nav_item text-xl"/>
-            <input id="password" className={` w-full outline-none py-4 px-5 rounded-xl placeholder:italic`} type="text" placeholder="Type your password"/>
+            <input ref={passwordRef} type="password" onBlur={(e) => handleDisplayWarn(e, 2)} onFocus={(e) => handleHiddenWarn(e, 2)} id="password" className={` w-full outline-none py-3 px-5 rounded-xl placeholder:italic`} placeholder="Type your password"/>
         </div>
+        <div ref={warning2} className="hidden items-center mb-5">
+            <AiFillWarning className="text-red-600 mr-1 pb-[1px] text-sm"/>
+            <span className="text-xs text-red-600">Vui lòng nhập mật khẩu của bạn</span>
+        </div>
+
+        <div ref={warning3} className="hidden items-center mb-5">
+            <AiFillWarning className="text-red-600 mr-1 pb-[1px] text-sm"/>
+            <span className="text-xs text-red-600">tài khoản hoặc mật khẩu không chính xác</span>
+        </div>
+
         <div className='flex justify-between text-xs mt-1 cursor-pointer text-gray-500 mb-8 italic'>
-            <div className='underline'>Đăng ký</div>
+            <div onClick={() => handleDisplayRegister()} className='underline'>Đăng ký</div>
             <div className='flex items-center'>
-                <input type="checkbox" name="" id="" />
+                <input onChange={(e) => handleDisplayPassword(e)} type="checkbox" name="" id="" />
                 <span className='ml-2'>Show password</span>
             </div>
         </div>

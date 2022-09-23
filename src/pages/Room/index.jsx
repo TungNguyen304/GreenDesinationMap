@@ -2,31 +2,81 @@ import Header from "../../components/common/Header";
 import Footer from "../../components/common/Footer";
 import BigBox from "../../components/Home/BigBox";
 import Map from '../../components/common/Map'
-import Comment from "./Comment";
+import Comment from "../../components/Room/Comment";
+import Avt from '../../assets/logo/avt.svg'
+import Avt2 from '../../assets/images/user_picuiaysdduiasydh232739sadhajksdhjh-50x50.png'
 import { useSelector } from "react-redux";
 import {GrStar} from 'react-icons/gr'
 import { AiFillStar } from 'react-icons/ai'
 import { TiHeartFullOutline, TiLocation } from 'react-icons/ti'
 import { MdVerifiedUser } from 'react-icons/md'
 import { useValueContext } from "../../hook";
+import commentApi from "../../api/commentApi";
 import Scroll from 'react-scroll'
 import style from './room.module.scss'
 import classNames from 'classnames/bind';
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 const cx = classNames.bind(style)
 
 function Room({type, title}) {
-    const arr = [1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9]
+
+    const [commentList, setCommentList] = useState([])
+    const [totalComment, setTotalComment] = useState(0)
+    const value = useValueContext()
+    const service = JSON.parse(localStorage.getItem('service'))
+    const account = JSON.parse(localStorage.getItem('account'))
+    const show = useSelector(state => state.bigboxReducer.show)
+    let count = 0;
+
+
     useEffect(() => {
         var scroll = Scroll.animateScroll;
         scroll.scrollToTop({
             duration: 500,
             smooth: true
         });
+
+        const count = commentList ? commentList.reduce((total, currentValue) => {
+            if(currentValue.placeid === service.id) {
+                return total + 1
+            }
+            return total
+        }, 0) : 0;
+        setTotalComment(count)
     })
-    const value = useValueContext()
-    const service = JSON.parse(localStorage.getItem('service'))
-    const show = useSelector(state => state.bigboxReducer.show)
+
+
+    useEffect(() => {
+        (async () => {
+            const data = await commentApi.getAll()
+            setCommentList(data.data)
+        })()
+    }, [])
+
+    
+    function handleLike(even) {
+        even.stopPropagation()
+        if(localStorage.getItem('account')) {
+            if(even.target.style.fill !== 'var(--color_heart)'){
+                value.handleSetBigBox('Danh sách yêu thích của bạn', 'interests')
+                value.handleDisplayBigBox()
+                // even.target.style.fill = 'var(--color_heart)'
+            }
+            else
+                even.target.style.fill = 'rgba(0, 0, 0, 0.6)'
+        }
+        else {
+            value.handleSetBigBox('Chào mừng bạn đến với GreenMap', 'login')
+            value.handleDisplayBigBox()
+        }
+    }
+    
+
+    function handleDisplayComment(e) {
+        value.handleSetBigBox('', 'comment')
+        value.handleDisplayBigBox()
+    }
+
     return ( <div className={`${cx("room")}`}>
         <Header/>
         <div className={`small_wrap my-[100px]`}>
@@ -48,7 +98,7 @@ function Room({type, title}) {
                         {service.address}
                     </div>
                 </div>
-                <div className="flex items-center underline active:scale-[0.8] select-none">
+                <div onClick={(e) => handleLike(e)} className="flex items-center underline active:scale-[0.8] select-none">
                     <TiHeartFullOutline style={{'fill': 'white', 'stroke': 'black', 'strokeWidth': '1px'}} className="text-base w-[24px] h-[20px] select-none mr-1"/>
                     <span>Lưu</span>
                 </div>
@@ -106,26 +156,29 @@ function Room({type, title}) {
                         {service.star}
                     </div>
                     <div className="px-3"> - </div>
-                    <div>{arr.length} Đánh giá</div>
+                    <div>{totalComment} Đánh giá</div>
                 </div>
                 <div className="mb-5">
                     <div className="grid grid-cols-2">
-                        {arr.map((item, index) => {
-                            if(index<6) {
-                                return <Comment name="Tyra" date="tháng 9 năm 2022"/>
+                        {commentList.map((item, index) => {
+                            if(count<6) {
+                                if(item.placeid === service.id) {
+                                    count++;
+                                    return <Comment key={index} name={item.username} date={item.date} content={item.content} image={item.image}/>
+                                }
                             }
                         })}
                     </div>
-                    {arr.length >= 6 && <div className="border border-solid border-black rounded-xl inline-block py-3 px-5 cursor-pointer hover:bg-slate-100 active:scale-[0.98] font-semibold">
-                        Hiển thị tất cả {arr.length} đánh giá
+                    {totalComment >= 6 && <div onClick={(e) => handleDisplayComment(e)} className="border border-solid border-black rounded-xl inline-block py-3 px-5 cursor-pointer hover:bg-slate-100 active:scale-[0.98] font-semibold">
+                        Hiển thị tất cả {totalComment} đánh giá
                     </div>}
                 </div>
                 <div className={`w-[50%]`}>
                     <div>
                         <div className="flex items-center mb-6">
-                            <div className="mr-5 text-xl font-semibold italic">Tùng Nguyễn</div>
+                            <div className="mr-5 text-xl font-semibold italic">{account.username}</div>
                             <div>
-                                <img className="w-[56px] h-[56px] rounded-full" src="https://scontent.fdad3-6.fna.fbcdn.net/v/t39.30808-6/277776849_113191581360624_2792228990289081119_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=i7xLQGNzYNwAX_dsghq&_nc_ht=scontent.fdad3-6.fna&oh=00_AT_-bbgNThyCjvfwIyh4bnI6TmnB1-6rDkx0-6pr8WPPAg&oe=632B96F2" alt="" />
+                                <img className="w-[56px] h-[56px] rounded-full" src={account && account.image!=="" ? account.image : account ? Avt2 : Avt} alt="" />
                             </div>
                         </div>
                         <div>
