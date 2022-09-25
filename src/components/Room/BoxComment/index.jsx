@@ -1,4 +1,3 @@
-import {BsFillStarFill} from 'react-icons/bs'
 import {IoSearchOutline, IoStar} from 'react-icons/io5'
 import { useEffect } from 'react'
 import commentApi from '../../../api/commentApi'
@@ -27,7 +26,7 @@ function BoxComment() {
             return total
         }, 0) : 0;
         setTotalComment(count)
-    })
+    }, [commentList, service.id])
     return ( <div className={`${cx('box_comment')} w-[1032px]`}>
         <div className="flex">
             <div className='w-[33.3333%] mr-[8.333%]'>
@@ -48,11 +47,12 @@ function BoxComment() {
                         <input type="text" className='ml-3 w-full bg-[#F7F7F7]' placeholder='Tìm kiếm đánh giá'/>
                     </div>
                 </div>
-                <div onScroll={(e) => {e.stopPropagation()}} className={`overflow-y-scroll h-[70vh] ${cx('comment_list')}`}>
+                <div onTouchMove={(e) => {e.preventDefault()}} className={`overflow-y-scroll h-[70vh] ${cx('comment_list')}`}>
                     {commentList && commentList.map((item, index) => {
                         if(item.placeid === service.id) {
                             return <Comment key={index} name={item.username} date={item.date} content={item.content} image={item.image}/>
                         }
+                        else return <></>
                     })}
                 </div>
             </div>

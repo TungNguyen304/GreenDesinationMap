@@ -1,17 +1,17 @@
-import Header from "../../components/common/Header";
-import Footer from "../../components/common/Footer";
-import BigBox from "../../components/Home/BigBox";
-import Map from '../../components/common/Map'
-import Comment from "../../components/Room/Comment";
-import Avt from '../../assets/logo/avt.svg'
-import Avt2 from '../../assets/images/user_picuiaysdduiasydh232739sadhajksdhjh-50x50.png'
+import Header from "../../../components/common/Header";
+import Footer from "../../../components/common/Footer";
+import BigBox from "../../../components/Home/BigBox";
+import Map from '../../../components/common/Map'
+import Comment from "../../../components/Room/Comment";
+import Avt from '../../../assets/logo/avt.svg'
+import Avt2 from '../../../assets/images/avt.png'
 import { useSelector } from "react-redux";
 import {GrStar} from 'react-icons/gr'
 import { AiFillStar } from 'react-icons/ai'
 import { TiHeartFullOutline, TiLocation } from 'react-icons/ti'
 import { MdVerifiedUser } from 'react-icons/md'
-import { useValueContext } from "../../hook";
-import commentApi from "../../api/commentApi";
+import { useValueContext } from "../../../hook";
+import commentApi from "../../../api/commentApi";
 import Scroll from 'react-scroll'
 import style from './room.module.scss'
 import classNames from 'classnames/bind';
@@ -36,6 +36,10 @@ function Room({type, title}) {
             smooth: true
         });
 
+        
+    })
+
+    useEffect(() => {
         const count = commentList ? commentList.reduce((total, currentValue) => {
             if(currentValue.placeid === service.id) {
                 return total + 1
@@ -43,7 +47,7 @@ function Room({type, title}) {
             return total
         }, 0) : 0;
         setTotalComment(count)
-    })
+    }, [count, commentList, service])
 
 
     useEffect(() => {
@@ -166,7 +170,8 @@ function Room({type, title}) {
                                     count++;
                                     return <Comment key={index} name={item.username} date={item.date} content={item.content} image={item.image}/>
                                 }
-                            }
+                                else return <></>
+                            } else return <></>
                         })}
                     </div>
                     {totalComment >= 6 && <div onClick={(e) => handleDisplayComment(e)} className="border border-solid border-black rounded-xl inline-block py-3 px-5 cursor-pointer hover:bg-slate-100 active:scale-[0.98] font-semibold">
@@ -176,7 +181,7 @@ function Room({type, title}) {
                 <div className={`w-[50%]`}>
                     <div>
                         <div className="flex items-center mb-6">
-                            <div className="mr-5 text-xl font-semibold italic">{account.username}</div>
+                            <div className="mr-5 text-xl font-semibold italic">{account && account.username}</div>
                             <div>
                                 <img className="w-[56px] h-[56px] rounded-full" src={account && account.image!=="" ? account.image : account ? Avt2 : Avt} alt="" />
                             </div>
@@ -187,7 +192,7 @@ function Room({type, title}) {
                                 <textarea id="comment" type="text" placeholder="Comment ..." className="outline-none mr-5 py-3 px-4 flex-1 border border-solid border-normal placeholder:italic" />
                                 <div className="flex flex-col">
                                     <button style={{'backgroundColor': 'var(--primary)', "backgroundImage": "linear-gradient(to right, #07D5DF, #7F6DEF, #F408FE)"}} className="hover:brightness-90 active:scale-[0.98] text-white py-2 px-4 rounded-full italic mb-3">Gửi đi</button>
-                                    <button style={{'backgroundColor': 'var(--primary)', "backgroundImage": "linear-gradient(to right, #07D5DF, #7F6DEF, #F408FE)"}} className="hover:brightness-90 active:scale-[0.98] text-white py-2 px-4 rounded-full italic">Vào trang đánh giá</button>
+                                    <button style={{'backgroundColor': 'var(--primary)', "backgroundImage": "linear-gradient(to right, #07D5DF, #7F6DEF, #F408FE)"}} className="hover:brightness-90 active:scale-[0.98] text-white py-2 px-4 rounded-full italic">Đến trang đánh giá</button>
                                 </div>
                             </div>
                         </div>

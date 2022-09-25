@@ -1,6 +1,6 @@
-import Header from '../../components/common/Header'
-import Footer from '../../components/common/Footer';
-import interestApi from '../../api/interestApi';
+import Header from '../../../components/common/Header'
+import Footer from '../../../components/common/Footer';
+import interestApi from '../../../api/interestApi';
 import { useState } from 'react';
 import { useEffect } from 'react';
 

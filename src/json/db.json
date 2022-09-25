@@ -1065,7 +1065,10 @@
             "gender": "Nam",
             "username": "KillerBee",
             "password": "Tungnguyen304@",
-            "image": "https://scontent.fsgn5-5.fna.fbcdn.net/v/t39.30808-1/277776849_113191581360624_2792228990289081119_n.jpg?stp=dst-jpg_p240x240&_nc_cat=100&ccb=1-7&_nc_sid=7206a8&_nc_ohc=q8EVWHNZiNAAX8xSbtM&_nc_ht=scontent.fsgn5-5.fna&oh=00_AT-RM9x0RYwCaQBW2z1c_3EonfFmxNdNPYyQJUt_AYcimg&oe=6332DBB8"
+            "image": "https://scontent.fsgn5-5.fna.fbcdn.net/v/t39.30808-1/277776849_113191581360624_2792228990289081119_n.jpg?stp=dst-jpg_p240x240&_nc_cat=100&ccb=1-7&_nc_sid=7206a8&_nc_ohc=q8EVWHNZiNAAX8xSbtM&_nc_ht=scontent.fsgn5-5.fna&oh=00_AT-RM9x0RYwCaQBW2z1c_3EonfFmxNdNPYyQJUt_AYcimg&oe=6332DBB8",
+            "role": 1,
+            "startday": "25/9/2022",
+            "phonenumber": "0899852441"
         },
         {
             "id": 2,
@@ -1075,7 +1078,10 @@
             "gender": "Nam",
             "username": "Winner",
             "password": "Tungnguyen304@",
-            "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQWvdJhF2Fh0KX0KmMT4em_LKsqsEZx3XPKwA&usqp=CAU"
+            "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQWvdJhF2Fh0KX0KmMT4em_LKsqsEZx3XPKwA&usqp=CAU",
+            "role": 1,
+            "startday": "25/9/2022",
+            "phonenumber": "0899852441"
         },
         {
             "id": 3,
@@ -1085,7 +1091,10 @@
             "gender": "Nam",
             "username": "John Wick",
             "password": "Tungnguyen304@",
-            "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTcHuywykpIFUVVXJgm7Wn9Mo53Sz5EqYJ95w&usqp=CAU"
+            "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTcHuywykpIFUVVXJgm7Wn9Mo53Sz5EqYJ95w&usqp=CAU",
+            "role": 2,
+            "startday": "25/9/2022",
+            "phonenumber": "0899852441"
         },
         {
             "id": 4,
@@ -1095,7 +1104,10 @@
             "gender": "Nam",
             "username": "Marguire",
             "password": "Tungnguyen304@",
-            "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZ739FInzHvrMQFxKWNEikOA1xeqDByrbnGw&usqp=CAU"
+            "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZ739FInzHvrMQFxKWNEikOA1xeqDByrbnGw&usqp=CAU",
+            "role": 1,
+            "startday": "25/9/2022",
+            "phonenumber": "0899852441"
         }
     ]
 }

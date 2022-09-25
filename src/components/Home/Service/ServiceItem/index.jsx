@@ -22,14 +22,17 @@ function ServiceItem({img, name, phone, address, star, typeService, serviceItem}
     const right = useRef()
     const navigate = useNavigate()
     const homePage = useSelector(state => state.homePageReducer.type)
-    let imgList
+    const [imgList, setImgList] = useState() ;
+
 
     useEffect(() => {
-        (() => {
-            imgList = imgRef.current.getImg()
-            left.current.addEventListener('click', handleSlideLeft)
-            right.current.addEventListener('click', handleSlideRight)
-        })();
+            let imgs = imgRef.current.getImg()
+            setImgList(imgs)
+    }, [])
+
+    useEffect(() => {
+        left.current.addEventListener('click', handleSlideLeft)
+        right.current.addEventListener('click', handleSlideRight)
     })
 
     function handelHidden() {
