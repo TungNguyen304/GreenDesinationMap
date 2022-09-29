@@ -1,14 +1,14 @@
 import { useSelector } from 'react-redux';
 import { useDispatch } from "react-redux";
-import { useValueContext } from '../../hook';
-import { setHomePage } from "../../store/actions/homePage";
-import Header from "../../components/common/Header";
-import Footer from "../../components/common/Footer";
-import MapService from "../../components/Home/MapService";
-import Navbar from "../../components/Home/Navbar";
-import Service from "../../components/Home/Service";
-import BigBox from "../../components/Home/BigBox";
-import ButtonMap from "../../components/common/ButtonMap";
+import { useValueContext } from '../../../hook';
+import { setHomePage } from "../../../store/actions/homePage";
+import Header from "../../../components/common/Header";
+import Footer from "../../../components/common/Footer";
+import MapService from "../../../components/Home/MapService";
+import Navbar from "../../../components/Home/Navbar";
+import Service from "../../../components/Home/Service";
+import BigBox from "../../../components/Home/BigBox";
+import ButtonMap from "../../../components/common/ButtonMap";
 import { useState } from "react";
 import style from './home.module.scss'
 import classNames from 'classnames/bind';
@@ -34,7 +34,6 @@ function Home({type, title}) {
             dispatch(setHomePage('map'))
     }
     
-    
     return ( <div>
         <div>
             <Header selectPosition={selectPosition} setSelectPosition={setSelectPosition}/>
@@ -46,6 +45,7 @@ function Home({type, title}) {
             {homePage === "map" ? <MapService selectPosition={selectPosition} setSelectPosition={setSelectPosition} typeService={typeService}/> : <Service typeService={typeService}/>}
             <div className="h-10">
             </div>
+            
             <ButtonMap handleSetSubPage={handleSetSubPage} content={homePage === "map" ? "Hiện danh sách" : "Hiện bản đồ"} type={homePage}/>
             <Footer/>
         </div>

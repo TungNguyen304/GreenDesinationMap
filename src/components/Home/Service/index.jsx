@@ -38,10 +38,10 @@ function Service({typeService}) {
                     <div className="grid grid-cols-4 mx-[-13px]">
                         {services && services.map(item => {
                             if(typeService ==='noibat') {
-                                return <ServiceItem serviceItem={item} key={item.id} typeService={item.type} name={item.name} phone={item.phone} star={item.star} address={item.address} img={item.images}/>
+                                return <ServiceItem serviceItem={item} key={item.id} id={item.id} typeService={item.type} name={item.name} phone={item.phone} star={item.star} address={item.address}/>
                             }
                             else if(item.type === typeService) {
-                                return <ServiceItem serviceItem={item} key={item.id} typeService={item.type} name={item.name} phone={item.phone} star={item.star} address={item.address} img={item.images}/>
+                                return <ServiceItem serviceItem={item} key={item.id} id={item.id} typeService={item.type} name={item.name} phone={item.phone} star={item.star} address={item.address}/>
                             }
                         })}
                     </div>

@@ -1,8 +1,8 @@
-import Header from "../../components/common/Header";
-import Footer from "../../components/common/Footer";
-import Profile from "../../components/Account/Profile";
-import { useValueContext } from "../../hook";
-import BigBox from "../../components/Home/BigBox";
+import Header from "../../../components/common/Header";
+import Footer from "../../../components/common/Footer";
+import Profile from "../../../components/Account/Profile";
+import { useValueContext } from "../../../hook";
+import BigBox from "../../../components/Home/BigBox";
 import { useSelector } from "react-redux";
 
 function Account({type, title}) {

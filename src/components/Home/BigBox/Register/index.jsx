@@ -1,7 +1,6 @@
-import {ImUser} from 'react-icons/im'
-import {MdEmail} from 'react-icons/md'
+import {HiOutlineUser} from 'react-icons/hi'
 import {MdLockOutline} from 'react-icons/md'
-import {AiOutlineArrowRight} from 'react-icons/ai'
+import {AiOutlineArrowRight, AiOutlineMail, AiOutlinePhone} from 'react-icons/ai'
 
 function Register() {
     return ( <div>
@@ -16,12 +15,18 @@ function Register() {
             </div>
             <div className='w-full flex items-center border-b-2 border-solid border-gray-600 mb-5'>
                 <input className='w-full py-2 placeholder:text-gray-600' type="text"  name="" id="" placeholder="Username"/>
-                <ImUser/>
+                <HiOutlineUser/>
             </div>
             <div className='w-full flex items-center border-b-2 border-solid border-gray-600 mb-5'>
                 <input className='w-full py-2 placeholder:text-gray-600' type="text" placeholder='Email Address'/>
-                <MdEmail/>
+                <AiOutlineMail/>
             </div>
+
+            <div className='w-full flex items-center border-b-2 border-solid border-gray-600 mb-5'>
+                <input className='w-full py-2 placeholder:text-gray-600' type="text" placeholder='Phone Number'/>
+                <AiOutlinePhone/>
+            </div>
+
             <div className='w-full flex items-center border-b-2 border-solid border-gray-600 mb-5'>
                 <input className='py-2 w-full placeholder:text-gray-600' type="text" name="city"  list="gender" placeholder='Gender'/>
                 <datalist id='gender'>
