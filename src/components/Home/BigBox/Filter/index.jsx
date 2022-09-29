@@ -2,7 +2,7 @@ import location from '../../../../json/location.json'
 import style from './filter.module.scss'
 import classNames from 'classnames/bind';
 import { useSelector } from 'react-redux';
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
 const cx = classNames.bind(style)
 
 function Filter() {
@@ -39,7 +39,7 @@ function Filter() {
                 <div>
                     {location.districts.map((item, index) => {
                         if(arrDistrictCheck.includes(item.name)) {
-                            return <>
+                            return <Fragment key={index}>
                                 <div className='underline mb-2'>{item.name}</div>
                                 <div key={index} className='grid grid-cols-3 border border-solid border-normal pl-5 py-2 mb-4'>
                                     {item.wards.map((item, index) => {
@@ -51,7 +51,7 @@ function Filter() {
                                         )
                                     })}
                                 </div>
-                            </>
+                            </Fragment>
                         }
                     })}
                 </div>

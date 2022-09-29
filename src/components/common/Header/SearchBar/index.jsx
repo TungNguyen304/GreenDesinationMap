@@ -7,9 +7,6 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import Divider from "@material-ui/core/Divider";
 import { useRef } from 'react';
-import style from './searchbar.module.scss'
-import classNames from 'classnames/bind';
-const cx = classNames.bind(style)
 
 const NOMINATIM_BASE_URL = "https://nominatim.openstreetmap.org/search?";
 
@@ -38,7 +35,7 @@ function SearchBar({hidden, ...props}) {
         }
     }
 
-    return ( <div className={`${hidden || "flex"}`} style={{position: "relative", flexDirection: "column"}}>
+    return ( <div className={`${hidden || "flex"} hover:shadow-normal rounded-full`} style={{position: "relative", flexDirection: "column"}}>
       <div style={{ display: "flex", justifyContent: "space-between", borderRadius: "50px", padding: "8px 10px 8px 20px", height: "100%", border: "1px solid var(--border)"}}>
         <div className='w-[400px]'>
           <input
@@ -68,6 +65,7 @@ function SearchBar({hidden, ...props}) {
                 polygon_geojson: 0,
               };
               const queryString = new URLSearchParams(params).toString();
+              console.log(queryString);
               const requestOptions = {
                 method: "GET",
                 redirect: "follow",

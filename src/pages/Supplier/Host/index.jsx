@@ -2,16 +2,31 @@ import Header from "../../../components/common/Header";
 import Footer from "../../../components/common/Footer";
 import { useValueContext } from "../../../hook";
 import { useSelector } from "react-redux";
+import Map from "../../../components/common/Map";
 import BigBox from "../../../components/Home/BigBox";
+import serviceApi from '../../../api/serviceApi'
 
 import style from './host.module.scss'
 import classNames from 'classnames/bind';
+import { useEffect } from "react";
+import { useState } from "react";
 const cx = classNames.bind(style)
 
 function Host({title, type}) {
+    const account = JSON.parse(localStorage.getItem('accountSupplier'))
     const value = useValueContext()
     const {handleDisplayBigBox} = value
     const show = useSelector(state => state.bigboxReducer.show)
+    const [positionList, setPositionList] = useState([])
+    useEffect(() => {
+        (async () => {
+            const data = await serviceApi.getAll()
+            const list = data.data.filter((item) => {
+                return item.userid === account.id
+            })
+            setPositionList(list)
+        })()
+    }, [])
 
     return ( <div>
         <Header/>
@@ -27,6 +42,16 @@ function Host({title, type}) {
                 </div>
             </div>
         </div>
+
+
+
+        <div className="wrap mt-8 mb-[80px]">
+            <div className="text-xl font-semibold italic mb-3">Các địa điểm xanh của bạn (*<span>{positionList && positionList.length ? positionList.length : account ? 0 : 'Chưa đăng nhập'}</span>)</div>
+            <div className="h-[90vh]">
+                <Map positionList={positionList}/>
+            </div>
+        </div>
+
         {show && <div>
                 <BigBox title={title} type={type} handleDisplayBigBox={handleDisplayBigBox}/>
             </div>}

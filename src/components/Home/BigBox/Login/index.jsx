@@ -27,7 +27,6 @@ function Login() {
             setAccountList(data.data)
         })()
     }, [])
-    console.log(accountList);
     function handleConditionLogin() {
         let isYourAccount = false
         let account = {}

@@ -11,7 +11,7 @@ function CreateInterest() {
     const [value, setValue] = useState('')
     const serviceInterest = useSelector(state => state.serviceReducer.service)
     useEffect(() => {
-        if(value != '') {
+        if(value !== '') {
             buttonRef.current.disabled = false
         }
         else
@@ -56,7 +56,7 @@ function CreateInterest() {
             </div>
         </div>
         <div>
-            <button ref={buttonRef} onClick={pushInterest} className="bg-[#222222] w-full rounded-lg text-white disabled:bg-[#DDDDDD] disabled:cursor-not-allowed hover:bg-black p-4 flex justify-center"><span>Tạo</span></button>
+            <button ref={buttonRef} onClick={pushInterest} className="bg-gradient-to-r from-[#07D5DF] to-[#F408FE] w-full text-xl italic rounded-full text-white disabled:bg-gradient-to-r disabled:from-[#DDD] disabled:to-[#DDD] disabled:cursor-not-allowed hover:bg-black p-4 flex justify-center"><span>Tạo</span></button>
         </div>
     </div> );
 }

@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { MapContainer, Marker, Popup, TileLayer, useMap } from "react-leaflet";
+import ServiceItem from '../../Home/Service/ServiceItem'
 import { useSelector } from "react-redux";
 import green from '../../../greenIcon.svg'
 import "leaflet/dist/leaflet.css";
@@ -44,7 +45,7 @@ function ResetCenterView(props) {
         }
       )
     }
-    else if(serviceRoom) {
+    else if (serviceRoom) {
       map.setView(
         L.latLng(serviceRoom?.lat, serviceRoom?.lon),
         map.getZoom(),
@@ -59,14 +60,15 @@ function ResetCenterView(props) {
 
 
 
-export default function Maps(props) {
+function Map(props) {
   const serviceType = useSelector(state => state.serviceReducer.serviceType)
   const { selectPosition, positionList, serviceRoom } = props;
   const locationSelection = [selectPosition?.lat, selectPosition?.lon];
   const locationServiceRoom = [serviceRoom?.lat, serviceRoom?.lon];
+
   return (
     <MapContainer
-      className="z-0 rounded-lg"
+      className={`z-0 ${window.location.pathname.includes('/detailwishlist') ? '' : 'rounded-lg'}`}
       center={position}
       zoom={window.location.pathname === 'room' ? 10 : 12}
       style={{ width: "100%", height: "100%" }}
@@ -79,10 +81,10 @@ export default function Maps(props) {
       {selectPosition && (positionList && positionList.every((item) => item.mapid !== selectPosition.place_id)) ? (
         <Marker position={locationSelection} icon={icon}>
           <Popup>
-            <div>Hello</div>
+            <div>Không phải địa điểm xanh</div>
           </Popup>
         </Marker>
-      ) : <></> }
+      ) : <></>}
 
       {serviceRoom && (
         <Marker position={locationServiceRoom} icon={greenIcon2}>
@@ -94,22 +96,21 @@ export default function Maps(props) {
 
       {positionList && (
         positionList.map((item, index) => {
-          if(serviceType === 'noibat')
-          {
+          if (serviceType === 'noibat') {
             return (
               <Marker key={index} position={item} icon={selectPosition && item.mapid === selectPosition.place_id ? greenIcon2 : greenIcon}>
                 <Popup>
-                  <div>Hello</div>
-              </Popup>
+                  <ServiceItem serviceItem={item} typeComponent="map" id={item.id} typeService={item.type} name={item.name} phone={item.phone} star={item.star} address={item.address} />
+                </Popup>
               </Marker>
             )
           }
-          else if(serviceType === item.type) {
+          else if (serviceType === item.type) {
             return (
-              <Marker key={index} position={item} icon={selectPosition && item.mapid === selectPosition.place_id ? greenIcon2 : greenIcon}>
+              <Marker key={index} position={item} icon={selectPosition && item.mid === selectPosition.place_id ? greenIcon2 : greenIcon}>
                 <Popup>
-                  <div>Hello</div>
-              </Popup>
+                  <ServiceItem serviceItem={item} typeComponent="map" id={item.id} typeService={item.type} name={item.name} phone={item.phone} star={item.star} address={item.address} />
+                </Popup>
               </Marker>
             )
           }
@@ -121,3 +122,4 @@ export default function Maps(props) {
   );
 }
 
+export default React.memo(Map)

@@ -34,7 +34,6 @@ function Home({type, title}) {
             dispatch(setHomePage('map'))
     }
     
-    
     return ( <div>
         <div>
             <Header selectPosition={selectPosition} setSelectPosition={setSelectPosition}/>
@@ -43,7 +42,7 @@ function Home({type, title}) {
             {show && <div>
                 <BigBox title={title} type={type} handleDisplayBigBox={handleDisplayBigBox}/>
             </div>}
-            {homePage === "map" ? <MapService selectPosition={selectPosition} setSelectPosition={setSelectPosition} typeService={typeService}/> : <Service typeService={typeService}/>}
+            {homePage === "map" ? <MapService selectPosition={selectPosition} typeService={typeService}/> : <Service typeService={typeService}/>}
             <div className="h-10">
             </div>
             

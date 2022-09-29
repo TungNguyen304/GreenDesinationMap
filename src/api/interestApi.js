@@ -7,6 +7,12 @@ const interestApi = {
             params
         })
     },
+    get: (id, params) => {
+        const url = `/interests/${id}`
+        return axiosClient.get(url, { 
+            params
+        })
+    },
     getListService: (params, query) => {
         const url = `/interests/${query}`
         return axiosClient.get(url, { 

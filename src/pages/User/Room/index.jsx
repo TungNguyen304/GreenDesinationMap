@@ -5,6 +5,7 @@ import Map from '../../../components/common/Map'
 import Comment from "../../../components/Room/Comment";
 import Avt from '../../../assets/logo/avt.svg'
 import Avt2 from '../../../assets/images/avt.png'
+import imageApi from "../../../api/imageApi";
 import { useSelector } from "react-redux";
 import {GrStar} from 'react-icons/gr'
 import { AiFillStar } from 'react-icons/ai'
@@ -15,12 +16,13 @@ import commentApi from "../../../api/commentApi";
 import Scroll from 'react-scroll'
 import style from './room.module.scss'
 import classNames from 'classnames/bind';
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 const cx = classNames.bind(style)
 
 function Room({type, title}) {
 
     const [commentList, setCommentList] = useState([])
+    const [imageList, setImageList] = useState([])
     const [totalComment, setTotalComment] = useState(0)
     const value = useValueContext()
     const service = JSON.parse(localStorage.getItem('service'))
@@ -54,6 +56,13 @@ function Room({type, title}) {
         (async () => {
             const data = await commentApi.getAll()
             setCommentList(data.data)
+        })()
+    }, [])
+
+    useEffect(() => {
+        (async () => {
+            const data = await imageApi.get(`?placeid=${service.id}`)
+            setImageList(data.data)
         })()
     }, [])
 
@@ -110,23 +119,23 @@ function Room({type, title}) {
 
             <div className="flex h-[390px] rounded-xl overflow-hidden">
                 <div className="flex-1 h-full mr-2">
-                    <img className="h-full w-full hover:brightness-[0.8] cursor-pointer" src={service && service.images[0]} alt="" />
+                    <img className="h-full w-full hover:brightness-[0.8] cursor-pointer" src={imageList.length && imageList[0].name} alt="" />
                 </div>
                 <div className="flex-1 flex flex-col h-full">
                     <div className="flex-1 flex h-[50%] mb-2">
                         <div className="flex-1 h-full mr-2">
-                            <img className="h-full w-full hover:brightness-[0.8] cursor-pointer" src={service.images[1]} alt="" />
+                            <img className="h-full w-full hover:brightness-[0.8] cursor-pointer" src={imageList.length && imageList[1].name} alt="" />
                         </div>
                         <div className="flex-1">
-                            <img className="h-full w-full hover:brightness-[0.8] cursor-pointer" src={service.images[2]} alt="" />
+                            <img className="h-full w-full hover:brightness-[0.8] cursor-pointer" src={imageList.length && imageList[2].name} alt="" />
                         </div>
                     </div>
                     <div className="flex-1 flex h-50%">
                         <div className="flex-1 h-full mr-2">
-                            <img className="h-full w-full hover:brightness-[0.8] cursor-pointer" src={service.images[3]} alt="" />
+                            <img className="h-full w-full hover:brightness-[0.8] cursor-pointer" src={imageList.length && imageList[3].name} alt="" />
                         </div>
                         <div className="flex-1">
-                            <img className="h-full w-full hover:brightness-[0.8] cursor-pointer" src={service.images[4]} alt="" />
+                            <img className="h-full w-full hover:brightness-[0.8] cursor-pointer" src={imageList.length && imageList[4].name} alt="" />
                         </div>
                     </div>
                 </div>
@@ -170,8 +179,9 @@ function Room({type, title}) {
                                     count++;
                                     return <Comment key={index} name={item.username} date={item.date} content={item.content} image={item.image}/>
                                 }
-                                else return <></>
-                            } else return <></>
+                                else return <Fragment key={index}></Fragment>
+                            }
+                            else return <Fragment key={index}></Fragment>
                         })}
                     </div>
                     {totalComment >= 6 && <div onClick={(e) => handleDisplayComment(e)} className="border border-solid border-black rounded-xl inline-block py-3 px-5 cursor-pointer hover:bg-slate-100 active:scale-[0.98] font-semibold">

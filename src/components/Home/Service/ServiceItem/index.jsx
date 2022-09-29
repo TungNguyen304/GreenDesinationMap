@@ -13,7 +13,7 @@ import style from './serviceitem.module.scss'
 import classNames from 'classnames/bind';
 const cx = classNames.bind(style)
 
-function ServiceItem({img, name, phone, address, star, typeService, serviceItem}) {
+function ServiceItem({name, phone, address, star, typeService, serviceItem, typeComponent, id}) {
     const value = useValueContext()
     const dispatch = useDispatch()
     const [hidden, setHidden] = useState(true)
@@ -23,8 +23,7 @@ function ServiceItem({img, name, phone, address, star, typeService, serviceItem}
     const navigate = useNavigate()
     const homePage = useSelector(state => state.homePageReducer.type)
     const [imgList, setImgList] = useState() ;
-
-
+    
     useEffect(() => {
             let imgs = imgRef.current.getImg()
             setImgList(imgs)
@@ -47,7 +46,7 @@ function ServiceItem({img, name, phone, address, star, typeService, serviceItem}
         let width = imgList && Number((window.getComputedStyle(imgList[0]).width).slice(0, (window.getComputedStyle(imgList[0]).width).length-2))
         let sum = width
         let marginLeft = imgList && (Number((window.getComputedStyle(imgList[0]).marginLeft).slice(0, (window.getComputedStyle(imgList[0]).marginLeft).length-2)))
-        if(marginLeft !== -(imgList.length-1)*(sum/1)) {
+        if(imgList && marginLeft !== -(imgList.length-1)*(sum/1)) {
             if(marginLeft === 0) {
                 imgList[0].style.marginLeft = `${-sum}px`
             }
@@ -56,7 +55,8 @@ function ServiceItem({img, name, phone, address, star, typeService, serviceItem}
             }
         }
         else {
-            imgList[0].style.marginLeft = `0px`
+            if(imgList)
+                imgList[0].style.marginLeft = `0px`
         }
 
         right.current.removeEventListener('click', handleSlideRight)
@@ -106,9 +106,9 @@ function ServiceItem({img, name, phone, address, star, typeService, serviceItem}
     }
 
 
-    return ( <div onMouseOver={handelDisplay} onMouseLeave={handelHidden} onClick={handleNavigateToRoom} className={`${cx('service_item')} ${homePage === "map" ? "hover:scale-1 w-[90%]" : "hover:scale-[1.01]"} cursor-pointer`}>
+    return ( <div onMouseOver={handelDisplay} onMouseLeave={handelHidden} onClick={handleNavigateToRoom} className={`${cx('service_item')} ${typeComponent === "map" ? 'w-[200px] mx-auto' : homePage === "map" ? "hover:scale-1 w-[90%] hover:shadow-normal mb-[40px] px-[13px] pt-[13px] pb-[4px]" : "hover:scale-[1.01] hover:shadow-normal mb-[40px] px-[13px] pt-[13px] pb-[4px]"} cursor-pointer`}>
         <div className={`relative mb-3 flex justify-center`}>
-            <ServiceSlide ref={imgRef} img={img}/>
+            <ServiceSlide ref={imgRef} typeComponent={typeComponent} id={id}/>
             <BsHeartFill style={{'fill': 'rgba(0, 0, 0, 0.6)', 'stroke': 'white', 'strokeWidth': '1px'}} onClick={(e) => handleLike(e)} className={`absolute text-base w-[30px] h-[24px] top-3 right-3 select-none active:scale-[0.8]`}/>
             <Left ref={left} className={hidden && 'hidden'}/>
             <Right ref={right} className={hidden && 'hidden'}/>
