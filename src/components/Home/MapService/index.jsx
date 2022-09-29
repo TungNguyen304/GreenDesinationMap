@@ -83,7 +83,7 @@ function MapService(props) {
                     </div>
                 </div>
                 <div className="col-span-3">
-                    <Map positionList={serviceList} {...props}/>
+                    <Map default={true} positionList={serviceList} {...props}/>
                 </div>
             </div>
         </div>
