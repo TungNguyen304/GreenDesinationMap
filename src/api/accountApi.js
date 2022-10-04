@@ -6,6 +6,10 @@ const accountApi = {
             params
         })
     },
+    get: (id) => {
+        const url = `/accounts/${id}`
+        return axiosClient.get(url)
+    },
     update: (id) => {
         const url = `/accounts${id}`
         return axiosClient.put(url)

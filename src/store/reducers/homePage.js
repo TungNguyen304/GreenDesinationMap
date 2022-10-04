@@ -1,4 +1,3 @@
-import SwitchBase from "@material-ui/core/internal/SwitchBase"
 
 const initState = {
     type: "map"

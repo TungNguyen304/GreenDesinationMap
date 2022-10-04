@@ -2,6 +2,7 @@ import Home from "../pages/User/Home";
 import Room from "../pages/User/Room";
 import Account from "../pages/User/Account";
 import WishList from "../pages/User/WishList";
+import Evaluate from "../pages/User/Evaluate";
 import Host from "../pages/Supplier/Host";
 import Mailbox from "../pages/Supplier/Mailbox";
 import Management from "../pages/Supplier/Management";
@@ -13,6 +14,7 @@ export const publicRouters = [
     {path: '/room', component: Room},
     {path: '/account', component: Account},
     {path: '/wishlist', component: WishList},
+    {path: '/evaluate/:id', component: Evaluate},
     {path: '/detailwishlist/:id', component: DetailWishList},
     {path: '/host', component: Host},
     {path: '/host/mailbox', component: Mailbox},

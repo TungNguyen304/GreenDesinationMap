@@ -1,4 +1,4 @@
-import { TiTick } from 'react-icons/ti'
+import { FiCheckCircle } from 'react-icons/fi'
 import { AiFillStar } from 'react-icons/ai'
 import { RiArrowRightSLine } from 'react-icons/ri'
 import {HiOutlineUser} from 'react-icons/hi'
@@ -66,19 +66,19 @@ function Profile() {
                     <div>
                         <div className='text-xl font-medium mb-3'>Đã xác nhận</div>
                         <div className='flex items-center'>
-                            <TiTick className='text-[green] mr-2'/>
+                            <FiCheckCircle className='text-[green] mr-2'/>
                             Số điện thoại
                         </div>
                         <div className='flex items-center'>
-                            <TiTick className='text-[green] mr-2'/>
+                            <FiCheckCircle className='text-[green] mr-2'/>
                             Email
                         </div>
                         <div className='flex items-center'>
-                            <TiTick className='text-[green] mr-2'/>
+                            <FiCheckCircle className='text-[green] mr-2'/>
                             Tài khoản
                         </div>
                         <div className='flex items-center'>
-                            <TiTick className='text-[green] mr-2'/>
+                            <FiCheckCircle className='text-[green] mr-2'/>
                             Mật khẩu
                         </div>
                     </div>

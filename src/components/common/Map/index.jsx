@@ -65,6 +65,7 @@ function Map(props) {
   const { selectPosition, positionList, serviceRoom } = props;
   const locationSelection = [selectPosition?.lat, selectPosition?.lon];
   const locationServiceRoom = [serviceRoom?.lat, serviceRoom?.lon];
+  console.log(positionList);
 
   return (
     <MapContainer
@@ -96,7 +97,16 @@ function Map(props) {
 
       {positionList && (
         positionList.map((item, index) => {
-          if (serviceType === 'noibat') {
+          if(serviceType === 'search') {
+            return (
+              <Marker key={index} position={item} icon={selectPosition && item.mapid === selectPosition.place_id ? greenIcon2 : greenIcon}>
+                <Popup>
+                  <ServiceItem serviceItem={item} typeComponent="map" id={item.id} typeService={item.type} name={item.name} phone={item.phone} star={item.star} address={item.address} />
+                </Popup>
+              </Marker>
+            )
+          }
+          else if (serviceType === 'noibat') {
             return (
               <Marker key={index} position={item} icon={selectPosition && item.mapid === selectPosition.place_id ? greenIcon2 : greenIcon}>
                 <Popup>

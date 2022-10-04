@@ -15,17 +15,17 @@ const initState = {
             Component: FaHotjar
         },
         {
-            type: "coffe",
+            type: "cafe",
             name: "Quán cafe, trà sửa",
             Component: SiBuymeacoffee
         },
         {
-            type: "nhahang",
+            type: "restaurant",
             name: "Nhà hàng, quán ăn",
             Component: IoRestaurantSharp
         },
         {
-            type: "khachsan",
+            type: "hotel",
             name: "Khách sạn, nhà nghỉ",
             Component: FaHotel
         },

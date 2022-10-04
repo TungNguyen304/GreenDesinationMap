@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Left from '../../../common/Left'
 import Right from '../../../common/Right'
+import interestApi from "../../../../api/interestApi";
 import ServiceSlide from "../ServiceSlide";
 import style from './serviceitem.module.scss'
 import classNames from 'classnames/bind';
@@ -17,6 +18,8 @@ function ServiceItem({name, phone, address, star, typeService, serviceItem, type
     const value = useValueContext()
     const dispatch = useDispatch()
     const [hidden, setHidden] = useState(true)
+    const [isInterest, setIsInterest] = useState(false)
+    const account = JSON.parse(localStorage.getItem('account'))
     const imgRef = useRef()
     const left = useRef()
     const right = useRef()
@@ -24,15 +27,28 @@ function ServiceItem({name, phone, address, star, typeService, serviceItem, type
     const homePage = useSelector(state => state.homePageReducer.type)
     const [imgList, setImgList] = useState() ;
     
-    useEffect(() => {
-            let imgs = imgRef.current.getImg()
-            setImgList(imgs)
-    }, [])
-
+    
     useEffect(() => {
         left.current.addEventListener('click', handleSlideLeft)
         right.current.addEventListener('click', handleSlideRight)
+        
     })
+    
+    useEffect(() => {
+        let imgs = imgRef.current.getImg()
+        setImgList(imgs)
+    }, [])
+
+    useEffect(() => {
+        (async() => {
+            const data = await interestApi.getAll()
+            data.data.forEach((item) => {
+                if(item.placeid === id && account && item.userid === account.id) {
+                    setIsInterest(true)
+                }
+            })
+        })()
+    }, [])
 
     function handelHidden() {
         setHidden(true)
@@ -85,13 +101,15 @@ function ServiceItem({name, phone, address, star, typeService, serviceItem, type
     function handleLike(even) {
         even.stopPropagation()
         if(localStorage.getItem('account')) {
-            if(even.target.style.fill !== 'var(--color_heart)'){
+            if(even.target.farthestViewportElement.style.fill !== 'var(--color_heart)'){
                 value.handleSetBigBox('Danh sách yêu thích của bạn', 'interests')
                 value.handleDisplayBigBox()
                 // even.target.style.fill = 'var(--color_heart)'
             }
             else
-                even.target.style.fill = 'rgba(0, 0, 0, 0.6)'
+            {
+                even.target.farthestViewportElement.style.fill = 'rgba(0, 0, 0, 0.6)'
+            }
         }
         else {
             value.handleSetBigBox('Chào mừng bạn đến với GreenMap', 'login')
@@ -109,7 +127,7 @@ function ServiceItem({name, phone, address, star, typeService, serviceItem, type
     return ( <div onMouseOver={handelDisplay} onMouseLeave={handelHidden} onClick={handleNavigateToRoom} className={`${cx('service_item')} ${typeComponent === "map" ? 'w-[200px] mx-auto' : homePage === "map" ? "hover:scale-1 w-[90%] hover:shadow-normal mb-[40px] px-[13px] pt-[13px] pb-[4px]" : "hover:scale-[1.01] hover:shadow-normal mb-[40px] px-[13px] pt-[13px] pb-[4px]"} cursor-pointer`}>
         <div className={`relative mb-3 flex justify-center`}>
             <ServiceSlide ref={imgRef} typeComponent={typeComponent} id={id}/>
-            <BsHeartFill style={{'fill': 'rgba(0, 0, 0, 0.6)', 'stroke': 'white', 'strokeWidth': '1px'}} onClick={(e) => handleLike(e)} className={`absolute text-base w-[30px] h-[24px] top-3 right-3 select-none active:scale-[0.8]`}/>
+            <BsHeartFill style={{'fill': `${isInterest ? 'var(--color_heart)' : 'rgba(0, 0, 0, 0.6)'}`, 'stroke': 'white', 'strokeWidth': '1px'}} onClick={(e) => handleLike(e)} className={`absolute text-base w-[30px] h-[24px] top-3 right-3 select-none active:scale-[0.8]`}/>
             <Left ref={left} className={hidden && 'hidden'}/>
             <Right ref={right} className={hidden && 'hidden'}/>
         </div>

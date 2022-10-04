@@ -4,7 +4,8 @@ import React from 'react';
 import {MdArrowBack} from 'react-icons/md'
 import {HiDotsHorizontal} from 'react-icons/hi'
 import classNames from 'classnames/bind';
-import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import serviceApi from '../../../api/serviceApi';
 import Loader from '../../common/Loader';
 import { Suspense } from 'react';
@@ -13,9 +14,10 @@ import { useState } from 'react';
 const cx = classNames.bind(style)
 
 function MapService(props) {
-    const navigate = useNavigate()
+
     let serviceListElement
     const isDetailWishListPage = window.location.pathname.includes('/detailwishlist')
+    const searchList = useSelector(state => state.searchReducer.service)
     const ServiceItem = React.lazy(async() => {
         return new Promise(resolve => setTimeout(resolve, 2000))
         .then(
@@ -43,17 +45,14 @@ function MapService(props) {
         })()
     }, [])
 
-    function handleNavigateWishList() {
-        navigate('/wishlist')
-    }
-
+    
     return ( <div style={{marginTop: `${isDetailWishListPage ? '' : 'calc(var(--height_header) + var(--height_navbar) + 30px)'}`}} className={`${cx('map_service')}`}>
         <div className={`${isDetailWishListPage ? 'h-[88vh]' : 'wrap h-[67vh]'} `}>
             <div className="grid grid-cols-4 h-full">
                 <div className={`${isDetailWishListPage ? 'h-[88vh]' : 'h-[67vh]'}`}>
                     {isDetailWishListPage && <div className='flex items-center justify-between px-5 py-3 text-2xl font-semibold'>
                         <div className='flex items-center'>
-                            <div onClick={handleNavigateWishList} className='hover:bg-slate-50 active:scale-[0.9] rounded-full p-3 cursor-pointer'><MdArrowBack /></div>
+                            <Link to='/wishlist' className='hover:bg-slate-50 active:scale-[0.9] rounded-full p-3 cursor-pointer'><MdArrowBack /></Link>
                             <span className='ml-5 text-3xl font-semibold'>Perfect</span>
                         </div>
                         <div>
@@ -64,12 +63,15 @@ function MapService(props) {
                         <Suspense fallback={<Loader/>}>
                             <div className={`${isDetailWishListPage ? 'h-[78vh]' : 'h-full'} ${cx('wrap_list')}`}>
                                 <div className='flex flex-col items-center mt-[10px]'>
-                                    {isDetailWishListPage ?
+                                    {
+                                    isDetailWishListPage ?
                                     props.positionList.map((item, index) => {
                                         return <ServiceItem key={index} id={item.id} name={item.name} phone={item.phone} address={item.address} star={item.star} typeService={item.type} serviceItem={item}/>
                                     })  
-                                    : 
-                                    serviceList && serviceList.map((item, index) => {
+                                    : props.typeService==='search' && searchList && searchList.length ? searchList.map((item, index) => {
+                                        return <ServiceItem key={index} id={item.id} name={item.name} phone={item.phone} address={item.address} star={item.star} typeService={item.type} serviceItem={item}/>
+                                    })
+                                    : serviceList && serviceList.map((item, index) => {
                                         if(props.typeService === "noibat") {
                                             return <ServiceItem key={index} id={item.id} name={item.name} phone={item.phone} address={item.address} star={item.star} typeService={item.type} serviceItem={item}/>
                                         }
@@ -83,7 +85,7 @@ function MapService(props) {
                     </div>
                 </div>
                 <div className="col-span-3">
-                    <Map default={true} positionList={serviceList} {...props}/>
+                    <Map positionList={props.typeService==='search' ? searchList : serviceList} {...props}/>
                 </div>
             </div>
         </div>

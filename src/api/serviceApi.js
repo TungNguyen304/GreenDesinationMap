@@ -7,6 +7,10 @@ const serviceApi = {
             params
         })
     },
+    get: (id) => {
+        const url = `/services/${id}`
+        return axiosClient.get(url)
+    },
     push: (data) => {
         const url = '/services'
         return axiosClient.post(url, data)

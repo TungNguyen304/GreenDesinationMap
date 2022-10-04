@@ -6,23 +6,29 @@ import Comment from "../../../components/Room/Comment";
 import Avt from '../../../assets/logo/avt.svg'
 import Avt2 from '../../../assets/images/avt.png'
 import imageApi from "../../../api/imageApi";
+import accountApi from "../../../api/accountApi";
+import interestApi from "../../../api/interestApi";
 import { useSelector } from "react-redux";
-import {GrStar} from 'react-icons/gr'
+import { GrStar } from 'react-icons/gr'
+import { IoMdArrowRoundBack } from 'react-icons/io'
 import { AiFillStar } from 'react-icons/ai'
 import { TiHeartFullOutline, TiLocation } from 'react-icons/ti'
 import { MdVerifiedUser } from 'react-icons/md'
 import { useValueContext } from "../../../hook";
 import commentApi from "../../../api/commentApi";
 import Scroll from 'react-scroll'
+import { Link } from "react-router-dom";
 import style from './room.module.scss'
 import classNames from 'classnames/bind';
 import { Fragment, useEffect, useState } from "react";
 const cx = classNames.bind(style)
 
-function Room({type, title}) {
+function Room({ type, title }) {
 
     const [commentList, setCommentList] = useState([])
+    const [isInterest, setIsInterest] = useState(false)
     const [imageList, setImageList] = useState([])
+    const [owner, setOwner] = useState([])
     const [totalComment, setTotalComment] = useState(0)
     const value = useValueContext()
     const service = JSON.parse(localStorage.getItem('service'))
@@ -37,13 +43,11 @@ function Room({type, title}) {
             duration: 500,
             smooth: true
         });
-
-        
     })
 
     useEffect(() => {
         const count = commentList ? commentList.reduce((total, currentValue) => {
-            if(currentValue.placeid === service.id) {
+            if (currentValue.placeid === service.id) {
                 return total + 1
             }
             return total
@@ -66,32 +70,51 @@ function Room({type, title}) {
         })()
     }, [])
 
-    
+    useEffect(() => {
+        (async () => {
+            const data = await accountApi.get(service.userid)
+            setOwner(data.data)
+        })()
+    }, [])
+
+    useEffect(() => {
+        (async () => {
+            const data = await interestApi.getAll()
+            data.data.forEach((item) => {
+                if (item.placeid === service.id && item.userid === account.id) {
+                    setIsInterest(true)
+                }
+            })
+        })()
+    }, [])
+
+
     function handleLike(even) {
         even.stopPropagation()
-        if(localStorage.getItem('account')) {
-            if(even.target.style.fill !== 'var(--color_heart)'){
+        if (localStorage.getItem('account')) {
+            if (even.target.farthestViewportElement.style.fill !== 'var(--color_heart)') {
                 value.handleSetBigBox('Danh sách yêu thích của bạn', 'interests')
                 value.handleDisplayBigBox()
                 // even.target.style.fill = 'var(--color_heart)'
             }
-            else
-                even.target.style.fill = 'rgba(0, 0, 0, 0.6)'
+            else {
+                even.target.farthestViewportElement.style.fill = 'white'
+            }
         }
         else {
             value.handleSetBigBox('Chào mừng bạn đến với GreenMap', 'login')
             value.handleDisplayBigBox()
         }
     }
-    
+
 
     function handleDisplayComment(e) {
         value.handleSetBigBox('', 'comment')
         value.handleDisplayBigBox()
     }
 
-    return ( <div className={`${cx("room")}`}>
-        <Header/>
+    return (<div className={`${cx("room")}`}>
+        <Header />
         <div className={`small_wrap my-[100px]`}>
             <div className="text-2xl font-semibold">
                 {service.name}
@@ -100,19 +123,19 @@ function Room({type, title}) {
             <div className="flex justify-between cursor-pointer mt-3 mb-5">
                 <div className="flex">
                     <div className="flex items-center mr-5">
-                        <AiFillStar/>
+                        <AiFillStar />
                         <span>{service.star}</span>
                     </div>
                     <div className="flex underline mr-5">
                         <div><span>180</span> Đánh giá</div>
                     </div>
                     <div className="flex items-center underline">
-                        <TiLocation/>
+                        <TiLocation />
                         {service.address}
                     </div>
                 </div>
                 <div onClick={(e) => handleLike(e)} className="flex items-center underline active:scale-[0.8] select-none">
-                    <TiHeartFullOutline style={{'fill': 'white', 'stroke': 'black', 'strokeWidth': '1px'}} className="text-base w-[24px] h-[20px] select-none mr-1"/>
+                    <TiHeartFullOutline style={{ 'fill': `${isInterest ? 'var(--color_heart)' : 'white'}`, 'stroke': 'black', 'strokeWidth': '1px' }} className="text-base w-[24px] h-[20px] select-none mr-1" />
                     <span>Lưu</span>
                 </div>
             </div>
@@ -140,7 +163,7 @@ function Room({type, title}) {
                     </div>
                 </div>
             </div>
-            
+
             <div className="flex mt-9">
                 <div className="w-[50%] border-t border-solid border-normal pt-6">
                     <div className="flex justify-between items-center">
@@ -149,7 +172,7 @@ function Room({type, title}) {
                         </div>
                         <div>
                             <div className="inline-block rounded-full overflow-hidden">
-                                <img className="w-[56px] h-[56px] " src="https://a0.muscache.com/im/pictures/user/237512e2-5c40-40e9-86de-6a7c84e6882b.jpg?im_w=240" alt="" />
+                                <img className="w-[56px] h-[56px] " src={owner.image} alt="" />
                             </div>
                         </div>
                     </div>
@@ -165,7 +188,7 @@ function Room({type, title}) {
             <div className={`${cx('comment')} mt-6 border-t border-solid border-normal pt-9`}>
                 <div className="flex items-center text-2xl mb-4">
                     <div className="flex items-center">
-                        <GrStar/>
+                        <GrStar />
                         {service.star}
                     </div>
                     <div className="px-3"> - </div>
@@ -174,10 +197,10 @@ function Room({type, title}) {
                 <div className="mb-5">
                     <div className="grid grid-cols-2">
                         {commentList.map((item, index) => {
-                            if(count<6) {
-                                if(item.placeid === service.id) {
+                            if (count < 6) {
+                                if (item.placeid === service.id) {
                                     count++;
-                                    return <Comment key={index} name={item.username} date={item.date} content={item.content} image={item.image}/>
+                                    return <Comment key={index} name={item.username} date={item.date} content={item.content} image={item.image} />
                                 }
                                 else return <Fragment key={index}></Fragment>
                             }
@@ -189,11 +212,11 @@ function Room({type, title}) {
                     </div>}
                 </div>
                 <div className={`w-[50%]`}>
-                    <div>
+                    {account ? <div>
                         <div className="flex items-center mb-6">
                             <div className="mr-5 text-xl font-semibold italic">{account && account.username}</div>
                             <div>
-                                <img className="w-[56px] h-[56px] rounded-full" src={account && account.image!=="" ? account.image : account ? Avt2 : Avt} alt="" />
+                                <img className="w-[56px] h-[56px] rounded-full" src={account && account.image !== "" ? account.image : account ? Avt2 : Avt} alt="" />
                             </div>
                         </div>
                         <div>
@@ -201,46 +224,60 @@ function Room({type, title}) {
                             <div className="flex justify-between items-center w-full">
                                 <textarea id="comment" type="text" placeholder="Comment ..." className="outline-none mr-5 py-3 px-4 flex-1 border border-solid border-normal placeholder:italic" />
                                 <div className="flex flex-col">
-                                    <button style={{'backgroundColor': 'var(--primary)', "backgroundImage": "linear-gradient(to right, #07D5DF, #7F6DEF, #F408FE)"}} className="hover:brightness-90 active:scale-[0.98] text-white py-2 px-4 rounded-full italic mb-3">Gửi đi</button>
-                                    <button style={{'backgroundColor': 'var(--primary)', "backgroundImage": "linear-gradient(to right, #07D5DF, #7F6DEF, #F408FE)"}} className="hover:brightness-90 active:scale-[0.98] text-white py-2 px-4 rounded-full italic">Đến trang đánh giá</button>
+                                    <button style={{ 'backgroundColor': 'var(--primary)', "backgroundImage": "linear-gradient(to right, #07D5DF, #7F6DEF, #F408FE)" }} className="hover:brightness-90 active:scale-[0.98] text-white py-2 px-4 rounded-full italic mb-3">Gửi đi</button>
+                                    <Link to={`/evaluate/${service.id}`} style={{ 'backgroundColor': 'var(--primary)', "backgroundImage": "linear-gradient(to right, #07D5DF, #7F6DEF, #F408FE)" }} className="hover:brightness-90 active:scale-[0.98] text-white py-2 px-4 rounded-full italic">Đến trang đánh giá</Link>
                                 </div>
                             </div>
                         </div>
                     </div>
+                        :
+                        <div>
+                            <button onClick={(e) => {
+                                value.handleDisplayBigBox()
+                                value.handleSetBigBox('Đăng Nhập', 'login')
+                            }} style={{ 'backgroundColor': 'var(--primary)', "backgroundImage": "linear-gradient(to right, #07D5DF, #7F6DEF, #F408FE)" }} className="hover:brightness-90 active:scale-[0.98] text-white py-2 px-4 rounded-full italic mb-3">Bình luận và đánh giá</button>
+                        </div>
+                    }
+
                 </div>
+
             </div>
 
             <div className="w-full h-[70vh] mt-6">
-                <Map serviceRoom={service}/>
+                <Map serviceRoom={service} />
             </div>
 
             <div className="mt-6">
                 <div className="flex items-center">
                     <div className="mr-5">
-                        <img className="w-[64px] h-[64px] rounded-full" src="https://a0.muscache.com/im/pictures/user/237512e2-5c40-40e9-86de-6a7c84e6882b.jpg?im_w=240" alt="" />
+                        <img className="w-[64px] h-[64px] rounded-full" src={owner.image} alt="" />
                     </div>
                     <div>
                         <div className="text-lg font-semibold">Người đăng ký: {service.host}</div>
-                        <div>Đã tham gia vào tháng {service.startday.slice(3,5)} năm {service.startday.slice(6,10)}</div>
+                        <div>Đã tham gia vào tháng {service.startday.slice(3, 5)} năm {service.startday.slice(6, 10)}</div>
                     </div>
                 </div>
                 <div className="flex mt-4">
                     <div className="flex items-center mr-6">
-                        <AiFillStar className="mr-2"/>
+                        <AiFillStar className="mr-2" />
                         <span>438 đánh giá</span>
                     </div>
                     <div className="flex items-center">
-                        <MdVerifiedUser className="mr-2"/>
+                        <MdVerifiedUser className="mr-2" />
                         <span>Đã xác minh danh tính</span>
                     </div>
                 </div>
             </div>
         </div>
         {show && <div>
-                <BigBox title={title} type={type} handleDisplayBigBox={value.handleDisplayBigBox}/>
+            <BigBox title={title} type={type} handleDisplayBigBox={value.handleDisplayBigBox} />
         </div>}
-        <Footer/>
-    </div> );
+        <Link to='/' style={{ "backgroundImage": "linear-gradient(to right, #07D5DF, #7F6DEF, #F408FE)" }} className="text-white py-3 px-6 fixed top-[100px] cursor-pointer left-[20px] flex items-center mx-auto rounded-full hover:opacity-90 active:scale-[0.98]">
+            <IoMdArrowRoundBack/>
+            <span>Back</span>
+        </Link>
+        <Footer />
+    </div>);
 }
 
 export default Room

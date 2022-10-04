@@ -1,4 +1,5 @@
 import { TbGitPullRequestClosed } from 'react-icons/tb'
+import {BsCheckCircleFill} from 'react-icons/bs'
 import { useDispatch } from 'react-redux/es/exports'
 import { useSelector } from 'react-redux/es/exports'
 import { setServiceType } from '../../../store/actions/service'
@@ -12,10 +13,14 @@ const cx = classNames.bind(style)
 
 function Navbar(props) {
     const dispatch = useDispatch()
+    const checkRef = useRef()
+    const filterRef = useRef()
     const left = useRef()
     const right = useRef()
     const navbar = useRef()
     const serviceType = useSelector(state => state.serviceReducer.serviceComponent)
+    const filter = useSelector(state => state.filterReducer.filter)
+    
 
     let navList, navlistChild
     useEffect(() => {
@@ -60,6 +65,17 @@ function Navbar(props) {
             window.onscroll = () => {}
         }
     }, [navList])
+
+    useEffect(() => {
+        if((filter.district && filter.district.length) || (filter.ward && filter.ward.length) || (filter.type && filter.type.length)) {
+            checkRef.current.classList.remove('hidden')
+            filterRef.current.style.border = '1px solid green'
+        }
+        else {
+            checkRef.current.classList.add('hidden')
+            filterRef.current.style.border = ''
+        }
+    }, [filter])
 
     function handleSlideRight() {
         let width = navList && Number((window.getComputedStyle(navList[0]).width).slice(0, (window.getComputedStyle(navList[0]).width).length-2))
@@ -116,13 +132,14 @@ function Navbar(props) {
                 </div>
                 <div>
                     <div className={`pl-6`}>
-                        <button onClick={() => {
+                        <div ref={filterRef} onClick={() => {
                             props.handleSetBigBox('Bộ lọc', 'filter')
                             props.handleDisplayBigBox()
-                        }} className={`${cx('filter')} rounded-xl text-xs flex items-center px-4 py-4 cursor-pointer justify-between`}>
+                        }} className={`${cx('filter')} rounded-xl text-xs flex items-center px-4 py-4 cursor-pointer relative justify-between`}>
                             <TbGitPullRequestClosed className='text-base'/>
                             <span className='ml-2 font-bold'>Bộ lọc</span>
-                        </button>
+                            <div ref={checkRef} className='text-green-600 text-2xl absolute top-0 right-0 translate-x-[50%] translate-y-[-50%] hidden'><BsCheckCircleFill/></div>
+                        </div>
                     </div>
                 </div>
             </div>
