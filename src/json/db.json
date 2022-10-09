@@ -1,5 +1,5 @@
 {
-    "services": [
+    "getservices": [
         {
             "id": 1,
             "mapid": 5956869,
@@ -590,7 +590,7 @@
             "startday": "05/09/2022"
         }
     ],
-    "interests": [
+    "getinterests": [
         {
             "id": 1,
             "name": "love1",
@@ -634,7 +634,7 @@
             "placeid": 9
         }
     ],
-    "comments": [
+    "getcomments": [
         {
             "id": 1,
             "userid": 1,
@@ -825,7 +825,7 @@
             "date": "Ngày 12 tháng 8 năm 2022"
         }
     ],
-    "accounts": [
+    "getaccounts": [
         {
             "id": 1,
             "firstname": "Tung",
@@ -892,7 +892,7 @@
             "phonenumber": "0899852441"
         }
     ],
-    "images": [
+    "getimages": [
         {
             "id": 1,
             "placeid": 1,
@@ -1694,7 +1694,7 @@
             "name": "https://a0.muscache.com/im/pictures/5e902b1f-feb7-4adf-9334-9016561ff338.jpg?im_w=720"
         }
     ],
-    "criterias": [
+    "getcriterias": [
         {
             "id": 1,
             "name": "Sử dụng vật liệu thân thiện môi trường",

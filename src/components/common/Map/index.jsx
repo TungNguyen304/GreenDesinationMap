@@ -65,11 +65,10 @@ function Map(props) {
   const { selectPosition, positionList, serviceRoom } = props;
   const locationSelection = [selectPosition?.lat, selectPosition?.lon];
   const locationServiceRoom = [serviceRoom?.lat, serviceRoom?.lon];
-  console.log(positionList);
 
   return (
     <MapContainer
-      className={`z-0 ${window.location.pathname.includes('/detailwishlist') ? '' : 'rounded-lg'}`}
+      className={`z-0 ${window.location.pathname.includes('/detailwishlist') || window.location.pathname.includes('/host/registerservice/location') ? '' : 'rounded-lg'}`}
       center={position}
       zoom={window.location.pathname === 'room' ? 10 : 12}
       style={{ width: "100%", height: "100%" }}

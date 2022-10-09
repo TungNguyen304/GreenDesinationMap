@@ -1,7 +1,7 @@
-const setServiceType = (service) => {
+const setServiceType = (type) => {
     return {
-        type: 'SET_SERVICETYPE',
-        payload: service
+        type: 'SET_SERVICE_TYPE',
+        payload: type
     }
 }
 
@@ -12,5 +12,12 @@ const setService = (service) => {
     }
 }
 
+const setServiceRegisterType = (type) => {
+    return {
+        type: 'SET_SERVICE_REGISTER_TYPE',
+        payload: type
+    }
+}
 
-export {setServiceType, setService}
+
+export {setServiceType, setService, setServiceRegisterType}

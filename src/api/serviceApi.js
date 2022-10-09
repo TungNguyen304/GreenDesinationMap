@@ -2,21 +2,21 @@ import axiosClient from "./axiosApi";
 
 const serviceApi = {
     getAll: (params) => {
-        const url = '/services'
+        const url = '/getservices'
         return axiosClient.get(url, { 
             params
         })
     },
     get: (id) => {
-        const url = `/services/${id}`
+        const url = `/getservices/${id}`
         return axiosClient.get(url)
     },
     push: (data) => {
-        const url = '/services'
+        const url = '/getservices'
         return axiosClient.post(url, data)
     },
     delete: (id) => {
-        const url = `/services/${id}`
+        const url = `/getservices/${id}`
         return axiosClient.delete(url)
     }
 }

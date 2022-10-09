@@ -78,17 +78,21 @@ function Filter() {
                                 return <Fragment key={index}>
                                     <div className='underline mb-2'>{item.name}</div>
                                     <div key={index} className={`grid grid-cols-3 border border-solid border-normal pl-5 py-2 mb-4 ${cx('ward')}`}>
-                                        {item.wards.map((item, index) => {
+                                        {item.wards.map((item2, index) => {
                                             return (
                                                 <div key={index} className='my-2 flex items-center'>
-                                                    <input className='mr-2 w-5 h-5' type="checkbox" value={item.name} defaultChecked={ward && ward.length && ward.includes(item.name)} name="" id={item.code} />
-                                                    <label htmlFor={item.code}>{item.name}</label>
+                                                    <input className='mr-2 w-5 h-5' type="checkbox" value={item2.name} defaultChecked={
+                                                        ward && ward.length && ward.includes(item2.name)
+                                                        } name="" id={item2.code} />
+                                                    <label htmlFor={item2.code}>{item2.name}</label>
                                                 </div>
                                             )
                                         })}
                                     </div>
+                                    
                                 </Fragment>
                             }
+                            else return <Fragment key={index}></Fragment>
                         })}
                     </div>
                 </div>
@@ -99,14 +103,17 @@ function Filter() {
             <div className='text-2xl mb-3 mt-5 font-semibold'>Dịch vụ</div>
             <div>
                 <div className='text-lg font-semibold mb-4'>Chọn loại dịch vụ: </div>
-                <div className={`grid grid-cols-4 ${cx('type')}`}>
+                <div className={`grid grid-cols-2 ${cx('type')}`}>
                     {services.map((item, index) => {
-                        return (
-                            <div key={index} className='my-2 flex items-center'>
-                                <input className='mr-2 w-5 h-5' value={item.type} defaultChecked={serviceTypes && serviceTypes.length && serviceTypes.includes(item.type)} type="checkbox" name="" id={item.type} />
-                                <label htmlFor={item.type}>{item.name}</label>
-                            </div>
-                        )
+                        if (index < 4) {
+                            return (
+                                <div key={index} className='my-2 flex items-center'>
+                                    <input className='mr-2 w-5 h-5' value={item.type} defaultChecked={serviceTypes && serviceTypes.length && serviceTypes.includes(item.type)} type="checkbox" name="" id={item.type} />
+                                    <label htmlFor={item.type}>{item.name}</label>
+                                </div>
+                            )
+                        }
+                        else return <Fragment key={index}></Fragment>
                     })}
                 </div>
             </div>

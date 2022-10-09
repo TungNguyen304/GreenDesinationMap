@@ -1,21 +1,21 @@
 import axiosClient from "./axiosApi";
 const accountApi = {
     getAll: (params) => {
-        const url = "/accounts"
+        const url = "/getaccounts"
         return axiosClient.get(url, {
             params
         })
     },
     get: (id) => {
-        const url = `/accounts/${id}`
+        const url = `/getaccounts/${id}`
         return axiosClient.get(url)
     },
     update: (id) => {
-        const url = `/accounts${id}`
+        const url = `/getaccounts${id}`
         return axiosClient.put(url)
     },
     delete: (id) => {
-        const url = `/accounts${id}`
+        const url = `/getaccounts${id}`
         return axiosClient.delete(url)
     }
 }

@@ -7,6 +7,7 @@ import {FaSwimmingPool, FaHotjar, FaHotel} from 'react-icons/fa'
 
 const initState = {
     serviceType: 'noibat',
+    serviceRegisterType: '',
     service: {},
     serviceComponent: [
         {
@@ -94,7 +95,7 @@ const initState = {
 
 const serviceReducer = (state=initState, action) => {
     switch(action.type) {
-        case 'SET_SERVICETYPE': 
+        case 'SET_SERVICE_TYPE': 
         {
             const newType = action.payload
             return {
@@ -102,12 +103,20 @@ const serviceReducer = (state=initState, action) => {
                 serviceType: newType
             }
         }
+        case 'SET_SERVICE_REGISTER_TYPE': 
+        {
+            const newType = action.payload
+            return {
+                ...state,
+                serviceRegisterType: newType
+            }
+        }
         case 'SET_SERVICE': 
         {
             const service = action.payload
             return {
                 ...state,
-                service: service
+                service: {...service}
             }
         }
         default : return state

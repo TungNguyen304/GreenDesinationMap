@@ -2,13 +2,13 @@ import axiosClient from "./axiosApi";
 
 const imageApi = {
     getAll: (params) => {
-        const url = "/images"
+        const url = "/getimages"
         return axiosClient.get(url, {
             params
         })
     },
     get: (id, params) => {
-        const url = `/images${id}`
+        const url = `/getimages${id}`
         return axiosClient.get(url, {
             params
         })
