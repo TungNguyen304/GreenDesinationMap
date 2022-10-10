@@ -13,8 +13,10 @@ body {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    scroll-behavior: smooth;
     user-select: none;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
     &::-webkit-scrollbar-track {
         box-shadow: inset 0 0 5px grey; 
     }

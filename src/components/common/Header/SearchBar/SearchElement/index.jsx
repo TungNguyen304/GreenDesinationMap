@@ -2,17 +2,15 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import Divider from "@material-ui/core/Divider";
-import { useSelector } from "react-redux";
 
 function SearchElement({item, recomment, positionList, setSelectPosition, handleRegisterLocation}) {
-  const type = useSelector(state => state.serviceReducer.serviceRegisterType)
     return ( <div >
         <ListItem
           button
           onClick={() => {
             recomment.classList.add("hidden")
             setSelectPosition && setSelectPosition(item);
-            handleRegisterLocation && handleRegisterLocation(item, type)
+            handleRegisterLocation && handleRegisterLocation(item)
           }}
         >
           <ListItemIcon>

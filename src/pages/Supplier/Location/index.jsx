@@ -4,20 +4,22 @@ import { Link } from "react-router-dom";
 import { MdChevronLeft } from 'react-icons/md'
 import { useRef } from "react";
 import { useState } from "react";
+import { useParams } from "react-router-dom";
+import { useEffect } from "react";
 
 function Location() {
     const formRef = useRef()
     const [selectPosition, setSelectPosition] = useState()
+    const style = useParams()
 
-    function handleRegisterLocation(service, type) {
-        if(service.type !== type) {
-            alert(`Loại địa điểm bạn đang chọn không phải là ${type}`)
+    function handleRegisterLocation(service) {
+        if(service.type !== style.style) {
+            alert(`Loại địa điểm bạn đang chọn không phải là ${style.style}`)
         }
         else {
             setSelectPosition(service)
         }
     }
-    console.log(selectPosition);
 
     return (<div style={{fontFamily: "sans-serif"}}>
         <div className="flex h-[100vh] relative">

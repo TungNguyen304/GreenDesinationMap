@@ -27,7 +27,7 @@ function RegisterService() {
                         {serviceList && serviceList.map((item, index) => {
                             if (item.type === 'cafe' || item.type === 'restaurant' || item.type === 'hotel') {
                                 let Component = item.Component
-                                return (<Link key={index} to={`/host/registerservice/location`} onClick={() => handleDispatchType(item.type)} className="flex items-center justify-between px-5 py-6 border-2 border-solid border-[#ccc] my-3 rounded-xl cursor-pointer hover:border-black">
+                                return (<Link key={index} to={`/host/registerservice/location/${item.type}`} onClick={() => handleDispatchType(item.type)} className="flex items-center justify-between px-5 py-6 border-2 border-solid border-[#ccc] my-3 rounded-xl cursor-pointer hover:border-black">
                                     <div className="flex items-center">
                                         <div className="bg-slate-400 p-3 rounded-xl">
                                             <Component />

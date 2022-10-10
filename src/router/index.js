@@ -10,6 +10,8 @@ import RegisterService from "../pages/Supplier/RegisterService";
 import DetailWishList from "../pages/User/DetailWishList";
 import Location from "../pages/Supplier/Location";
 import ProvidePhotos from "../pages/Supplier/ProvidePhotos";
+import ProvideTitle from "../pages/Supplier/ProvideTitle";
+import NotFound from "../pages/NotFound";
 
 export const publicRouters = [
     {path: '/', component: Home},
@@ -22,9 +24,11 @@ export const publicRouters = [
     {path: '/host/mailbox', component: Mailbox},
     {path: '/host/management', component: Management},
     {path: '/host/registerservice', component: RegisterService},
-    {path: '/host/registerservice/location', component: Location},
+    {path: '/host/registerservice/location/:style', component: Location},
     {path: '/host/registerservice/providephotos', component: ProvidePhotos},
-    {path: '/host/account', component: Account}
+    {path: '/host/registerservice/providetitle', component: ProvideTitle},
+    {path: '/host/account', component: Account},
+    {path: '*', component: NotFound}
 ]
 
 export const privateRouters = []

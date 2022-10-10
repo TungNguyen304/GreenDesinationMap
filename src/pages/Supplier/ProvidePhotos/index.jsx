@@ -16,6 +16,7 @@ function ProvidePhotos() {
     const fileRef2 = useRef()
     const dropRef = useRef()
     const wrapDropRef = useRef()
+    const nextRef = useRef()
 
     function handleOnChangeImg(event) {
         console.log(event.target);
@@ -34,6 +35,11 @@ function ProvidePhotos() {
 
     function handleUploadImageDrop(path, position) {
         pathList.splice(position, 0, path)
+        setPathList([...pathList])
+    }
+
+    function handleChangeImage(path, position) {
+        pathList[position] = path
         setPathList([...pathList])
     }
 
@@ -60,7 +66,16 @@ function ProvidePhotos() {
             setLength(length - 1)
         }
 
-    }, [pathList])
+        if(pathList.length < 5) {
+            nextRef.current.classList.add('pointer-events-none')
+            nextRef.current.style.backgroundImage = "unset"
+        }
+        else {
+            nextRef.current.classList.remove('pointer-events-none')
+            nextRef.current.style.backgroundImage = "linear-gradient(to right, #07D5DF, #7F6DEF, #F408FE)"
+        }
+
+    }, [pathList.length])
 
     function handleDrag(event) {
         event.preventDefault()
@@ -120,7 +135,7 @@ function ProvidePhotos() {
                             <div className="w-full pr-2 relative">
                                 <div>
                                     <div>
-                                        <AddImage type="background" classname="w-full h-[420px]" path={pathList[0]} position={0} handleUploadImage={handleUploadImage} handleDeleteImage={handleDeleteImage} handleUploadImageDrop={handleUploadImageDrop} handleSortImage={handleSortImage}/>
+                                        <AddImage type="background" classname="w-full h-[420px]" path={pathList[0]} position={0} handleChangeImage={handleChangeImage} handleUploadImage={handleUploadImage} handleDeleteImage={handleDeleteImage} handleUploadImageDrop={handleUploadImageDrop} handleSortImage={handleSortImage}/>
                                     </div>
                                     <div className="grid grid-cols-2 gap-4 mt-4">
                                         {
@@ -128,7 +143,7 @@ function ProvidePhotos() {
                                                 const arr = []
                                                 let i = 1
                                                 for (i; i < length; i++) {
-                                                    arr.push(<AddImage key={i} path={pathList[i]} position={i} handleUploadImage={handleUploadImage} handleDeleteImage={handleDeleteImage} handleUploadImageDrop={handleUploadImageDrop} handleSortImage={handleSortImage}/>)
+                                                    arr.push(<AddImage key={i} path={pathList[i]} position={i} handleChangeImage={handleChangeImage} handleUploadImage={handleUploadImage} handleDeleteImage={handleDeleteImage} handleUploadImageDrop={handleUploadImageDrop} handleSortImage={handleSortImage}/>)
                                                 }
                                                 return arr
                                             })()
@@ -152,7 +167,7 @@ function ProvidePhotos() {
 
             <Link to='/host' className="z-10 fixed top-4 right-4 text-sm italic bg-slate-50 px-3 py-1 rounded-lg cursor-pointer hover:brightness-95 active:scale-95 select-none">Thoát</Link>
             <Link to='/host/registerservice/location' style={{ "backgroundImage": "linear-gradient(to right, #07D5DF, #7F6DEF, #F408FE)" }} className="z-10 fixed bottom-8 left-[55%] italic text-white px-6 py-2 font-semibold rounded-lg cursor-pointer hover:brightness-95 active:scale-95 select-none">Quay lại</Link>
-            <Link to='/host/registerservice/location/providephotos' style={{ "backgroundImage": "linear-gradient(to right, #07D5DF, #7F6DEF, #F408FE)" }} className="z-10 fixed bottom-8 right-8 italic text-white px-6 py-2 font-semibold rounded-lg cursor-pointer hover:brightness-95 active:scale-95 select-none">Tiếp theo</Link>
+            <Link ref={nextRef} to='/host/registerservice/providetitle' style={{ "backgroundImage": "" }} className="bg-[#DDDDDD] z-10 fixed bottom-8 right-8 italic text-white px-6 py-2 font-semibold rounded-lg cursor-pointer hover:brightness-95 active:scale-95 select-none pointer-events-none">Tiếp theo</Link>
         </div>
     </div>);
 }

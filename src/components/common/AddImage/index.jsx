@@ -11,7 +11,7 @@ import { useEffect } from 'react'
 const cx = classNames.bind(style)
 
 
-function AddImage({ type, path, classname, handleUploadImage, handleDeleteImage, position, handleUploadImageDrop, handleSortImage}) {
+function AddImage({ type, path, classname, handleUploadImage, handleDeleteImage, position, handleUploadImageDrop, handleSortImage, handleChangeImage}) {
     const [pathCurrent, setPathCurrent] = useState()
     const optionList = ["Thay đổi", "Xóa"]
     const fileRef = useRef()
@@ -27,13 +27,23 @@ function AddImage({ type, path, classname, handleUploadImage, handleDeleteImage,
         setPathCurrent(path)
     })
 
+    function handleStopPropagation(e) {
+        e.stopPropagation()
+    }
 
     function handleOnChangeImg(event) {
         if (event.target.files[0] && event.target.files[0].type.includes("image/")) {
             const newPath = URL.createObjectURL(event.target.files[0])
-            setPathCurrent(newPath)
-            handleUploadImage(newPath)
-            console.log(event.target.querySelector('div img'))
+            if(path) {
+                handleChangeImage(newPath, position)
+            }
+            else {
+                setPathCurrent(newPath)
+                handleUploadImage(newPath)
+            }
+            if(![...optionRef.current.classList].includes('hidden')) {
+                optionRef.current.classList.add('hidden')
+            }
         }
         else {
             alert("File không hợp lệ, làm ơn chọn ảnh!")
@@ -58,12 +68,16 @@ function AddImage({ type, path, classname, handleUploadImage, handleDeleteImage,
 
     function handleDrag(event) {
         event.preventDefault()
+
         if (!path && !isDragStart) {
             dragRef.current.classList.remove('hidden')
             dragRef.current.classList.add('flex')
         }
         if (!path)
+        {
             dropRef.current.classList.remove('border')
+        }
+
         if (isDragStart)
             dropRef.current.classList.add('border')
     }
@@ -79,9 +93,9 @@ function AddImage({ type, path, classname, handleUploadImage, handleDeleteImage,
             dropRef.current.classList.add('border')
     }
 
-    function handleDrop(event) {
+    function handleDrop(event) {   
         event.preventDefault()
-        if (!isDragStart) {
+        if (isDragStart === false) {
             dragRef.current.classList.add('hidden')
             dragRef.current.classList.remove('flex')
             if (!path) {
@@ -90,7 +104,11 @@ function AddImage({ type, path, classname, handleUploadImage, handleDeleteImage,
             if (event.dataTransfer.files[0] && event.dataTransfer.files[0].type.includes("image/")) {
                 const file = event.dataTransfer.files[0]
                 const newPath = URL.createObjectURL(file)
-                handleUploadImageDrop(newPath, position)
+                if(path) {
+                    handleChangeImage(newPath, position)
+                } else {
+                    handleUploadImageDrop(newPath, position)
+                }
             }
             else {
                 alert("File không hợp lệ, làm ơn chọn ảnh!")
@@ -100,26 +118,23 @@ function AddImage({ type, path, classname, handleUploadImage, handleDeleteImage,
         }
     }
 
-    function handleStopPropagation(e) {
-        e.stopPropagation()
-    }
+    
 
     function handleDragStart() {
-        console.log('start');
+        imgRef.current.addEventListener('dragover', handleStopPropagation)
         dispatch(setIsDraging({
             type: true,
             position: position
         }))
-        imgRef.current.addEventListener('dragover', handleStopPropagation)
     }
 
     function handleDragEnd() {
-        console.log('end');
+        imgRef.current.addEventListener('dragover', handleDrag)
         dispatch(setIsDraging({
             type: false,
             position: undefined
         }))
-        imgRef.current.removeEventListener('dragover', handleStopPropagation)
+
     }
 
 
@@ -131,7 +146,7 @@ function AddImage({ type, path, classname, handleUploadImage, handleDeleteImage,
                 <div onDragOver={(e) => { e.stopPropagation() }} onClick={(e) => handleOption(e)} className='absolute top-3 right-3 bg-white rounded-full p-3'>
                     <BsThreeDots />
                     <div ref={optionRef} className='hidden'>
-                        <Tippy removeImage={removeImage} topList={optionList} />
+                        <Tippy removeImage={removeImage} handleChangeImage={() => { fileRef.current.click()}} topList={optionList} />
                     </div>
                 </div>
             </div> : <FcAddImage className="text-5xl pointer-events-none" />}
