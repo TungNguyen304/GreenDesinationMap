@@ -12,6 +12,7 @@ const cx = classNames.bind(style)
 
 
 function AddImage({ type, path, classname, handleUploadImage, handleDeleteImage, position, handleUploadImageDrop, handleSortImage, handleChangeImage}) {
+    // console.log(path);
     const [pathCurrent, setPathCurrent] = useState()
     const optionList = ["Thay đổi", "Xóa"]
     const fileRef = useRef()
@@ -35,13 +36,14 @@ function AddImage({ type, path, classname, handleUploadImage, handleDeleteImage,
         if (event.target.files[0] && event.target.files[0].type.includes("image/")) {
             const newPath = URL.createObjectURL(event.target.files[0])
             if(path) {
-                handleChangeImage(newPath, position)
+                handleChangeImage(newPath, event.target.files[0], event.target.files[0].name, position)
             }
             else {
-                setPathCurrent(newPath)
-                handleUploadImage(newPath)
+                setPathCurrent(newPath, event.target.files[0], event.target.files[0].name)
+                handleUploadImage(newPath, event.target.files[0], event.target.files[0].name)
             }
-            if(![...optionRef.current.classList].includes('hidden')) {
+            
+            if(optionRef.current && ![...optionRef.current.classList].includes('hidden')) {
                 optionRef.current.classList.add('hidden')
             }
         }
@@ -62,8 +64,8 @@ function AddImage({ type, path, classname, handleUploadImage, handleDeleteImage,
     }
 
     function removeImage() {
-        handleDeleteImage(pathCurrent)
-        setPathCurrent('')
+        handleDeleteImage(pathCurrent.path)
+        setPathCurrent({})
     }
 
     function handleDrag(event) {
@@ -105,9 +107,9 @@ function AddImage({ type, path, classname, handleUploadImage, handleDeleteImage,
                 const file = event.dataTransfer.files[0]
                 const newPath = URL.createObjectURL(file)
                 if(path) {
-                    handleChangeImage(newPath, position)
+                    handleChangeImage(newPath, file, file.name, position)
                 } else {
-                    handleUploadImageDrop(newPath, position)
+                    handleUploadImageDrop(newPath, file, file.name, position)
                 }
             }
             else {
@@ -141,7 +143,7 @@ function AddImage({ type, path, classname, handleUploadImage, handleDeleteImage,
     return (
         <div ref={dropRef} onDragOver={(e) => handleDrag(e)} onDragLeave={(e) => handleDragLeave(e)} onDrop={(e) => handleDrop(e)} onClick={() => { fileRef.current.click() }} className={`${path ? '' : 'border border-dashed hover:border-solid hover:border-2 border-black'} ${classname || 'h-[210px]'} relative flex justify-center items-center cursor-pointer`}>
             {path ? <div className='w-full h-full relative'>
-                <img ref={imgRef} className='w-full h-full hover:brightness-[0.8]' draggable onDragStart={handleDragStart} onDragEnd={handleDragEnd} src={path} alt="" />
+                <img ref={imgRef} className='w-full h-full hover:brightness-[0.8]' draggable onDragStart={handleDragStart} onDragEnd={handleDragEnd} src={path.path} alt="" />
                 {type === "background" && <div onDragOver={(e) => { e.stopPropagation() }} onClick={(e) => { e.stopPropagation() }} className='cursor-not-allowed px-3 py-1 absolute top-3 left-3 bg-white'>Ảnh bìa</div>}
                 <div onDragOver={(e) => { e.stopPropagation() }} onClick={(e) => handleOption(e)} className='absolute top-3 right-3 bg-white rounded-full p-3'>
                     <BsThreeDots />

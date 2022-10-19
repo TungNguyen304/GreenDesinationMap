@@ -7,6 +7,8 @@ import classNames from 'classnames/bind';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import serviceApi from '../../../api/serviceApi';
+import interestApi from '../../../api/interestApi';
+import imageApi from '../../../api/imageApi';
 import Loader from '../../common/Loader';
 import { Suspense } from 'react';
 import { useEffect } from 'react';
@@ -14,7 +16,8 @@ import { useState } from 'react';
 const cx = classNames.bind(style)
 
 function MapService(props) {
-
+    const [imageList, setImageList] = useState([])
+    const [interestList, setInterestList] = useState([])
     let serviceListElement
     const isDetailWishListPage = window.location.pathname.includes('/detailwishlist')
     const searchList = useSelector(state => state.searchReducer.service)
@@ -36,6 +39,20 @@ function MapService(props) {
             })
         }, 2300)
     })
+
+    useEffect(() => {
+        (async () => {
+            const data = await imageApi.getAll()
+            setImageList([...data.data])
+        })()
+    }, [])
+
+    useEffect(() => {
+        (async () => {
+            const data = await interestApi.getAll()
+            setInterestList([...data.data])
+        })()
+    }, [])
 
     const [serviceList, setServiceList] = useState()
     useEffect(() => {
@@ -59,24 +76,24 @@ function MapService(props) {
                             <div className='hover:bg-slate-50 rounded-full p-3 cursor-pointer'><HiDotsHorizontal/></div>
                         </div>
                     </div>}
-                    <div className={`${isDetailWishListPage ? '' : 'h-full'}`}>
+                    <div className={`${isDetailWishListPage ? '' : 'h-full'} relative`}>
                         <Suspense fallback={<Loader/>}>
                             <div className={`${isDetailWishListPage ? 'h-[78vh]' : 'h-full'} ${cx('wrap_list')}`}>
                                 <div className='flex flex-col items-center mt-[10px]'>
                                     {
                                     isDetailWishListPage ?
                                     props.positionList.map((item, index) => {
-                                        return <ServiceItem key={index} id={item.id} name={item.name} phone={item.phone} address={item.address} star={item.star} typeService={item.type} serviceItem={item}/>
+                                        return <ServiceItem imageList={imageList} interestList={interestList} key={index} id={item.id} name={item.name} phone={item.phone} address={item.address} star={item.star} typeService={item.type} serviceItem={item}/>
                                     })  
                                     : props.typeService==='search' && searchList && searchList.length ? searchList.map((item, index) => {
-                                        return <ServiceItem key={index} id={item.id} name={item.name} phone={item.phone} address={item.address} star={item.star} typeService={item.type} serviceItem={item}/>
+                                        return <ServiceItem imageList={imageList} interestList={interestList} key={index} id={item.id} name={item.name} phone={item.phone} address={item.address} star={item.star} typeService={item.type} serviceItem={item}/>
                                     })
                                     : serviceList && serviceList.map((item, index) => {
                                         if(props.typeService === "noibat") {
-                                            return <ServiceItem key={index} id={item.id} name={item.name} phone={item.phone} address={item.address} star={item.star} typeService={item.type} serviceItem={item}/>
+                                            return <ServiceItem imageList={imageList} interestList={interestList} key={index} id={item.id} name={item.name} phone={item.phone} address={item.address} star={item.star} typeService={item.type} serviceItem={item}/>
                                         }
                                         else if(props.typeService === item.type) {
-                                            return <ServiceItem key={index} id={item.id} name={item.name} phone={item.phone} address={item.address} star={item.star} typeService={item.type} serviceItem={item}/>
+                                            return <ServiceItem imageList={imageList} interestList={interestList} key={index} id={item.id} name={item.name} phone={item.phone} address={item.address} star={item.star} typeService={item.type} serviceItem={item}/>
                                         }
                                     })}
                                 </div>

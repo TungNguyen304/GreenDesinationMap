@@ -8,11 +8,20 @@ function ProvideTitle() {
     const [text, setText] = useState('')
     const max = 500
     const nextRef = useRef()
+    const service = JSON.parse(localStorage.getItem('placeTemporary'))
 
     function handleTyping(e) {
         setText(e.target.value)
         setLength(e.target.value.length)
     }
+
+    useEffect(() => {
+        if(service.description) {
+            setText(service.description)
+            setLength(service.description.length)
+        }
+
+    },[])
 
     useEffect(() => {
         if(length === 0 || length > 500) {
@@ -24,6 +33,14 @@ function ProvideTitle() {
             nextRef.current.style.backgroundImage = "linear-gradient(to right, #07D5DF, #7F6DEF, #F408FE)"
         }
     }, [length])
+
+    function handleDispatchValue(text) {
+        const currdentData = JSON.parse(localStorage.getItem('placeTemporary'))
+        localStorage.setItem('placeTemporary', JSON.stringify({
+            ...currdentData,
+            description: text
+        }))
+    }
 
     return (<div>
         <div className={`flex h-[100vh] relative`}>
@@ -38,9 +55,9 @@ function ProvideTitle() {
                 </div>
             </div>
 
-            <Link to='/host' className="z-10 fixed top-4 right-4 text-sm italic bg-slate-50 px-3 py-1 rounded-lg cursor-pointer hover:brightness-95 active:scale-95 select-none">Thoát</Link>
+            <Link onClick={() => {localStorage.removeItem('placeTemporary')}} to='/host' className="z-10 fixed top-4 right-4 text-sm italic bg-slate-50 px-3 py-1 rounded-lg cursor-pointer hover:brightness-95 active:scale-95 select-none">Thoát</Link>
             <Link to='/host/registerservice/providephotos' style={{ "backgroundImage": "linear-gradient(to right, #07D5DF, #7F6DEF, #F408FE)" }} className="z-10 fixed bottom-8 left-[55%] italic text-white px-6 py-2 font-semibold rounded-lg cursor-pointer hover:brightness-95 active:scale-95 select-none">Quay lại</Link>
-            <Link ref={nextRef} to='/host/registerservice/abc' style={{ "backgroundImage": "" }} className="bg-[#DDDDDD] cursor-pointer z-10 fixed bottom-8 right-8 italic text-white px-6 py-2 font-semibold rounded-lg hover:brightness-95 active:scale-95 select-none pointer-events-none">Tiếp theo</Link>
+            <Link onClick={() => {handleDispatchValue(text)}} ref={nextRef} to='/host/registerservice/providecriteria' style={{ "backgroundImage": "" }} className="bg-[#DDDDDD] cursor-pointer z-10 fixed bottom-8 right-8 italic text-white px-6 py-2 font-semibold rounded-lg hover:brightness-95 active:scale-95 select-none pointer-events-none">Lưu và đến bước tiếp theo</Link>
         </div>
     </div>);
 }

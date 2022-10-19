@@ -8,13 +8,13 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Left from '../../../common/Left'
 import Right from '../../../common/Right'
-import interestApi from "../../../../api/interestApi";
 import ServiceSlide from "../ServiceSlide";
 import style from './serviceitem.module.scss'
 import classNames from 'classnames/bind';
 const cx = classNames.bind(style)
 
-function ServiceItem({name, phone, address, star, typeService, serviceItem, typeComponent, id}) {
+function ServiceItem({name, phone, address, star, typeService, serviceItem, typeComponent, id, imageList, interestList, previewPage}) {
+    const isPreviewPage = localStorage.getItem('placeTemporary') ? true : false
     const value = useValueContext()
     const dispatch = useDispatch()
     const [hidden, setHidden] = useState(true)
@@ -25,24 +25,26 @@ function ServiceItem({name, phone, address, star, typeService, serviceItem, type
     const right = useRef()
     const navigate = useNavigate()
     const homePage = useSelector(state => state.homePageReducer.type)
-    const [imgList, setImgList] = useState() ;
-    
-    
+    const [imgList, setImgList] = useState()
+
     useEffect(() => {
-        left.current.addEventListener('click', handleSlideLeft)
-        right.current.addEventListener('click', handleSlideRight)
-        
+        if (left.current) {
+            left.current.addEventListener('click', handleSlideLeft)
+            right.current.addEventListener('click', handleSlideRight)
+        }
     })
+
     
     useEffect(() => {
-        let imgs = imgRef.current.getImg()
-        setImgList(imgs)
+        if(imgRef.current) {
+            let imgs = imgRef.current.getImg()
+            setImgList(imgs)
+        }
     }, [])
 
     useEffect(() => {
         (async() => {
-            const data = await interestApi.getAll()
-            data.data.forEach((item) => {
+            interestList && interestList.forEach((item) => {
                 if(item.placeid === id && account && item.userid === account.id) {
                     setIsInterest(true)
                 }
@@ -118,16 +120,21 @@ function ServiceItem({name, phone, address, star, typeService, serviceItem, type
     }
 
     function handleNavigateToRoom() {
-        dispatch(setService(serviceItem))
-        localStorage.setItem('service', JSON.stringify(serviceItem))
-        navigate('/room')
+        if(isPreviewPage) {
+            navigate(`/room/temporary`)
+        }
+        else {
+            dispatch(setService(serviceItem))
+            localStorage.setItem('service', JSON.stringify(serviceItem))
+            navigate(`/room/${id}`)
+        }
     }
 
 
-    return ( <div onMouseOver={handelDisplay} onMouseLeave={handelHidden} onClick={handleNavigateToRoom} className={`${cx('service_item')} ${typeComponent === "map" ? 'w-[200px] mx-auto' : homePage === "map" ? "hover:scale-1 w-[90%] hover:shadow-normal mb-[40px] px-[13px] pt-[13px] pb-[4px]" : "hover:scale-[1.01] hover:shadow-normal mb-[40px] px-[13px] pt-[13px] pb-[4px]"} cursor-pointer`}>
+    return ( <div onMouseOver={handelDisplay} onMouseLeave={handelHidden} onClick={handleNavigateToRoom} className={`${cx('service_item')} ${typeComponent === "map" ? 'w-[200px] mx-auto' : homePage === "map" ? "hover:scale-1 w-[90%] hover:shadow-normal mb-[40px] px-[13px] pt-[13px] pb-[4px]" : "hover:scale-[1.01] hover:shadow-normal mb-[40px] px-[13px] pt-[13px] pb-[4px]"} ${previewPage && 'border-2 border-solid border-[#4c4949]'} cursor-pointer`}>
         <div className={`relative mb-3 flex justify-center`}>
-            <ServiceSlide ref={imgRef} typeComponent={typeComponent} id={id}/>
-            <BsHeartFill style={{'fill': `${isInterest ? 'var(--color_heart)' : 'rgba(0, 0, 0, 0.6)'}`, 'stroke': 'white', 'strokeWidth': '1px'}} onClick={(e) => handleLike(e)} className={`absolute text-base w-[30px] h-[24px] top-3 right-3 select-none active:scale-[0.8]`}/>
+            <ServiceSlide ref={imgRef} imageList={imageList} typeComponent={typeComponent} id={id}/>
+            {!previewPage && <BsHeartFill style={{'fill': `${isInterest ? 'var(--color_heart)' : 'rgba(0, 0, 0, 0.6)'}`, 'stroke': 'white', 'strokeWidth': '1px'}} onClick={(e) => handleLike(e)} className={`absolute text-base w-[30px] h-[24px] top-3 right-3 select-none active:scale-[0.8]`}/>}
             <Left ref={left} className={hidden && 'hidden'}/>
             <Right ref={right} className={hidden && 'hidden'}/>
         </div>

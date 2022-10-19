@@ -3,13 +3,17 @@ import React, { Suspense, useEffect, useState } from 'react';
 import { memo } from 'react';
 import { useSelector } from 'react-redux';
 import serviceApi from '../../../api/serviceApi';
+import imageApi from '../../../api/imageApi';
 import style from './service.module.scss'
 import classNames from 'classnames/bind';
+import interestApi from '../../../api/interestApi';
 const cx = classNames.bind(style)
 
 
 function Service({typeService}) {
     const searchList = useSelector(state => state.searchReducer.service)
+    const [imageList, setImageList] = useState([])
+    const [interestList, setInterestList] = useState([])
     const ServiceItem = React.lazy(async() => {
         return new Promise(resolve => setTimeout(resolve, 2000))
         .then(
@@ -25,6 +29,19 @@ function Service({typeService}) {
         window.scroll(0, 0);
     })
 
+    useEffect(() => {
+        (async () => {
+            const data = await imageApi.getAll()
+            setImageList([...data.data])
+        })()
+    }, [])
+
+    useEffect(() => {
+        (async () => {
+            const data = await interestApi.getAll()
+            setInterestList([...data.data])
+        })()
+    }, [])
     
     const [services, setService] = useState([])
     useEffect(() => {
@@ -40,15 +57,15 @@ function Service({typeService}) {
                         {
                         typeService==='search' && searchList && searchList.length ? 
                         searchList.map((item) => {
-                            return <ServiceItem serviceItem={item} key={item.id} id={item.id} typeService={item.type} name={item.name} phone={item.phone} star={item.star} address={item.address}/>
+                            return <ServiceItem imageList={imageList} interestList={interestList} serviceItem={item} key={item.id} id={item.id} typeService={item.type} name={item.name} phone={item.phone} star={item.star} address={item.address}/>
                         })
                         :
                         services && services.map(item => {
                             if(typeService ==='noibat') {
-                                return <ServiceItem serviceItem={item} key={item.id} id={item.id} typeService={item.type} name={item.name} phone={item.phone} star={item.star} address={item.address}/>
+                                return <ServiceItem imageList={imageList} interestList={interestList} serviceItem={item} key={item.id} id={item.id} typeService={item.type} name={item.name} phone={item.phone} star={item.star} address={item.address}/>
                             }
                             else if(item.type === typeService) {
-                                return <ServiceItem serviceItem={item} key={item.id} id={item.id} typeService={item.type} name={item.name} phone={item.phone} star={item.star} address={item.address}/>
+                                return <ServiceItem imageList={imageList} interestList={interestList} serviceItem={item} key={item.id} id={item.id} typeService={item.type} name={item.name} phone={item.phone} star={item.star} address={item.address}/>
                             }
                         })}
                     </div>

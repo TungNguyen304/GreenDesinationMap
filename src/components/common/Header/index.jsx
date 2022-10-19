@@ -18,7 +18,9 @@ function Header(props) {
     var account = JSON.parse(localStorage.getItem('account'))
     var accountSupplier = JSON.parse(localStorage.getItem('accountSupplier'))
     const actor = window.location.pathname.includes('/host') ? 'supplier' : 'user'
+    const tippyRef = useRef()
     let bottomList2
+
     if (actor === 'user' && localStorage.getItem('account')) {
         topList = ['Tin nhắn', 'Thông báo', 'Danh sách yêu thích']
         bottomList1 = ['Tổ chức trải nghiệm', 'Giới thiệu chủ nhà']
@@ -28,7 +30,7 @@ function Header(props) {
         topList = ['Thông báo', 'Đăng ký địa điểm', 'Quản lý địa điểm']
         bottomList1 = ['Tài khoản', 'Trợ giúp', 'Đăng xuất']
     }
-    const tippyRef = useRef()
+
     function removeClass() {
         tippyRef.current && tippyRef.current.classList.add('hidden')
         window.removeEventListener('click', removeClass)
@@ -43,15 +45,15 @@ function Header(props) {
     }
 
 
-    return (<div className={`${cx("header")} `}>
+    return (<div className={`${cx("header")} ${props.isServiceTemporary && 'pointer-events-none'}`}>
         <div className={`${window.location.pathname === '/room' ? 'small_wrap' : 'wrap'} ${cx('wrap_flex')} max-h-[54px]`}>
-            <div className='text-primary flex items-center flex-1'>
+            <div className='text-primary flex items-center'>
                 <a href="/"><img className='w-[150px]' src={Logo} alt="" /></a>
             </div>
 
             {window.location.pathname.includes('/host') ? <NavHeader /> : <SearchBar {...props} hidden={window.location.pathname !== '/' ? 'hidden' : ''} />}
 
-            <div className='flex justify-end items-center flex-1'>
+            <div className='flex justify-end items-center'>
                 <div className='text-sm font-medium rounded-full cursor-pointer hover:bg-gray-100'>
                     <Link className='block p-3' to={window.location.pathname.includes('host') ? '/' : '/host'}>{window.location.pathname.includes('host') ? 'Trở thành người dùng' : 'Trở thành nhà cung cấp'}</Link>
                 </div>

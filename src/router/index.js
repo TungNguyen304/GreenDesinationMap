@@ -11,11 +11,17 @@ import DetailWishList from "../pages/User/DetailWishList";
 import Location from "../pages/Supplier/Location";
 import ProvidePhotos from "../pages/Supplier/ProvidePhotos";
 import ProvideTitle from "../pages/Supplier/ProvideTitle";
+import Preview from "../pages/Supplier/Preview";
 import NotFound from "../pages/NotFound";
+import ProvideCriteria from "../pages/Supplier/ProvideCriteria";
+import ViewListImage from "../pages/User/ViewListImage";
+import ViewImage from "../pages/User/ViewImage";
 
 export const publicRouters = [
     {path: '/', component: Home},
-    {path: '/room', component: Room},
+    {path: '/room/:id', component: Room},
+    {path: '/room/:id/viewlistimage', component: ViewListImage},
+    {path: '/room/:id/viewimage', component: ViewImage},
     {path: '/account', component: Account},
     {path: '/wishlist', component: WishList},
     {path: '/evaluate/:id', component: Evaluate},
@@ -27,6 +33,8 @@ export const publicRouters = [
     {path: '/host/registerservice/location/:style', component: Location},
     {path: '/host/registerservice/providephotos', component: ProvidePhotos},
     {path: '/host/registerservice/providetitle', component: ProvideTitle},
+    {path: '/host/registerservice/providecriteria', component: ProvideCriteria},
+    {path: '/host/registerservice/preview', component: Preview},
     {path: '/host/account', component: Account},
     {path: '*', component: NotFound}
 ]

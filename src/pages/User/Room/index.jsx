@@ -13,6 +13,7 @@ import { GrStar } from 'react-icons/gr'
 import { IoMdArrowRoundBack } from 'react-icons/io'
 import { AiFillStar } from 'react-icons/ai'
 import { TiHeartFullOutline, TiLocation } from 'react-icons/ti'
+import { useNavigate } from "react-router-dom";
 import { MdVerifiedUser } from 'react-icons/md'
 import { useValueContext } from "../../../hook";
 import commentApi from "../../../api/commentApi";
@@ -24,17 +25,27 @@ import { Fragment, useEffect, useState } from "react";
 const cx = classNames.bind(style)
 
 function Room({ type, title }) {
-
+    const navigate = useNavigate()
     const [commentList, setCommentList] = useState([])
     const [isInterest, setIsInterest] = useState(false)
     const [imageList, setImageList] = useState([])
     const [owner, setOwner] = useState([])
     const [totalComment, setTotalComment] = useState(0)
     const value = useValueContext()
-    const service = JSON.parse(localStorage.getItem('service'))
+    let service = {}
+    let isServiceTemporary = false
+    if(localStorage.getItem('placeTemporary')) {
+        service = JSON.parse(localStorage.getItem('placeTemporary'))
+        isServiceTemporary = true
+    }
+    else {
+        service = JSON.parse(localStorage.getItem('service'))
+    }
     const account = JSON.parse(localStorage.getItem('account'))
+    const accountSupplier = JSON.parse(localStorage.getItem('accountSupplier'))
     const show = useSelector(state => state.bigboxReducer.show)
     let count = 0;
+    const currentDay = new Date()
 
 
     useEffect(() => {
@@ -43,6 +54,8 @@ function Room({ type, title }) {
             duration: 500,
             smooth: true
         });
+
+
     })
 
     useEffect(() => {
@@ -64,15 +77,22 @@ function Room({ type, title }) {
     }, [])
 
     useEffect(() => {
-        (async () => {
+        !isServiceTemporary ? (async () => {
             const data = await imageApi.get(`?placeid=${service.id}`)
             setImageList(data.data)
+        })() : (() => {
+            const data = service.imageList.map((item) => {
+                return {
+                    name: item.path
+                }
+            })
+            setImageList(data)
         })()
     }, [])
 
     useEffect(() => {
         (async () => {
-            const data = await accountApi.get(service.userid)
+            const data = await accountApi.get(accountSupplier.id)
             setOwner(data.data)
         })()
     }, [])
@@ -81,7 +101,7 @@ function Room({ type, title }) {
         (async () => {
             const data = await interestApi.getAll()
             data.data.forEach((item) => {
-                if (item.placeid === service.id && item.userid === account.id) {
+                if (item.placeid === service.id && account && item.userid === account.id) {
                     setIsInterest(true)
                 }
             })
@@ -113,8 +133,12 @@ function Room({ type, title }) {
         value.handleDisplayBigBox()
     }
 
+    function handleNavigateToViewImage() {
+        navigate(`${window.location.pathname}/viewlistimage`)
+    }
+
     return (<div className={`${cx("room")}`}>
-        <Header />
+        <Header isServiceTemporary={isServiceTemporary}/>
         <div className={`small_wrap my-[100px]`}>
             <div className="text-2xl font-semibold">
                 {service.name}
@@ -124,41 +148,41 @@ function Room({ type, title }) {
                 <div className="flex">
                     <div className="flex items-center mr-5">
                         <AiFillStar />
-                        <span>{service.star}</span>
+                        <span>{service.star || 4}</span>
                     </div>
                     <div className="flex underline mr-5">
                         <div><span>180</span> Đánh giá</div>
                     </div>
                     <div className="flex items-center underline">
                         <TiLocation />
-                        {service.address}
+                        {service.address || service.road + ', ' + service.ward + ', ' + service.district + ', ' + service.city}
                     </div>
                 </div>
-                <div onClick={(e) => handleLike(e)} className="flex items-center underline active:scale-[0.8] select-none">
+                {!isServiceTemporary && <div onClick={(e) => handleLike(e)} className="flex items-center underline active:scale-[0.8] select-none">
                     <TiHeartFullOutline style={{ 'fill': `${isInterest ? 'var(--color_heart)' : 'white'}`, 'stroke': 'black', 'strokeWidth': '1px' }} className="text-base w-[24px] h-[20px] select-none mr-1" />
                     <span>Lưu</span>
-                </div>
+                </div>}
             </div>
 
             <div className="flex h-[390px] rounded-xl overflow-hidden">
                 <div className="flex-1 h-full mr-2">
-                    <img className="h-full w-full hover:brightness-[0.8] cursor-pointer" src={imageList.length && imageList[0].name} alt="" />
+                    <img onClick={handleNavigateToViewImage} className="h-full w-full hover:brightness-[0.8] cursor-pointer" src={imageList.length!==0 ? imageList[0].name : ''} alt="" />
                 </div>
                 <div className="flex-1 flex flex-col h-full">
                     <div className="flex-1 flex h-[50%] mb-2">
                         <div className="flex-1 h-full mr-2">
-                            <img className="h-full w-full hover:brightness-[0.8] cursor-pointer" src={imageList.length && imageList[1].name} alt="" />
+                            <img onClick={handleNavigateToViewImage} className="h-full w-full hover:brightness-[0.8] cursor-pointer" src={imageList.length!==0 ? imageList[1].name : ''} alt="" />
                         </div>
                         <div className="flex-1">
-                            <img className="h-full w-full hover:brightness-[0.8] cursor-pointer" src={imageList.length && imageList[2].name} alt="" />
+                            <img onClick={handleNavigateToViewImage} className="h-full w-full hover:brightness-[0.8] cursor-pointer" src={imageList.length!==0 ? imageList[2].name : ''} alt="" />
                         </div>
                     </div>
                     <div className="flex-1 flex h-50%">
                         <div className="flex-1 h-full mr-2">
-                            <img className="h-full w-full hover:brightness-[0.8] cursor-pointer" src={imageList.length && imageList[3].name} alt="" />
+                            <img onClick={handleNavigateToViewImage} className="h-full w-full hover:brightness-[0.8] cursor-pointer" src={imageList.length!==0 ? imageList[3].name : ''} alt="" />
                         </div>
                         <div className="flex-1">
-                            <img className="h-full w-full hover:brightness-[0.8] cursor-pointer" src={imageList.length && imageList[4].name} alt="" />
+                            <img onClick={handleNavigateToViewImage} className="h-full w-full hover:brightness-[0.8] cursor-pointer" src={imageList.length!==0 ? imageList[4].name : ''} alt="" />
                         </div>
                     </div>
                 </div>
@@ -168,7 +192,7 @@ function Room({ type, title }) {
                 <div className="w-[50%] border-t border-solid border-normal pt-6">
                     <div className="flex justify-between items-center">
                         <div className="text-2xl font-semibold mb-3">
-                            <span>Người đăng ký: {service.host}</span>
+                            <span>Người đăng ký: {owner.username}</span>
                         </div>
                         <div>
                             <div className="inline-block rounded-full overflow-hidden">
@@ -185,7 +209,7 @@ function Room({ type, title }) {
                 <div className="w-[50%]"></div>
             </div>
 
-            <div className={`${cx('comment')} mt-6 border-t border-solid border-normal pt-9`}>
+            {!isServiceTemporary && <div className={`${cx('comment')} mt-6 border-t border-solid border-normal pt-9`}>
                 <div className="flex items-center text-2xl mb-4">
                     <div className="flex items-center">
                         <GrStar />
@@ -241,7 +265,7 @@ function Room({ type, title }) {
 
                 </div>
 
-            </div>
+            </div>}
 
             <div className="w-full h-[70vh] mt-6">
                 <Map serviceRoom={service} />
@@ -254,7 +278,7 @@ function Room({ type, title }) {
                     </div>
                     <div>
                         <div className="text-lg font-semibold">Người đăng ký: {service.host}</div>
-                        <div>Đã tham gia vào tháng {service.startday.slice(3, 5)} năm {service.startday.slice(6, 10)}</div>
+                        <div>Đã tham gia vào tháng {isServiceTemporary ? currentDay.getMonth() + 1 : service.startday.slice(3, 5)} năm {isServiceTemporary ? currentDay.getFullYear() : service.startday.slice(6, 10)}</div>
                     </div>
                 </div>
                 <div className="flex mt-4">
@@ -272,10 +296,10 @@ function Room({ type, title }) {
         {show && <div>
             <BigBox title={title} type={type} handleDisplayBigBox={value.handleDisplayBigBox} />
         </div>}
-        <Link to='/' style={{ "backgroundImage": "linear-gradient(to right, #07D5DF, #7F6DEF, #F408FE)" }} className="text-white py-3 px-6 fixed top-[100px] cursor-pointer left-[20px] flex items-center mx-auto rounded-full hover:opacity-90 active:scale-[0.98]">
+        <div onClick={() => {navigate(-1)}} style={{ "backgroundImage": "linear-gradient(to right, #07D5DF, #7F6DEF, #F408FE)" }} className="text-white py-3 px-6 fixed top-[100px] cursor-pointer left-[20px] flex items-center mx-auto rounded-full hover:opacity-90 active:scale-[0.98]">
             <IoMdArrowRoundBack/>
             <span>Back</span>
-        </Link>
+        </div>
         <Footer />
     </div>);
 }

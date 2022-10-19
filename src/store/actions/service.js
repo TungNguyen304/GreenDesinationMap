@@ -19,5 +19,4 @@ const setServiceRegisterType = (type) => {
     }
 }
 
-
 export {setServiceType, setService, setServiceRegisterType}

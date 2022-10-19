@@ -18,6 +18,7 @@ function Host({title, type}) {
     const {handleDisplayBigBox} = value
     const show = useSelector(state => state.bigboxReducer.show)
     const [positionList, setPositionList] = useState([])
+
     useEffect(() => {
         (async () => {
             const data = await serviceApi.getAll()

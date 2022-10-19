@@ -17,43 +17,66 @@ function ProvidePhotos() {
     const dropRef = useRef()
     const wrapDropRef = useRef()
     const nextRef = useRef()
+    const service = JSON.parse(localStorage.getItem('placeTemporary'))
+
+    useEffect(() => {
+        service.imageList && setPathList([...service.imageList])
+    }, [])
+
 
     function handleOnChangeImg(event) {
-        console.log(event.target);
         if (event.target.files[0] && event.target.files[0].type.includes("image/")) {
             const newPath = URL.createObjectURL(event.target.files[0])
-            setPathList([...pathList, newPath])
+            setPathList([...pathList, {
+                path: newPath,
+                file: event.target.files[0],
+                name: event.target.files[0].name
+            }])
         }
         else {
             alert("File không hợp lệ, làm ơn chọn ảnh!")
         }
     }
 
-    function handleUploadImage(path) {
-        setPathList([...pathList, path])
+    function handleUploadImage(path, file, name) {
+        setPathList([...pathList, {
+            path: path,
+            file: file,
+            name: name
+        }])
     }
 
-    function handleUploadImageDrop(path, position) {
-        pathList.splice(position, 0, path)
+    function handleUploadImageDrop(path, file, name, position) {
+        pathList.splice(position, 0, {
+            path: path,
+            file: file,
+            name: name
+        })
         setPathList([...pathList])
     }
 
-    function handleChangeImage(path, position) {
-        pathList[position] = path
+    function handleChangeImage(path, file, name, position) {
+        pathList[position] = {
+            path: path,
+            file: file,
+            name: name
+        }
         setPathList([...pathList])
     }
 
     function handleSortImage(position1, position2) {
-        const a = pathList[position1]
-        const b = pathList[position2]
-        pathList[position2] = a
-        pathList[position1] = b
+        const path1 = pathList[position1]
+        const path2 = pathList[position2]
+
+        pathList[position2] = path1
+        pathList[position1] = path2
+
         setPathList([...pathList])
     }
 
     function handleDeleteImage(path) {
         const newPathList = pathList.filter((item) => {
-            return item !== path
+            return item.path !== path
         })
         setPathList([...newPathList])
     }
@@ -66,7 +89,7 @@ function ProvidePhotos() {
             setLength(length - 1)
         }
 
-        if(pathList.length < 5) {
+        if (pathList.length < 5) {
             nextRef.current.classList.add('pointer-events-none')
             nextRef.current.style.backgroundImage = "unset"
         }
@@ -106,10 +129,38 @@ function ProvidePhotos() {
         if (event.dataTransfer.files[0] && event.dataTransfer.files[0].type.includes("image/")) {
             const file = event.dataTransfer.files[0]
             const newPath = URL.createObjectURL(file)
-            setPathList((prev) => [...prev, newPath])
+            setPathList((prev) => [...prev, {
+                path: newPath,
+                file: file,
+                name: file.name
+            }])
         } else {
             alert("File không hợp lệ, làm ơn chọn ảnh!")
         }
+    }
+
+    function handleDispatchValue(pathList, event) {
+        if(JSON.stringify(pathList) !== JSON.stringify(service.imageList)) {
+            pathList.forEach((item) => {
+                var reader = new FileReader()
+                reader.readAsDataURL(item.file)
+                reader.onload = function () {
+                    item.file = reader.result
+                }
+            })
+            const interval = setInterval(() => {
+                if(pathList.every((item) => {
+                    return item.file !== {}
+                })) {
+                    clearInterval(interval)
+                }
+                localStorage.setItem('placeTemporary', JSON.stringify({
+                    ...service,
+                    imageList: [...pathList]
+                }))
+            }, 500)
+        }
+        
     }
 
     return (<div>
@@ -135,15 +186,21 @@ function ProvidePhotos() {
                             <div className="w-full pr-2 relative">
                                 <div>
                                     <div>
-                                        <AddImage type="background" classname="w-full h-[420px]" path={pathList[0]} position={0} handleChangeImage={handleChangeImage} handleUploadImage={handleUploadImage} handleDeleteImage={handleDeleteImage} handleUploadImageDrop={handleUploadImageDrop} handleSortImage={handleSortImage}/>
+                                        <AddImage type="background" classname="w-full h-[420px]" path={pathList[0]} position={0} handleChangeImage={handleChangeImage} handleUploadImage={handleUploadImage} handleDeleteImage={handleDeleteImage} handleUploadImageDrop={handleUploadImageDrop} handleSortImage={handleSortImage} />
                                     </div>
                                     <div className="grid grid-cols-2 gap-4 mt-4">
                                         {
                                             (() => {
                                                 const arr = []
                                                 let i = 1
-                                                for (i; i < length; i++) {
-                                                    arr.push(<AddImage key={i} path={pathList[i]} position={i} handleChangeImage={handleChangeImage} handleUploadImage={handleUploadImage} handleDeleteImage={handleDeleteImage} handleUploadImageDrop={handleUploadImageDrop} handleSortImage={handleSortImage}/>)
+                                                if(service) {
+                                                    for (i; i < pathList.length; i++) {
+                                                        arr.push(<AddImage key={i} path={pathList[i]} position={i} handleChangeImage={handleChangeImage} handleUploadImage={handleUploadImage} handleDeleteImage={handleDeleteImage} handleUploadImageDrop={handleUploadImageDrop} handleSortImage={handleSortImage} />)
+                                                    }
+                                                }else {
+                                                    for (i; i < length; i++) {
+                                                        arr.push(<AddImage key={i} path={pathList[i]} position={i} handleChangeImage={handleChangeImage} handleUploadImage={handleUploadImage} handleDeleteImage={handleDeleteImage} handleUploadImageDrop={handleUploadImageDrop} handleSortImage={handleSortImage} />)
+                                                    }
                                                 }
                                                 return arr
                                             })()
@@ -165,9 +222,9 @@ function ProvidePhotos() {
                 </div>
             </div>
 
-            <Link to='/host' className="z-10 fixed top-4 right-4 text-sm italic bg-slate-50 px-3 py-1 rounded-lg cursor-pointer hover:brightness-95 active:scale-95 select-none">Thoát</Link>
-            <Link to='/host/registerservice/location' style={{ "backgroundImage": "linear-gradient(to right, #07D5DF, #7F6DEF, #F408FE)" }} className="z-10 fixed bottom-8 left-[55%] italic text-white px-6 py-2 font-semibold rounded-lg cursor-pointer hover:brightness-95 active:scale-95 select-none">Quay lại</Link>
-            <Link ref={nextRef} to='/host/registerservice/providetitle' style={{ "backgroundImage": "" }} className="bg-[#DDDDDD] z-10 fixed bottom-8 right-8 italic text-white px-6 py-2 font-semibold rounded-lg cursor-pointer hover:brightness-95 active:scale-95 select-none pointer-events-none">Tiếp theo</Link>
+            <Link onClick={() => {localStorage.removeItem('placeTemporary')}} to='/host' className="z-10 fixed top-4 right-4 text-sm italic bg-slate-50 px-3 py-1 rounded-lg cursor-pointer hover:brightness-95 active:scale-95 select-none">Thoát</Link>
+            <Link to={`/host/registerservice/location/${service.type}`} style={{ "backgroundImage": "linear-gradient(to right, #07D5DF, #7F6DEF, #F408FE)" }} className="z-10 fixed bottom-8 left-[55%] italic text-white px-6 py-2 font-semibold rounded-lg cursor-pointer hover:brightness-95 active:scale-95 select-none">Quay lại</Link>
+            <Link onClick={(e) => { handleDispatchValue(pathList, e) }} ref={nextRef} to='/host/registerservice/providetitle' style={{ "backgroundImage": "" }} className="bg-[#DDDDDD] z-10 fixed bottom-8 right-8 italic text-white px-6 py-2 font-semibold rounded-lg cursor-pointer hover:brightness-95 active:scale-95 select-none pointer-events-none">Lưu và đến bước tiếp theo</Link>
         </div>
     </div>);
 }

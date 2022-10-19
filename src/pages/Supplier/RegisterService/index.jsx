@@ -8,9 +8,15 @@ import { Fragment } from "react";
 function RegisterService() {
     const serviceList = useSelector(state => state.serviceReducer.serviceComponent)
     const dispatch = useDispatch()
+    const service = JSON.parse(localStorage.getItem('placeTemporary'))
 
-    function handleDispatchType(type) {
-        dispatch(setServiceRegisterType(type))
+    function handleDispatchValue(type) {
+        if(!service || service.type !== type) {
+            localStorage.setItem('placeTemporary', JSON.stringify({
+                type: type
+            }))
+            dispatch(setServiceRegisterType(type))
+        }
     }
 
     return (<div>
@@ -27,7 +33,7 @@ function RegisterService() {
                         {serviceList && serviceList.map((item, index) => {
                             if (item.type === 'cafe' || item.type === 'restaurant' || item.type === 'hotel') {
                                 let Component = item.Component
-                                return (<Link key={index} to={`/host/registerservice/location/${item.type}`} onClick={() => handleDispatchType(item.type)} className="flex items-center justify-between px-5 py-6 border-2 border-solid border-[#ccc] my-3 rounded-xl cursor-pointer hover:border-black">
+                                return (<Link key={index} to={`/host/registerservice/location/${item.type}`} onClick={() => handleDispatchValue(item.type)} className={`flex items-center justify-between px-5 py-6 border-2 border-solid ${service && service.type === item.type ? 'border-green-600 bg-green-600' : 'border-[#ccc]'}  my-3 rounded-xl cursor-pointer hover:border-black`}>
                                     <div className="flex items-center">
                                         <div className="bg-slate-400 p-3 rounded-xl">
                                             <Component />
@@ -47,7 +53,7 @@ function RegisterService() {
                 </div>
             </div>
 
-            <Link to='/host' className="fixed top-4 right-4 text-sm italic bg-slate-50 px-3 py-1 rounded-lg cursor-pointer hover:brightness-95 active:scale-95 select-none">Thoát</Link>
+            <Link onClick={() => {localStorage.removeItem('placeTemporary')}} to='/host' className="fixed top-4 right-4 text-sm italic bg-slate-50 px-3 py-1 rounded-lg cursor-pointer hover:brightness-95 active:scale-95 select-none">Thoát</Link>
         </div>
     </div>);
 }

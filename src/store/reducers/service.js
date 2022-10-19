@@ -90,7 +90,7 @@ const initState = {
             name: "Siêu thị, chợ",
             Component: GiShop
         },
-    ]
+    ],
 }
 
 const serviceReducer = (state=initState, action) => {

@@ -1698,52 +1698,62 @@
         {
             "id": 1,
             "name": "Sử dụng vật liệu thân thiện môi trường",
-            "image": "ong-hut-giay-hinh-tre.jpg"
+            "image": "ong-hut-giay-hinh-tre.jpg",
+            "role": 1
         },
         {
             "id": 2,
             "name": "Sử dụng ánh sáng tự nhiên",
-            "image": "anh-sang-tu-nhien.jpg"
+            "image": "anh-sang-tu-nhien.jpg",
+            "role": 1
         },
         {
             "id": 3,
             "name": "Tiết kiệm nước",
-            "image": "tiet-kiem-nuoc.jpg"
+            "image": "tiet-kiem-nuoc.jpg",
+            "role": 1
         },
         {
             "id": 4,
             "name": "Có thảm thực vật",
-            "image": "tham-thuc-vat.jpg"
+            "image": "tham-thuc-vat.jpg",
+            "role": 1
         },
         {
             "id": 5,
             "name": "An toàn vệ sinh",
-            "image": "an-toan-ve-sinh.jpg"
+            "image": "an-toan-ve-sinh.jpg",
+            "role": 1
         },
         {
             "id": 6,
             "name": "Phân loại và xử lý rác thải",
-            "image": "phan-loai-xu-ly-rac-thai.jpg"
+            "image": "phan-loai-xu-ly-rac-thai.jpg",
+            "role": 1
         },
         {
             "id": 7,
             "name": "Ứng dụng công nghệ tự động để tiết kiệm năng lượng",
-            "image": "ung-dung-cong-nghe-tu-dong.jpg"
+            "image": "ung-dung-cong-nghe-tu-dong.jpg",
+            "role": 1
         },
         {
             "id": 8,
             "name": "Sử dụng khăn vải thay giấy lau",
-            "image": "khan-vai.jpg"
+            "image": "khan-vai.jpg",
+            "role": 1
         },
         {
             "id": 9,
             "name": "Môi trường thoáng mát, sạch sẽ",
-            "image": "moi-truong-thoat-mat-sach-se.jpg"
+            "image": "moi-truong-thoat-mat-sach-se.jpg",
+            "role": 1
         },
         {
             "id": 10,
             "name": "Tường cách âm, không gian ít ồn",
-            "image": "tuong-cach-am.jpg"
+            "image": "tuong-cach-am.jpg",
+            "role": 1
         }
     ]
 }

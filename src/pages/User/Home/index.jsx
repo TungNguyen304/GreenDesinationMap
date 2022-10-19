@@ -12,6 +12,8 @@ import ButtonMap from "../../../components/common/ButtonMap";
 import { useState } from "react";
 import style from './home.module.scss'
 import classNames from 'classnames/bind';
+import { useEffect } from 'react';
+import Loader from '../../../components/common/Loader';
 const cx = classNames.bind(style)
 
 
@@ -33,6 +35,10 @@ function Home({type, title}) {
         else
             dispatch(setHomePage('map'))
     }
+
+    useEffect(() => {
+        localStorage.removeItem('placeTemporary')
+    })
     
     return ( <div>
         <div>

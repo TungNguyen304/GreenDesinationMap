@@ -85,8 +85,8 @@ function SearchBar({ hidden, ...props }) {
     return newAddress
   }
 
-  return (<div className={`${hidden || "flex"}`} style={{ position: "relative", flexDirection: "column" }}>
-    <div className='flex items-center'>
+  return (<div className={`${hidden || "flex flex-1"}`} style={{ position: "relative", flexDirection: "column"}}>
+    <div className='flex items-center justify-center'>
       <div className={`${window.location.pathname.includes('/host') ? 'hidden' : ''} mr-5 text-xs text-center cursor-pointer italic rounded-full relative select-none`}>
         <div ref={greenRef3} onClick={handleChangeSearchType} className='flex bg-[#989999] text-white font-medium rounded-full hover:opacity-90'>
           <div ref={greenRef1} style={{ transition: "all 0.5s ease-in-out", opacity: 0 }} className={`py-3 pl-3 pr-[6px] `}>
@@ -100,8 +100,8 @@ function SearchBar({ hidden, ...props }) {
           Toàn bản đồ
         </div>
       </div>
-      <div style={{ display: "flex", justifyContent: "space-between", borderRadius: "50px", padding: "8px 10px 8px 20px", height: "100%", border: "1px solid var(--border)" }} className={`bg-white hover:shadow-normal rounded-full ${isRegiterServiceLocationPage ? 'w-full' : ''}`}>
-        <div className='w-[400px]'>
+      <div style={{ display: "flex", justifyContent: "space-between", borderRadius: "50px", padding: "8px 10px 8px 20px", height: "100%", border: "1px solid var(--border)" }} className={`bg-white hover:shadow-normal rounded-full ${isRegiterServiceLocationPage ? 'w-full' : 'w-[50%]'}`}>
+        <div className='w-full'>
           <input
             className='placeholder:italic'
             placeholder={typeSearch === 'full' ? 'Tìm kiếm ở đây ...(TP Đà Nẵng, Việt Nam)' : 'Tìm kiếm ở đây ...(Tìm theo tên, ít nhất 3 ký tự)'}
@@ -130,7 +130,6 @@ function SearchBar({ hidden, ...props }) {
                   polygon_geojson: 0,
                 };
                 const queryString = new URLSearchParams(params).toString();
-                console.log(queryString);
                 const requestOptions = {
                   method: "GET",
                   redirect: "follow",
@@ -219,7 +218,7 @@ function SearchBar({ hidden, ...props }) {
     </div>
 
     {typeSearch === 'full' &&
-      <div ref={recomment} className={`bg-white hidden absolute top-[130%] ${isRegiterServiceLocationPage ? 'w-full left-0 h-[30vh]' : 'w-[150%] left-[-25%] h-[60vh]'}  overflow-scroll border border-solid border-normal rounded-2xl`}>
+      <div ref={recomment} className={`bg-white hidden absolute top-[130%] ${isRegiterServiceLocationPage ? 'w-full left-0 h-[30vh]' : 'w-[100%] left-[5%] h-[60vh]'}  overflow-scroll border border-solid border-normal rounded-2xl`}>
       <List className='h-full' component="nav" aria-label="main mailbox folders">
         {listPlace && listPlace.length !== 0 ? listPlace.map((item) => {
           if (district.length && ward.length && serviceTypes.length) {
