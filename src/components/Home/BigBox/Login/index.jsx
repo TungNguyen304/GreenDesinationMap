@@ -38,12 +38,12 @@ function Login() {
         })
         if (isYourAccount) {
             if (role === 1) {
-                localStorage.setItem('account', JSON.stringify(account))
+                document.cookie = `user_id=${account.id}; expires=thu, 25 Jan 2024 00:00:00 UTC`
                 value.handleDisplayBigBox()
                 navigate('/')
             }
             else {
-                localStorage.setItem('accountSupplier', JSON.stringify(account))
+                document.cookie = `supplier_id=${account.id}; expires=thu, 25 Jan 2024 00:00:00 UTC`
                 value.handleDisplayBigBox()
                 navigate('/host')
             }

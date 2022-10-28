@@ -1,10 +1,12 @@
 import React, { useEffect } from "react";
 import { MapContainer, Marker, Popup, TileLayer, useMap } from "react-leaflet";
+import imageApi from "../../../api/imageApi";
 import ServiceItem from '../../Home/Service/ServiceItem'
 import { useSelector } from "react-redux";
 import green from '../../../greenIcon.svg'
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
+import { useState } from "react";
 
 const icon = L.icon({
   iconUrl: "https://png.pngtree.com/png-vector/20220706/ourmid/pngtree-vector-location-icon-free-and-png-png-image_5708678.png",
@@ -65,6 +67,14 @@ function Map(props) {
   const { selectPosition, positionList, serviceRoom } = props;
   const locationSelection = [selectPosition?.lat, selectPosition?.lon];
   const locationServiceRoom = [serviceRoom?.lat, serviceRoom?.lon];
+  const [imageList, setImageList] = useState()
+
+  useEffect(() => {
+      (async () => {
+        const res = await imageApi.getAll()
+        setImageList(res.data)
+      })()
+  }, [])
 
   return (
     <MapContainer
@@ -96,11 +106,11 @@ function Map(props) {
 
       {positionList && (
         positionList.map((item, index) => {
-          if(serviceType === 'search') {
+          if (serviceType === 'search') {
             return (
               <Marker key={index} position={item} icon={selectPosition && item.mapid === selectPosition.place_id ? greenIcon2 : greenIcon}>
                 <Popup>
-                  <ServiceItem serviceItem={item} typeComponent="map" id={item.id} typeService={item.type} name={item.name} phone={item.phone} star={item.star} address={item.address} />
+                  <ServiceItem serviceItem={item} typeComponent="map" id={item.id} typeService={item.type} name={item.name} imageList={imageList} type="marker" phone={item.phone} star={item.star} address={item.address} />
                 </Popup>
               </Marker>
             )
@@ -109,7 +119,7 @@ function Map(props) {
             return (
               <Marker key={index} position={item} icon={selectPosition && item.mapid === selectPosition.place_id ? greenIcon2 : greenIcon}>
                 <Popup>
-                  <ServiceItem serviceItem={item} typeComponent="map" id={item.id} typeService={item.type} name={item.name} phone={item.phone} star={item.star} address={item.address} />
+                  <ServiceItem serviceItem={item} typeComponent="map" id={item.id} typeService={item.type} name={item.name} imageList={imageList} phone={item.phone} star={item.star} address={item.address} />
                 </Popup>
               </Marker>
             )
@@ -118,7 +128,7 @@ function Map(props) {
             return (
               <Marker key={index} position={item} icon={selectPosition && item.mid === selectPosition.place_id ? greenIcon2 : greenIcon}>
                 <Popup>
-                  <ServiceItem serviceItem={item} typeComponent="map" id={item.id} typeService={item.type} name={item.name} phone={item.phone} star={item.star} address={item.address} />
+                  <ServiceItem serviceItem={item} typeComponent="map" id={item.id} typeService={item.type} name={item.name} imageList={imageList} phone={item.phone} star={item.star} address={item.address} />
                 </Popup>
               </Marker>
             )

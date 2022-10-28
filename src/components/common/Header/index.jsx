@@ -3,6 +3,7 @@ import Avt from '../../../assets/logo/avt.svg'
 import Avt2 from '../../../assets/images/avt.png'
 import SearchBar from './SearchBar';
 import NavHeader from './NavHeader';
+import { useSelector } from 'react-redux';
 import { AiFillSetting } from 'react-icons/ai'
 import { IoMenuOutline } from 'react-icons/io5'
 import Tippy from '../Tippy';
@@ -10,26 +11,34 @@ import { useRef } from 'react';
 import { Link } from 'react-router-dom';
 import style from './header.module.scss'
 import classNames from 'classnames/bind';
+import { useEffect } from 'react';
+import { useState } from 'react';
 const cx = classNames.bind(style)
 
 function Header(props) {
     let topList = ['Đăng nhập', 'Đăng ký']
     let bottomList1 = ['Cung cấp dịch vụ', 'Tổ chức trải nghiệm', 'Trợ giúp']
-    var account = JSON.parse(localStorage.getItem('account'))
-    var accountSupplier = JSON.parse(localStorage.getItem('accountSupplier'))
+    const [account, setAccount] = useState()
     const actor = window.location.pathname.includes('/host') ? 'supplier' : 'user'
+    let acc = useSelector(state => state.accountReducer)
     const tippyRef = useRef()
     let bottomList2
-
-    if (actor === 'user' && localStorage.getItem('account')) {
+    if (actor === 'user' && account && account.role === 1) {
         topList = ['Tin nhắn', 'Thông báo', 'Danh sách yêu thích']
         bottomList1 = ['Tổ chức trải nghiệm', 'Giới thiệu chủ nhà']
         bottomList2 = ['Tài khoản', 'Trợ giúp', 'Đăng xuất']
     }
-    else if(actor === 'supplier' && localStorage.getItem('accountSupplier')) {
+    else if (actor === 'supplier' && account && account.role === 2) {
         topList = ['Thông báo', 'Đăng ký địa điểm', 'Quản lý địa điểm']
         bottomList1 = ['Tài khoản', 'Trợ giúp', 'Đăng xuất']
     }
+    useEffect(() => {
+        if (actor === 'supplier') {
+            setAccount(acc.supplier)
+        } else {
+            setAccount(acc.user)
+        }
+    }, [acc, actor])
 
     function removeClass() {
         tippyRef.current && tippyRef.current.classList.add('hidden')
@@ -62,8 +71,8 @@ function Header(props) {
                     <div ><IoMenuOutline /></div>
                     <div className='w-7 rounded-full overflow-hidden h-7 ml-3'>
                         <img src={
-                            actor === 'user' && account && account.image !== "" ? account.image : actor === 'supplier' && accountSupplier && accountSupplier.image !== "" ? accountSupplier.image : account || accountSupplier ? Avt2 : Avt
-                            } alt="" />
+                            account && account.image ? account.image : account ? Avt2 : Avt
+                        } alt="" />
                     </div>
                     <div ref={tippyRef} onClick={(e) => { e.stopPropagation() }} className={`${'tippy'} hidden`}>
                         <Tippy topList={topList} bottomList1={bottomList1} bottomList2={bottomList2} />

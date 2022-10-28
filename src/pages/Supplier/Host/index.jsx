@@ -13,7 +13,7 @@ import { useState } from "react";
 const cx = classNames.bind(style)
 
 function Host({title, type}) {
-    const account = JSON.parse(localStorage.getItem('accountSupplier'))
+    const account = useSelector(state => state.accountReducer).supplier
     const value = useValueContext()
     const {handleDisplayBigBox} = value
     const show = useSelector(state => state.bigboxReducer.show)

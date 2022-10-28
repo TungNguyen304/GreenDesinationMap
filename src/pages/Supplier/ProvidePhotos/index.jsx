@@ -17,12 +17,13 @@ function ProvidePhotos() {
     const dropRef = useRef()
     const wrapDropRef = useRef()
     const nextRef = useRef()
-    const service = JSON.parse(localStorage.getItem('placeTemporary'))
-
+    const service = JSON.parse(sessionStorage.getItem('placeTemporary'))
     useEffect(() => {
-        service.imageList && setPathList([...service.imageList])
+        if (service.imageList) {
+            setPathList([...service.imageList])
+            setLength(service.imageList.length + 1)
+        }
     }, [])
-
 
     function handleOnChangeImg(event) {
         if (event.target.files[0] && event.target.files[0].type.includes("image/")) {
@@ -88,7 +89,6 @@ function ProvidePhotos() {
         else if (length > 5 && length - pathList.length === 2) {
             setLength(length - 1)
         }
-
         if (pathList.length < 5) {
             nextRef.current.classList.add('pointer-events-none')
             nextRef.current.style.backgroundImage = "unset"
@@ -140,27 +140,29 @@ function ProvidePhotos() {
     }
 
     function handleDispatchValue(pathList, event) {
-        if(JSON.stringify(pathList) !== JSON.stringify(service.imageList)) {
+        if (JSON.stringify(pathList) !== JSON.stringify(service.imageList)) {
             pathList.forEach((item) => {
-                var reader = new FileReader()
-                reader.readAsDataURL(item.file)
-                reader.onload = function () {
+                if(typeof item.file !== 'string') {
+                    var reader = new FileReader()
+                    reader.readAsDataURL(item.file)
+                    reader.onload = function () {
                     item.file = reader.result
+                }
                 }
             })
             const interval = setInterval(() => {
-                if(pathList.every((item) => {
+                if (pathList.every((item) => {
                     return item.file !== {}
                 })) {
                     clearInterval(interval)
                 }
-                localStorage.setItem('placeTemporary', JSON.stringify({
+                sessionStorage.setItem('placeTemporary', JSON.stringify({
                     ...service,
                     imageList: [...pathList]
                 }))
             }, 500)
         }
-        
+
     }
 
     return (<div>
@@ -193,14 +195,8 @@ function ProvidePhotos() {
                                             (() => {
                                                 const arr = []
                                                 let i = 1
-                                                if(service) {
-                                                    for (i; i < pathList.length; i++) {
-                                                        arr.push(<AddImage key={i} path={pathList[i]} position={i} handleChangeImage={handleChangeImage} handleUploadImage={handleUploadImage} handleDeleteImage={handleDeleteImage} handleUploadImageDrop={handleUploadImageDrop} handleSortImage={handleSortImage} />)
-                                                    }
-                                                }else {
-                                                    for (i; i < length; i++) {
-                                                        arr.push(<AddImage key={i} path={pathList[i]} position={i} handleChangeImage={handleChangeImage} handleUploadImage={handleUploadImage} handleDeleteImage={handleDeleteImage} handleUploadImageDrop={handleUploadImageDrop} handleSortImage={handleSortImage} />)
-                                                    }
+                                                for (i; i < length; i++) {
+                                                    arr.push(<AddImage key={i} path={pathList[i]} position={i} handleChangeImage={handleChangeImage} handleUploadImage={handleUploadImage} handleDeleteImage={handleDeleteImage} handleUploadImageDrop={handleUploadImageDrop} handleSortImage={handleSortImage} />)
                                                 }
                                                 return arr
                                             })()
@@ -215,14 +211,13 @@ function ProvidePhotos() {
                                 <div className="text-lg mt-3">Thêm ít nhất 5 ảnh</div>
                                 <input onChange={(e) => { handleOnChangeImg(e) }} ref={fileRef} className="hidden" type="file" />
                                 <div onClick={() => { fileRef.current.click() }} className="mt-20 underline font-semibold text-sm">Tải lên từ thiết bị của bạn</div>
-
                             </div>}
 
                     </div>
                 </div>
             </div>
 
-            <Link onClick={() => {localStorage.removeItem('placeTemporary')}} to='/host' className="z-10 fixed top-4 right-4 text-sm italic bg-slate-50 px-3 py-1 rounded-lg cursor-pointer hover:brightness-95 active:scale-95 select-none">Thoát</Link>
+            <Link onClick={() => { sessionStorage.removeItem('placeTemporary') }} to='/host' className="z-10 fixed top-4 right-4 text-sm italic bg-slate-50 px-3 py-1 rounded-lg cursor-pointer hover:brightness-95 active:scale-95 select-none">Thoát</Link>
             <Link to={`/host/registerservice/location/${service.type}`} style={{ "backgroundImage": "linear-gradient(to right, #07D5DF, #7F6DEF, #F408FE)" }} className="z-10 fixed bottom-8 left-[55%] italic text-white px-6 py-2 font-semibold rounded-lg cursor-pointer hover:brightness-95 active:scale-95 select-none">Quay lại</Link>
             <Link onClick={(e) => { handleDispatchValue(pathList, e) }} ref={nextRef} to='/host/registerservice/providetitle' style={{ "backgroundImage": "" }} className="bg-[#DDDDDD] z-10 fixed bottom-8 right-8 italic text-white px-6 py-2 font-semibold rounded-lg cursor-pointer hover:brightness-95 active:scale-95 select-none pointer-events-none">Lưu và đến bước tiếp theo</Link>
         </div>

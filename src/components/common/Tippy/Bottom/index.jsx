@@ -6,11 +6,11 @@ function Bottom({ list }) {
 
     function handleLogout() {
         if (role === 1) {
-            localStorage.removeItem('account')
+            document.cookie = `user_id=; expires=thu, 25 Jan 2021 00:00:00 UTC`
             navigate('/')
         }
         else if (role === 2) {
-            localStorage.removeItem('accountSupplier')
+            document.cookie = `supplier_id=; expires=thu, 25 Jan 2021 00:00:00 UTC`
             navigate('/host')
         }
         window.location.reload()

@@ -14,10 +14,12 @@
             "type": "cafe",
             "lat": "16.0785116",
             "lon": "108.2170218",
-            "star": 3,
+            "star": 3.5,
             "host": "Nguyễn Văn Tùng",
             "description": "Aura house là một ngôi nhà tre sinh thái đẹp & độc đáo được xây dựng ở bờ tây của sông Ayung hướng về phía đông để đón bình minh.",
-            "startday": "05/09/2022"
+            "startday": "05/09/2022",
+            "status": "1",
+            "browserday": "24/10/2022"
         },
         {
             "id": 2,
@@ -36,7 +38,9 @@
             "star": 3,
             "host": "Nguyễn Văn Tùng",
             "description": "Aura house là một ngôi nhà tre sinh thái đẹp & độc đáo được xây dựng ở bờ tây của sông Ayung hướng về phía đông để đón bình minh.",
-            "startday": "05/09/2022"
+            "startday": "05/09/2022",
+            "status": "1",
+            "browserday": "24/10/2022"
         },
         {
             "id": 3,
@@ -55,7 +59,8 @@
             "star": 3,
             "host": "Nguyễn Văn Tùng",
             "description": "Aura house là một ngôi nhà tre sinh thái đẹp & độc đáo được xây dựng ở bờ tây của sông Ayung hướng về phía đông để đón bình minh.",
-            "startday": "05/09/2022"
+            "startday": "05/09/2022",
+            "status": "0"
         },
         {
             "id": 4,
@@ -74,7 +79,8 @@
             "star": 3,
             "host": "Nguyễn Văn Tùng",
             "description": "Aura house là một ngôi nhà tre sinh thái đẹp & độc đáo được xây dựng ở bờ tây của sông Ayung hướng về phía đông để đón bình minh.",
-            "startday": "05/09/2022"
+            "startday": "05/09/2022",
+            "status": "0"
         },
         {
             "id": 5,
@@ -93,7 +99,9 @@
             "star": 3,
             "host": "Nguyễn Văn Tùng",
             "description": "Aura house là một ngôi nhà tre sinh thái đẹp & độc đáo được xây dựng ở bờ tây của sông Ayung hướng về phía đông để đón bình minh.",
-            "startday": "05/09/2022"
+            "startday": "05/09/2022",
+            "status": "1",
+            "browserday": "24/10/2022"
         },
         {
             "id": 6,
@@ -112,7 +120,9 @@
             "star": 3,
             "host": "Nguyễn Văn Tùng",
             "description": "Aura house là một ngôi nhà tre sinh thái đẹp & độc đáo được xây dựng ở bờ tây của sông Ayung hướng về phía đông để đón bình minh.",
-            "startday": "05/09/2022"
+            "startday": "05/09/2022",
+            "status": "1",
+            "browserday": "24/10/2022"
         },
         {
             "id": 7,
@@ -131,7 +141,8 @@
             "star": 3,
             "host": "Nguyễn Văn Tùng",
             "description": "Aura house là một ngôi nhà tre sinh thái đẹp & độc đáo được xây dựng ở bờ tây của sông Ayung hướng về phía đông để đón bình minh.",
-            "startday": "05/09/2022"
+            "startday": "05/09/2022",
+            "status": "0"
         },
         {
             "id": 8,
@@ -150,7 +161,8 @@
             "star": 3,
             "host": "Nguyễn Văn Tùng",
             "description": "Aura house là một ngôi nhà tre sinh thái đẹp & độc đáo được xây dựng ở bờ tây của sông Ayung hướng về phía đông để đón bình minh.",
-            "startday": "05/09/2022"
+            "startday": "05/09/2022",
+            "status": "0"
         },
         {
             "id": 9,
@@ -169,7 +181,9 @@
             "star": 3,
             "host": "Nguyễn Văn Tùng",
             "description": "Aura house là một ngôi nhà tre sinh thái đẹp & độc đáo được xây dựng ở bờ tây của sông Ayung hướng về phía đông để đón bình minh.",
-            "startday": "05/09/2022"
+            "startday": "05/09/2022",
+            "status": "1",
+            "browserday": "24/10/2022"
         },
         {
             "id": 10,
@@ -188,7 +202,9 @@
             "star": 3,
             "host": "Nguyễn Văn Tùng",
             "description": "Aura house là một ngôi nhà tre sinh thái đẹp & độc đáo được xây dựng ở bờ tây của sông Ayung hướng về phía đông để đón bình minh.",
-            "startday": "05/09/2022"
+            "startday": "05/09/2022",
+            "status": "1",
+            "browserday": "24/10/2022"
         },
         {
             "id": 11,
@@ -207,7 +223,8 @@
             "star": 3,
             "host": "Nguyễn Văn Tùng",
             "description": "Aura house là một ngôi nhà tre sinh thái đẹp & độc đáo được xây dựng ở bờ tây của sông Ayung hướng về phía đông để đón bình minh.",
-            "startday": "05/09/2022"
+            "startday": "05/09/2022",
+            "status": "0"
         },
         {
             "id": 12,
@@ -226,7 +243,8 @@
             "star": 3,
             "host": "Nguyễn Văn Tùng",
             "description": "Aura house là một ngôi nhà tre sinh thái đẹp & độc đáo được xây dựng ở bờ tây của sông Ayung hướng về phía đông để đón bình minh.",
-            "startday": "05/09/2022"
+            "startday": "05/09/2022",
+            "status": "0"
         },
         {
             "id": 13,
@@ -245,7 +263,9 @@
             "star": 3,
             "host": "Nguyễn Văn Tùng",
             "description": "Aura house là một ngôi nhà tre sinh thái đẹp & độc đáo được xây dựng ở bờ tây của sông Ayung hướng về phía đông để đón bình minh.",
-            "startday": "05/09/2022"
+            "startday": "05/09/2022",
+            "status": "1",
+            "browserday": "24/10/2022"
         },
         {
             "id": 14,
@@ -264,7 +284,9 @@
             "star": 3,
             "host": "Nguyễn Văn Tùng",
             "description": "Aura house là một ngôi nhà tre sinh thái đẹp & độc đáo được xây dựng ở bờ tây của sông Ayung hướng về phía đông để đón bình minh.",
-            "startday": "05/09/2022"
+            "startday": "05/09/2022",
+            "status": "1",
+            "browserday": "24/10/2022"
         },
         {
             "id": 15,
@@ -283,7 +305,8 @@
             "star": 3,
             "host": "Nguyễn Văn Tùng",
             "description": "Aura house là một ngôi nhà tre sinh thái đẹp & độc đáo được xây dựng ở bờ tây của sông Ayung hướng về phía đông để đón bình minh.",
-            "startday": "05/09/2022"
+            "startday": "05/09/2022",
+            "status": "0"
         },
         {
             "id": 16,
@@ -302,7 +325,8 @@
             "star": 3,
             "host": "Nguyễn Văn Tùng",
             "description": "Aura house là một ngôi nhà tre sinh thái đẹp & độc đáo được xây dựng ở bờ tây của sông Ayung hướng về phía đông để đón bình minh.",
-            "startday": "05/09/2022"
+            "startday": "05/09/2022",
+            "status": "0"
         },
         {
             "id": 17,
@@ -321,7 +345,9 @@
             "star": 3,
             "host": "Nguyễn Văn Tùng",
             "description": "Aura house là một ngôi nhà tre sinh thái đẹp & độc đáo được xây dựng ở bờ tây của sông Ayung hướng về phía đông để đón bình minh.",
-            "startday": "05/09/2022"
+            "startday": "05/09/2022",
+            "status": "1",
+            "browserday": "24/10/2022"
         },
         {
             "id": 18,
@@ -340,7 +366,9 @@
             "star": 3,
             "host": "Nguyễn Văn Tùng",
             "description": "Aura house là một ngôi nhà tre sinh thái đẹp & độc đáo được xây dựng ở bờ tây của sông Ayung hướng về phía đông để đón bình minh.",
-            "startday": "05/09/2022"
+            "startday": "05/09/2022",
+            "status": "1",
+            "browserday": "24/10/2022"
         },
         {
             "id": 19,
@@ -359,7 +387,9 @@
             "star": 3,
             "host": "Nguyễn Văn Tùng",
             "description": "Aura house là một ngôi nhà tre sinh thái đẹp & độc đáo được xây dựng ở bờ tây của sông Ayung hướng về phía đông để đón bình minh.",
-            "startday": "05/09/2022"
+            "startday": "05/09/2022",
+            "status": "1",
+            "browserday": "24/10/2022"
         },
         {
             "id":20,
@@ -378,7 +408,9 @@
             "star": 3,
             "host": "Nguyễn Văn Tùng",
             "description": "Aura house là một ngôi nhà tre sinh thái đẹp & độc đáo được xây dựng ở bờ tây của sông Ayung hướng về phía đông để đón bình minh.",
-            "startday": "05/09/2022"
+            "startday": "05/09/2022",
+            "status": "1",
+            "browserday": "24/10/2022"
         },
         {
             "id": 21,
@@ -397,7 +429,9 @@
             "star": 3,
             "host": "Nguyễn Văn Tùng",
             "description": "Aura house là một ngôi nhà tre sinh thái đẹp & độc đáo được xây dựng ở bờ tây của sông Ayung hướng về phía đông để đón bình minh.",
-            "startday": "05/09/2022"
+            "startday": "05/09/2022",
+            "status": "1",
+            "browserday": "24/10/2022"
         },
         {
             "id": 22,
@@ -416,7 +450,9 @@
             "star": 3,
             "host": "Nguyễn Văn Tùng",
             "description": "Aura house là một ngôi nhà tre sinh thái đẹp & độc đáo được xây dựng ở bờ tây của sông Ayung hướng về phía đông để đón bình minh.",
-            "startday": "05/09/2022"
+            "startday": "05/09/2022",
+            "status": "1",
+            "browserday": "24/10/2022"
         },
         {
             "id": 23,
@@ -435,7 +471,9 @@
             "star": 3,
             "host": "Nguyễn Văn Tùng",
             "description": "Aura house là một ngôi nhà tre sinh thái đẹp & độc đáo được xây dựng ở bờ tây của sông Ayung hướng về phía đông để đón bình minh.",
-            "startday": "05/09/2022"
+            "startday": "05/09/2022",
+            "status": "1",
+            "browserday": "24/10/2022"
         },
         {
             "id": 24,
@@ -454,7 +492,9 @@
             "star": 3,
             "host": "Nguyễn Văn Tùng",
             "description": "Aura house là một ngôi nhà tre sinh thái đẹp & độc đáo được xây dựng ở bờ tây của sông Ayung hướng về phía đông để đón bình minh.",
-            "startday": "05/09/2022"
+            "startday": "05/09/2022",
+            "status": "1",
+            "browserday": "24/10/2022"
         },
         {
             "id": 25,
@@ -473,7 +513,9 @@
             "star": 3,
             "host": "Nguyễn Văn Tùng",
             "description": "Aura house là một ngôi nhà tre sinh thái đẹp & độc đáo được xây dựng ở bờ tây của sông Ayung hướng về phía đông để đón bình minh.",
-            "startday": "05/09/2022"
+            "startday": "05/09/2022",
+            "status": "1",
+            "browserday": "24/10/2022"
         },
         {
             "id": 26,
@@ -492,7 +534,9 @@
             "star": 3,
             "host": "Nguyễn Văn Tùng",
             "description": "Aura house là một ngôi nhà tre sinh thái đẹp & độc đáo được xây dựng ở bờ tây của sông Ayung hướng về phía đông để đón bình minh.",
-            "startday": "05/09/2022"
+            "startday": "05/09/2022",
+            "status": "1",
+            "browserday": "24/10/2022"
         },
         {
             "id": 27,
@@ -511,7 +555,9 @@
             "star": 3,
             "host": "Nguyễn Văn Tùng",
             "description": "Aura house là một ngôi nhà tre sinh thái đẹp & độc đáo được xây dựng ở bờ tây của sông Ayung hướng về phía đông để đón bình minh.",
-            "startday": "05/09/2022"
+            "startday": "05/09/2022",
+            "status": "1",
+            "browserday": "24/10/2022"
         },
         {
             "id": 28,
@@ -530,7 +576,9 @@
             "star": 3,
             "host": "Nguyễn Văn Tùng",
             "description": "Aura house là một ngôi nhà tre sinh thái đẹp & độc đáo được xây dựng ở bờ tây của sông Ayung hướng về phía đông để đón bình minh.",
-            "startday": "05/09/2022"
+            "startday": "05/09/2022",
+            "status": "1",
+            "browserday": "24/10/2022"
         },
         {
             "id": 29,
@@ -549,7 +597,9 @@
             "star": 3,
             "host": "Nguyễn Văn Tùng",
             "description": "Aura house là một ngôi nhà tre sinh thái đẹp & độc đáo được xây dựng ở bờ tây của sông Ayung hướng về phía đông để đón bình minh.",
-            "startday": "05/09/2022"
+            "startday": "05/09/2022",
+            "status": "1",
+            "browserday": "24/10/2022"
         },
         {
             "id": 30,
@@ -568,7 +618,9 @@
             "star": 3,
             "host": "Nguyễn Văn Tùng",
             "description": "Aura house là một ngôi nhà tre sinh thái đẹp & độc đáo được xây dựng ở bờ tây của sông Ayung hướng về phía đông để đón bình minh.",
-            "startday": "05/09/2022"
+            "startday": "05/09/2022",
+            "status": "1",
+            "browserday": "24/10/2022"
         },
         {
             "id": 31,
@@ -587,7 +639,9 @@
             "star": 3,
             "host": "Nguyễn Văn Tùng",
             "description": "Aura house là một ngôi nhà tre sinh thái đẹp & độc đáo được xây dựng ở bờ tây của sông Ayung hướng về phía đông để đón bình minh.",
-            "startday": "05/09/2022"
+            "startday": "05/09/2022",
+            "status": "1",
+            "browserday": "24/10/2022"
         }
     ],
     "getinterests": [

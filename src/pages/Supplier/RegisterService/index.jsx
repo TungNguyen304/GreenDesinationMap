@@ -8,11 +8,11 @@ import { Fragment } from "react";
 function RegisterService() {
     const serviceList = useSelector(state => state.serviceReducer.serviceComponent)
     const dispatch = useDispatch()
-    const service = JSON.parse(localStorage.getItem('placeTemporary'))
+    const service = JSON.parse(sessionStorage.getItem('placeTemporary'))
 
     function handleDispatchValue(type) {
         if(!service || service.type !== type) {
-            localStorage.setItem('placeTemporary', JSON.stringify({
+            sessionStorage.setItem('placeTemporary', JSON.stringify({
                 type: type
             }))
             dispatch(setServiceRegisterType(type))
@@ -53,7 +53,7 @@ function RegisterService() {
                 </div>
             </div>
 
-            <Link onClick={() => {localStorage.removeItem('placeTemporary')}} to='/host' className="fixed top-4 right-4 text-sm italic bg-slate-50 px-3 py-1 rounded-lg cursor-pointer hover:brightness-95 active:scale-95 select-none">Thoát</Link>
+            <Link onClick={() => {sessionStorage.removeItem('placeTemporary')}} to='/host' className="fixed top-4 right-4 text-sm italic bg-slate-50 px-3 py-1 rounded-lg cursor-pointer hover:brightness-95 active:scale-95 select-none">Thoát</Link>
         </div>
     </div>);
 }

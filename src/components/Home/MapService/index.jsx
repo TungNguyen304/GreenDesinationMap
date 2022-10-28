@@ -58,6 +58,7 @@ function MapService(props) {
     useEffect(() => {
         (async() => {
             const data = await serviceApi.getAll()
+            console.log(data);
             setServiceList(data.data)
         })()
     }, [])
@@ -76,10 +77,10 @@ function MapService(props) {
                             <div className='hover:bg-slate-50 rounded-full p-3 cursor-pointer'><HiDotsHorizontal/></div>
                         </div>
                     </div>}
-                    <div className={`${isDetailWishListPage ? '' : 'h-full'} relative`}>
+                    <div className={`h-full relative`}>
                         <Suspense fallback={<Loader/>}>
                             <div className={`${isDetailWishListPage ? 'h-[78vh]' : 'h-full'} ${cx('wrap_list')}`}>
-                                <div className='flex flex-col items-center mt-[10px]'>
+                                <div className={`flex flex-col items-center mt-[10px] ${isDetailWishListPage ? '' : ''}`}>
                                     {
                                     isDetailWishListPage ?
                                     props.positionList.map((item, index) => {

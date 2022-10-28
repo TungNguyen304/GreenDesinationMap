@@ -1,22 +1,24 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 import ServiceItem from '../../../components/Home/Service/ServiceItem'
 import placeFirebase from "../../../firebase/place";
 
 function Preview() {
-    const currdentData = JSON.parse(localStorage.getItem('placeTemporary'))
-    const accountSupplier = JSON.parse(localStorage.getItem('accountSupplier'))
+    const currdentData = JSON.parse(sessionStorage.getItem('placeTemporary'))
+    const accountSupplier = useSelector(state => state.accountReducer).supplier
+    const state = sessionStorage.getItem("statusUpdate")
     const [imageList, setImageList] = useState([])
     
     useEffect(() => {
-        const data = JSON.parse(localStorage.getItem('placeTemporary'))
+        const data = JSON.parse(sessionStorage.getItem('placeTemporary'))
         setImageList([...data.imageList])
     }, [])
 
     function test(event) {
-        // currdentData.imageList.forEach(async (item) => {
-        //     placeFirebase.push(item.name, item.file)
-        // })
+        currdentData.imageList.forEach(async (item) => {
+            placeFirebase.push(item.name, item.file)
+        })
     }
 
     return (<div>
@@ -30,9 +32,9 @@ function Preview() {
                 </div>
             </div>
 
-            <Link onClick={() => { localStorage.removeItem('placeTemporary') }} to='/host' className="z-10 fixed top-4 right-4 text-sm italic bg-slate-50 px-3 py-1 rounded-lg cursor-pointer hover:brightness-95 active:scale-95 select-none">Thoát</Link>
+            <Link onClick={() => { sessionStorage.removeItem('placeTemporary') }} to='/host' className="z-10 fixed top-4 right-4 text-sm italic bg-slate-50 px-3 py-1 rounded-lg cursor-pointer hover:brightness-95 active:scale-95 select-none">Thoát</Link>
             <Link to='/host/registerservice/providecriteria' style={{ "backgroundImage": "linear-gradient(to right, #07D5DF, #7F6DEF, #F408FE)" }} className="z-10 fixed bottom-8 left-[55%] italic text-white px-6 py-2 font-semibold rounded-lg cursor-pointer hover:brightness-95 active:scale-95 select-none">Quay lại</Link>
-            <Link onClick={(e) => { test(e) }} to='/host/management' style={{ "backgroundImage": "linear-gradient(to right, #07D5DF, #7F6DEF, #F408FE)" }} className="cursor-pointer z-10 fixed bottom-8 right-8 italic text-white px-6 py-2 font-semibold rounded-lg hover:brightness-95 active:scale-95 select-none">Đăng địa điểm và chờ xét duyệt</Link>
+            <Link onClick={(e) => { test(e) }} to='/host/management' style={{ "backgroundImage": "linear-gradient(to right, #07D5DF, #7F6DEF, #F408FE)" }} className="cursor-pointer z-10 fixed bottom-8 right-8 italic text-white px-6 py-2 font-semibold rounded-lg hover:brightness-95 active:scale-95 select-none">{state ? "Cập nhật địa điểm và chờ xét duyệt" : "Đăng địa điểm và chờ xét duyệt"}</Link>
         </div>
     </div>);
 }

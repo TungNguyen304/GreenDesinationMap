@@ -13,13 +13,13 @@ import style from './serviceitem.module.scss'
 import classNames from 'classnames/bind';
 const cx = classNames.bind(style)
 
-function ServiceItem({name, phone, address, star, typeService, serviceItem, typeComponent, id, imageList, interestList, previewPage}) {
-    const isPreviewPage = localStorage.getItem('placeTemporary') ? true : false
+function ServiceItem({name, phone, address, star, typeService, serviceItem, type, typeComponent, id, imageList, interestList, previewPage}) {
+    const isPreviewPage = sessionStorage.getItem('placeTemporary') ? true : false
     const value = useValueContext()
     const dispatch = useDispatch()
     const [hidden, setHidden] = useState(true)
     const [isInterest, setIsInterest] = useState(false)
-    const account = JSON.parse(localStorage.getItem('account'))
+    const account = useSelector(state => state.accountReducer).user
     const imgRef = useRef()
     const left = useRef()
     const right = useRef()
@@ -50,7 +50,7 @@ function ServiceItem({name, phone, address, star, typeService, serviceItem, type
                 }
             })
         })()
-    }, [])
+    }, [account, id, interestList])
 
     function handelHidden() {
         setHidden(true)
@@ -102,7 +102,7 @@ function ServiceItem({name, phone, address, star, typeService, serviceItem, type
 
     function handleLike(even) {
         even.stopPropagation()
-        if(localStorage.getItem('account')) {
+        if(account) {
             if(even.target.farthestViewportElement.style.fill !== 'var(--color_heart)'){
                 value.handleSetBigBox('Danh sách yêu thích của bạn', 'interests')
                 value.handleDisplayBigBox()
@@ -133,7 +133,7 @@ function ServiceItem({name, phone, address, star, typeService, serviceItem, type
 
     return ( <div onMouseOver={handelDisplay} onMouseLeave={handelHidden} onClick={handleNavigateToRoom} className={`${cx('service_item')} ${typeComponent === "map" ? 'w-[200px] mx-auto' : homePage === "map" ? "hover:scale-1 w-[90%] hover:shadow-normal mb-[40px] px-[13px] pt-[13px] pb-[4px]" : "hover:scale-[1.01] hover:shadow-normal mb-[40px] px-[13px] pt-[13px] pb-[4px]"} ${previewPage && 'border-2 border-solid border-[#4c4949]'} cursor-pointer`}>
         <div className={`relative mb-3 flex justify-center`}>
-            <ServiceSlide ref={imgRef} imageList={imageList} typeComponent={typeComponent} id={id}/>
+            <ServiceSlide ref={imgRef} imageList={imageList} type={type} typeComponent={typeComponent} id={id}/>
             {!previewPage && <BsHeartFill style={{'fill': `${isInterest ? 'var(--color_heart)' : 'rgba(0, 0, 0, 0.6)'}`, 'stroke': 'white', 'strokeWidth': '1px'}} onClick={(e) => handleLike(e)} className={`absolute text-base w-[30px] h-[24px] top-3 right-3 select-none active:scale-[0.8]`}/>}
             <Left ref={left} className={hidden && 'hidden'}/>
             <Right ref={right} className={hidden && 'hidden'}/>

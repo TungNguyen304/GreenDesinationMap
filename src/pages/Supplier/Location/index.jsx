@@ -7,7 +7,7 @@ import { useParams } from "react-router-dom";
 
 function Location() {
     const [selectPosition, setSelectPosition] = useState()
-    const service = JSON.parse(localStorage.getItem('placeTemporary'))
+    const service = JSON.parse(sessionStorage.getItem('placeTemporary'))
     const style = useParams()
 
     function handleRegisterLocation(service) {
@@ -44,7 +44,7 @@ function Location() {
 
             </div>
 
-            <Link onClick={() => { localStorage.removeItem('placeTemporary') }} to='/host' className="fixed top-4 right-4 text-sm italic bg-slate-50 px-3 py-1 rounded-lg cursor-pointer hover:brightness-95 active:scale-95 select-none">Thoát</Link>
+            <Link onClick={() => { sessionStorage.removeItem('placeTemporary') }} to='/host' className="fixed top-4 right-4 text-sm italic bg-slate-50 px-3 py-1 rounded-lg cursor-pointer hover:brightness-95 active:scale-95 select-none">Thoát</Link>
             <Link to='/host/registerservice' style={{ "backgroundImage": "linear-gradient(to right, #07D5DF, #7F6DEF, #F408FE)" }} className="fixed bottom-8 left-[55%] italic text-white px-6 py-2 font-semibold rounded-lg cursor-pointer hover:brightness-95 active:scale-95 select-none">Quay lại</Link>
 
         </div>

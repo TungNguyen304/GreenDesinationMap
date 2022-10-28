@@ -1,5 +1,6 @@
 import { FiCheckCircle } from 'react-icons/fi'
 import { AiFillStar } from 'react-icons/ai'
+import { useSelector } from 'react-redux'
 import { RiArrowRightSLine } from 'react-icons/ri'
 import {HiOutlineUser} from 'react-icons/hi'
 import {MdLockOutline} from 'react-icons/md'
@@ -8,23 +9,26 @@ import style from './profile.module.scss'
 import Avt from '../../../assets/images/avt.png'
 import classNames from 'classnames/bind';
 import { useRef } from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 const cx = classNames.bind(style)
 
 function Profile() {
-    const changeAccountRef = useRef()
     const changeAvtRef = useRef()
     const accountRef = useRef()
     const inputImg = useRef()
     const [path, setPath] = useState()
+    const [account, setAccount] = useState()
     const [show, setShow] = useState(false)
+    let acc = useSelector(state => state.accountReducer)
     const role = window.location.pathname.includes('/host') ? 2 : 1
-    let account = {}
-    if (role === 1) {
-        account = JSON.parse(localStorage.getItem('account'))
-    } else if (role === 2) {
-        account = JSON.parse(localStorage.getItem('accountSupplier'))
-    }
+
+    useEffect(() => {
+        if (role === 2) {
+            setAccount(acc.supplier)
+        } else {
+            setAccount(acc.user)
+        }
+    }, [acc, role])
 
     function handleDisplayChangeAccount() {
         if(show === true) {
@@ -85,7 +89,7 @@ function Profile() {
                 </div>
             </div>
             <div className='flex-1'>
-                <div className='ml-[40px]'>
+                {account && <div className='ml-[40px]'>
                     <div className='text-3xl font-semibold'>Xin chào <span>{account.username}</span></div>
                     <div className='text-[#717171] mt-1'>Bắt đầu tham gia vào <span>{ }</span>{account.startday}</div>
                     <div onClick={(e) => handleDisplayChangeAccount(e)} className='select-none underline font-medium text-sm mt-3 cursor-pointer hover:bg-[#f1eeee] active:scale-[0.95] inline-block p-3 rounded-lg mx-[-12px]'>Thay đổi tài khoản đăng nhập</div>
@@ -145,7 +149,7 @@ function Profile() {
                         </span>
                     </div>
                     <div className='p-3 mt-4 text-sm hover:bg-[#f1eeee] active:scale-[0.95] rounded-xl inline-block font-medium underline cursor-pointer'>Đánh giá của bạn</div>
-                </div>
+                </div>}
             </div>
         </div>
 

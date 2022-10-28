@@ -7,8 +7,8 @@ function FormLocation({ amenity, type, tourism, road, name, house_number, suburb
     const formRef = useRef()
     function handleDispatchValue(selectPosition) {
         if (!save) {
-            const currdentData = JSON.parse(localStorage.getItem('placeTemporary'))
-            localStorage.setItem('placeTemporary', JSON.stringify({
+            const currdentData = JSON.parse(sessionStorage.getItem('placeTemporary'))
+            sessionStorage.setItem('placeTemporary', JSON.stringify({
                 ...currdentData,
                 name: selectPosition.type === 'hotel' ? selectPosition.address.tourism : selectPosition.address.amenity,
                 road: selectPosition.address.house_number ? selectPosition.address.house_number + ', ' + selectPosition.address.road : selectPosition.address.road,
@@ -40,7 +40,7 @@ function FormLocation({ amenity, type, tourism, road, name, house_number, suburb
             </div>
 
             <div className="border-[1.5px] border-solid border-[#c0bebe] rounded-lg">
-                {(amenity || name) && <div className="p-3 flex flex-col border-b-[1.5px] border-solid border-[#c0bebe]">
+                {(amenity || name || tourism) && <div className="p-3 flex flex-col border-b-[1.5px] border-solid border-[#c0bebe]">
                     <label className="text-[#717171] text-xs" htmlFor="name">Tên</label>
                     <input readOnly id="name" type="text" value={save ? name : type === 'hotel' ? tourism : amenity} />
                 </div>}

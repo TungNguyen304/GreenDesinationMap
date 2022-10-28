@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import criteriaApi from '../../../api/criteriaApi'
 import style from './providecriteria.module.scss'
@@ -8,7 +9,8 @@ const cx = classNames.bind(style)
 
 function ProvideCriteria() {
     const [criteriaList, setCriteriaList] = useState([])
-    const service = JSON.parse(localStorage.getItem('placeTemporary'))
+    const service = JSON.parse(sessionStorage.getItem('placeTemporary'))
+    const accountSupplier = useSelector(state => state.accountReducer).supplier
 
 
     useEffect(() => {
@@ -34,9 +36,10 @@ function ProvideCriteria() {
         const criteriaTickList = inputList.map((item) => {
             return item.value
         })
-        const currdentData = JSON.parse(localStorage.getItem('placeTemporary'))
-        localStorage.setItem('placeTemporary', JSON.stringify({
+        const currdentData = JSON.parse(sessionStorage.getItem('placeTemporary'))
+        sessionStorage.setItem('placeTemporary', JSON.stringify({
             ...currdentData,
+            userid: accountSupplier.id,
             criteriaList: [...criteriaTickList]
         }))
     }
@@ -75,7 +78,7 @@ function ProvideCriteria() {
                 </div>
             </div>
 
-            <Link onClick={() => {localStorage.removeItem('placeTemporary')}} to='/host' className="z-10 fixed top-4 right-4 text-sm italic bg-slate-50 px-3 py-1 rounded-lg cursor-pointer hover:brightness-95 active:scale-95 select-none">Thoát</Link>
+            <Link onClick={() => {sessionStorage.removeItem('placeTemporary')}} to='/host' className="z-10 fixed top-4 right-4 text-sm italic bg-slate-50 px-3 py-1 rounded-lg cursor-pointer hover:brightness-95 active:scale-95 select-none">Thoát</Link>
             <Link to='/host/registerservice/providetitle' style={{ "backgroundImage": "linear-gradient(to right, #07D5DF, #7F6DEF, #F408FE)" }} className="z-10 fixed bottom-8 left-[55%] italic text-white px-6 py-2 font-semibold rounded-lg cursor-pointer hover:brightness-95 active:scale-95 select-none">Quay lại</Link>
             <Link onClick={(e) => handleDispatchValue(e)} to='/host/registerservice/preview' style={{ "backgroundImage": "linear-gradient(to right, #07D5DF, #7F6DEF, #F408FE)" }} className="cursor-pointer z-10 fixed bottom-8 right-8 italic text-white px-6 py-2 font-semibold rounded-lg hover:brightness-95 active:scale-95 select-none">Lưu và xem lại địa điểm của bạn</Link>
         </div>

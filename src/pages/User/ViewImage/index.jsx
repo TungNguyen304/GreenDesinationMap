@@ -12,7 +12,7 @@ function ViewImage() {
     const wrapImageListRef = useRef()
     const [imageListRef, setImageListRef] = useState([])
     const [index, setIndex] = useState(1)
-    const isPreviewPage = localStorage.getItem('placeTemporary') ? true : false
+    const isPreviewPage = sessionStorage.getItem('placeTemporary') ? true : false
     const leftRef = useRef()
     const rightRef = useRef()
     const params = useParams()
@@ -24,7 +24,7 @@ function ViewImage() {
                 return item.placeid === Number(params.id)
             })
             setImageList(newdata)
-        })() : setImageList([...JSON.parse(localStorage.getItem('placeTemporary')).imageList])
+        })() : setImageList([...JSON.parse(sessionStorage.getItem('placeTemporary')).imageList])
     }, [])
     useEffect(() => {
         wrapImageListRef.current && setImageListRef([...wrapImageListRef.current.children])
@@ -100,7 +100,7 @@ function ViewImage() {
                     <div ref={wrapImageListRef} className='flex absolute'>
                         {imageList.length !== 0 && imageList.map((item, index) => {
                             return <div style={{transition: 'all 0.5s ease-in'}} key={isPreviewPage ? index : item.id} className='w-[800px] h-[500px]'>
-                                <img className='w-full h-full' src={isPreviewPage ? item.path : item.name} alt="" />
+                                <img className='w-full h-full' src={isPreviewPage ? item.file : item.name} alt="" />
                             </div>
                         })}
                     </div>

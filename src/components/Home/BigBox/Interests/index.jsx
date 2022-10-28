@@ -17,7 +17,7 @@ function Interests() {
     const [interest, setInterest] = useState([])
     const [serviceList, setServiceList] = useState([])
     const [imageList, setImageList] = useState([])
-    const account = JSON.parse(localStorage.getItem('account'))
+    const account = useSelector(state => state.accountReducer).user
 
     useEffect(() => {
         (async () => {

@@ -6,6 +6,7 @@
 
 .wrap_list {
     overflow-y: scroll;
+    overflow-x: hidden;
     margin-right: 20px;
     scroll-behavior: smooth;
     &::-webkit-scrollbar-track {

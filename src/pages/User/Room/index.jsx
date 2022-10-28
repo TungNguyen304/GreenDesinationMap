@@ -20,6 +20,7 @@ import commentApi from "../../../api/commentApi";
 import Scroll from 'react-scroll'
 import { Link } from "react-router-dom";
 import style from './room.module.scss'
+
 import classNames from 'classnames/bind';
 import { Fragment, useEffect, useState } from "react";
 const cx = classNames.bind(style)
@@ -34,15 +35,14 @@ function Room({ type, title }) {
     const value = useValueContext()
     let service = {}
     let isServiceTemporary = false
-    if(localStorage.getItem('placeTemporary')) {
-        service = JSON.parse(localStorage.getItem('placeTemporary'))
+    if(sessionStorage.getItem('placeTemporary')) {
+        service = JSON.parse(sessionStorage.getItem('placeTemporary'))
         isServiceTemporary = true
     }
     else {
         service = JSON.parse(localStorage.getItem('service'))
     }
-    const account = JSON.parse(localStorage.getItem('account'))
-    const accountSupplier = JSON.parse(localStorage.getItem('accountSupplier'))
+    const account = useSelector(state => state.accountReducer).user
     const show = useSelector(state => state.bigboxReducer.show)
     let count = 0;
     const currentDay = new Date()
@@ -66,7 +66,7 @@ function Room({ type, title }) {
             return total
         }, 0) : 0;
         setTotalComment(count)
-    }, [count, commentList, service])
+    }, [commentList, service.id])
 
 
     useEffect(() => {
@@ -83,19 +83,19 @@ function Room({ type, title }) {
         })() : (() => {
             const data = service.imageList.map((item) => {
                 return {
-                    name: item.path
+                    name: item.file
                 }
             })
             setImageList(data)
         })()
-    }, [])
+    }, [isServiceTemporary, service.id, JSON.stringify(service.imageList)])
 
     useEffect(() => {
         (async () => {
-            const data = await accountApi.get(accountSupplier.id)
+            const data = await accountApi.get(service.userid)
             setOwner(data.data)
         })()
-    }, [])
+    }, [service.userid])
 
     useEffect(() => {
         (async () => {
@@ -106,7 +106,7 @@ function Room({ type, title }) {
                 }
             })
         })()
-    }, [])
+    }, [account, service.id])
 
 
     function handleLike(even) {

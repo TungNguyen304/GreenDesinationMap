@@ -8,7 +8,7 @@ function ProvideTitle() {
     const [text, setText] = useState('')
     const max = 500
     const nextRef = useRef()
-    const service = JSON.parse(localStorage.getItem('placeTemporary'))
+    const service = JSON.parse(sessionStorage.getItem('placeTemporary'))
 
     function handleTyping(e) {
         setText(e.target.value)
@@ -21,7 +21,7 @@ function ProvideTitle() {
             setLength(service.description.length)
         }
 
-    },[])
+    },[service.description])
 
     useEffect(() => {
         if(length === 0 || length > 500) {
@@ -35,8 +35,8 @@ function ProvideTitle() {
     }, [length])
 
     function handleDispatchValue(text) {
-        const currdentData = JSON.parse(localStorage.getItem('placeTemporary'))
-        localStorage.setItem('placeTemporary', JSON.stringify({
+        const currdentData = JSON.parse(sessionStorage.getItem('placeTemporary'))
+        sessionStorage.setItem('placeTemporary', JSON.stringify({
             ...currdentData,
             description: text
         }))
@@ -55,7 +55,7 @@ function ProvideTitle() {
                 </div>
             </div>
 
-            <Link onClick={() => {localStorage.removeItem('placeTemporary')}} to='/host' className="z-10 fixed top-4 right-4 text-sm italic bg-slate-50 px-3 py-1 rounded-lg cursor-pointer hover:brightness-95 active:scale-95 select-none">Thoát</Link>
+            <Link onClick={() => {sessionStorage.removeItem('placeTemporary')}} to='/host' className="z-10 fixed top-4 right-4 text-sm italic bg-slate-50 px-3 py-1 rounded-lg cursor-pointer hover:brightness-95 active:scale-95 select-none">Thoát</Link>
             <Link to='/host/registerservice/providephotos' style={{ "backgroundImage": "linear-gradient(to right, #07D5DF, #7F6DEF, #F408FE)" }} className="z-10 fixed bottom-8 left-[55%] italic text-white px-6 py-2 font-semibold rounded-lg cursor-pointer hover:brightness-95 active:scale-95 select-none">Quay lại</Link>
             <Link onClick={() => {handleDispatchValue(text)}} ref={nextRef} to='/host/registerservice/providecriteria' style={{ "backgroundImage": "" }} className="bg-[#DDDDDD] cursor-pointer z-10 fixed bottom-8 right-8 italic text-white px-6 py-2 font-semibold rounded-lg hover:brightness-95 active:scale-95 select-none pointer-events-none">Lưu và đến bước tiếp theo</Link>
         </div>
