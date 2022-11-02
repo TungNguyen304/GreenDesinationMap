@@ -1,7 +1,7 @@
 .navbar {
     position: fixed;
     top: var(--height_header);
-    width: 100%;
+    width: 100vw;
     height: var(--height_navbar);
     background-color: white;
     z-index: 2;
@@ -22,6 +22,46 @@
 
     li {
         transition: all 0.4s ease-out;
+    }
+}
+
+@media (min-width: 1025px) and (max-width: 1280px) {
+    .navlist {
+        width: calc(var(--size_nav_item)* 10);
+    }
+}
+
+@media (min-width: 900px) and (max-width: 1024px) {
+    .navlist {
+        width: calc(var(--size_nav_item)* 8);
+    }
+}
+
+@media (min-width: 641px) and (max-width: 899px) {
+    .navlist {
+        width: calc(var(--size_nav_item)* 6);
+    }
+}
+
+@media (min-width: 500px) and (max-width: 640px) {
+    .navlist {
+        width: calc(var(--size_nav_item)* 5);
+    }
+}
+
+@media (min-width: 361px) and (max-width: 499px) {
+    .navlist {
+        width: calc(var(--size_nav_item) * 3);
+    }
+
+    .wrap_navlist {
+        padding: 0 10px;
+    }
+}
+
+@media (max-width: 360px) {
+    .navlist {
+        width: calc(var(--size_nav_item) * 3);
     }
 }
 

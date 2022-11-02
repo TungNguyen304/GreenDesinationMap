@@ -106,6 +106,7 @@ function Map(props) {
 
       {positionList && (
         positionList.map((item, index) => {
+          // console.log(serviceType);
           if (serviceType === 'search') {
             return (
               <Marker key={index} position={item} icon={selectPosition && item.mapid === selectPosition.place_id ? greenIcon2 : greenIcon}>
@@ -119,7 +120,7 @@ function Map(props) {
             return (
               <Marker key={index} position={item} icon={selectPosition && item.mapid === selectPosition.place_id ? greenIcon2 : greenIcon}>
                 <Popup>
-                  <ServiceItem serviceItem={item} typeComponent="map" id={item.id} typeService={item.type} name={item.name} imageList={imageList} phone={item.phone} star={item.star} address={item.address} />
+                  <ServiceItem serviceItem={item} type="marker" typeComponent="map" id={item.id} typeService={item.type} name={item.name} imageList={imageList} phone={item.phone} star={item.star} address={item.address} />
                 </Popup>
               </Marker>
             )

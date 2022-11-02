@@ -6,12 +6,14 @@ import { setServiceType } from '../../../store/actions/service'
 import NavItem from './NavItem';
 import Left from '../../common/Left'
 import Right from '../../common/Right'
+import { useValueContext } from '../../../hook'
 import { useEffect, useRef } from 'react'
 import style from './navbar.module.scss'
 import classNames from 'classnames/bind';
 const cx = classNames.bind(style)
 
 function Navbar(props) {
+    const {handleSetBigBox, handleDisplayBigBox} = useValueContext()
     const dispatch = useDispatch()
     const checkRef = useRef()
     const filterRef = useRef()
@@ -120,7 +122,7 @@ function Navbar(props) {
 
     return ( <div ref={navbar} className={`${cx('navbar')}`}>
         <div className={`wrap`}>
-            <div className='flex justify-between items-center'>
+            <div className='flex justify-between max1024:justify-center items-center'>
                 <div className={`${cx('wrap_navlist')} flex items-center relative`}>
                     <ul className={`${cx('navlist')} flex items-center relative`}>
                         {serviceType.map((item, index) => {
@@ -131,10 +133,10 @@ function Navbar(props) {
                     <Right ref={right}/>
                 </div>
                 <div>
-                    <div className={`pl-6`}>
+                    <div className={`slg1250:pl-6 max1024:hidden`}>
                         <div ref={filterRef} onClick={() => {
-                            props.handleSetBigBox('Bộ lọc', 'filter')
-                            props.handleDisplayBigBox()
+                            handleSetBigBox('Bộ lọc', 'filter')
+                            handleDisplayBigBox()
                         }} className={`${cx('filter')} rounded-xl text-xs flex items-center px-4 py-4 cursor-pointer relative justify-between`}>
                             <TbGitPullRequestClosed className='text-base'/>
                             <span className='ml-2 font-bold'>Bộ lọc</span>

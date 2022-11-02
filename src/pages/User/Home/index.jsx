@@ -15,41 +15,42 @@ import classNames from 'classnames/bind';
 const cx = classNames.bind(style)
 
 
-function Home({type, title}) {
+function Home({ type, title }) {
     const value = useValueContext()
-    const {handleDisplayBigBox, handleSetBigBox} = value
+    const { handleDisplayBigBox, handleSetBigBox } = value
     const show = useSelector(state => state.bigboxReducer.show)
     const typeService = useSelector(state => state.serviceReducer.serviceType)
     const dispatch = useDispatch()
-    
+
     const homePage = useSelector(state => state.homePageReducer.type)
 
     const [selectPosition, setSelectPosition] = useState(null);
 
-    
+
     function handleSetSubPage() {
-        if(homePage === 'map')
+        if (homePage === 'map')
             dispatch(setHomePage('list'))
         else
             dispatch(setHomePage('map'))
     }
-    
-    return ( <div>
+
+    return (<div>
         <div>
-            <Header selectPosition={selectPosition} setSelectPosition={setSelectPosition}/>
+            <Header selectPosition={selectPosition} setSelectPosition={setSelectPosition} />
             <div className={`${cx('header_virtual')}`}></div>
-            <Navbar handleDisplayBigBox={handleDisplayBigBox} handleSetBigBox={handleSetBigBox}/>
+            <Navbar handleDisplayBigBox={handleDisplayBigBox} handleSetBigBox={handleSetBigBox} />
             {show && <div>
-                <BigBox title={title} type={type} handleDisplayBigBox={handleDisplayBigBox}/>
+                <BigBox title={title} type={type} handleDisplayBigBox={handleDisplayBigBox} />
             </div>}
-            {homePage === "map" ? <MapService selectPosition={selectPosition} setSelectPosition={setSelectPosition} typeService={typeService}/> : <Service typeService={typeService}/>}
-            <div className="h-10">
+            {homePage === "map" ? <MapService selectPosition={selectPosition} setSelectPosition={setSelectPosition} typeService={typeService} /> : <Service typeService={typeService} />}
+            <div className="hidden slg1250:h-10">
             </div>
-            
-            <ButtonMap handleSetSubPage={handleSetSubPage} content={homePage === "map" ? "Hiện danh sách" : "Hiện bản đồ"} type={homePage}/>
-            <Footer/>
+
+            <ButtonMap handleSetSubPage={handleSetSubPage} content={homePage === "map" ? "Hiện danh sách" : "Hiện bản đồ"} type={homePage} />
+            <Footer />
         </div>
-    </div> );
+        
+    </div>);
 }
 
 export default Home

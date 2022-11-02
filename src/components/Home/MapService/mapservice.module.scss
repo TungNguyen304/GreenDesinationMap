@@ -1,8 +1,19 @@
 .map_service {
-    // margin-top: calc(var(--height_header) + var(--height_navbar) + 30px);
-    // min-height: 100vh;
     z-index: -1;
+    .container {
+        overflow-y: hidden;
+        height: calc(100vh - var(--height_header) - var(--height_navbar) - 20px);
+        .list_service {
+            height: calc(100vh - var(--height_header) - var(--height_navbar) - 20px);
+        }
+    }
+    @media (min-width: 1025px) and (max-width: 1536px) {
+        .container {
+            height: calc(100vh - var(--height_header) - var(--height_footer) - var(--height_navbar) - 20px + 30px);
+        }
+    }
 }
+
 
 .wrap_list {
     overflow-y: scroll;
@@ -14,7 +25,7 @@
     }
     &::-webkit-scrollbar {
         background: rgb(202, 198, 198);
-        width: 13px;
+        width: 10px;
         border-radius: 15px;
     }
     &::-webkit-scrollbar-thumb {

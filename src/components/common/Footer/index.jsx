@@ -14,7 +14,7 @@ function Footer() {
         });
     }
 
-    return ( <div className={`${cx('footer')}`}>
+    return ( <div className={`${cx('footer')} hidden slg1250:block z-10`}>
         <div className={`${window.location.pathname === '/room' ? 'small_wrap' : 'wrap'}`}>
             <div className={`${cx('wrap_footer')}`}>
                 <div>

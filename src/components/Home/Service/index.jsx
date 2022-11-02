@@ -53,7 +53,7 @@ function Service({typeService}) {
     return ( <div className={`${cx('service')}`}>
             <div className="wrap">
                 <Suspense fallback={<Loader/>}>
-                    <div className="grid grid-cols-4 mx-[-13px]">
+                    <div className="grid grid-cols-4 min820max1195:grid-cols-3 max819:grid-cols-2 ssm640:grid-cols-1 ">
                         {
                         typeService==='search' && searchList && searchList.length ? 
                         searchList.map((item) => {

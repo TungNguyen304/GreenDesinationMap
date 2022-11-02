@@ -63,10 +63,10 @@ function WishList() {
 
     return ( <div>
         <Header/>
-        <div className='wrap my-24 '>
+        <div className='wrap my-24 w-[90%]'>
             <div className='text-3xl font-bold text-[#222222] mb-11 pt-7'>Yêu thích</div>
             <Suspense fallback={<Loader/>}>
-                <div className='grid grid-cols-3 mx-[-16px]'>
+                <div className='grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 mx-[-16px]'>
                     {interestList && interestList.map((item) => {
                         return serviceList && serviceList.map((item2) => {
                             if(item.placeid === item2.id && account.id === item.userid && checkNameInterest.includes(item.name) === false) {

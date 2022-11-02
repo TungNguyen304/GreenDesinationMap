@@ -1,7 +1,9 @@
 import { BiSearch } from 'react-icons/bi'
+import { GiHamburgerMenu } from 'react-icons/gi'
 import React, { useEffect, useState } from "react";
 import List from "@material-ui/core/List";
 import { useDispatch } from 'react-redux';
+import { useMenuMobileContext } from '../../../../hook';
 import { setServiceSearch } from '../../../../store/actions/search';
 import { setServiceType } from '../../../../store/actions/service';
 import serviceApi from '../../../../api/serviceApi';
@@ -12,7 +14,9 @@ import { useRef } from 'react';
 const NOMINATIM_BASE_URL = "https://nominatim.openstreetmap.org/search?";
 
 function SearchBar({ hidden, ...props }) {
+  const context = useMenuMobileContext()
   const dispatch = useDispatch()
+  const isUserHomePage = window.location.pathname === "/"
   const isRegiterServiceLocationPage = window.location.pathname.includes('/host/registerservice/location')
   const { district, ward, serviceTypes } = useSelector(state => state.filterReducer.filter)
   const { setSelectPosition, handleRegisterLocation } = props;
@@ -34,7 +38,7 @@ function SearchBar({ hidden, ...props }) {
     })()
   }, [])
 
-  
+
   function removeClass() {
     recomment.current && recomment.current.classList.add('hidden')
     window.removeEventListener('click', removeClass)
@@ -85,9 +89,10 @@ function SearchBar({ hidden, ...props }) {
     return newAddress
   }
 
-  return (<div className={`${hidden || "flex flex-1"}`} style={{ position: "relative", flexDirection: "column"}}>
-    <div className='flex items-center justify-center'>
-      <div className={`${window.location.pathname.includes('/host') ? 'hidden' : ''} mr-5 text-xs text-center cursor-pointer italic rounded-full relative select-none`}>
+  return (<div className={`flex flex-1`} style={{ position: "relative", flexDirection: "column" }}>
+    <div className='flex items-center justify-center sm:flex-1 min640max1024:justify-around'>
+      
+      <div className={`${window.location.pathname.includes('/host') || hidden || !isUserHomePage ? 'hidden' : 'md:block'} hidden mr-5 text-xs text-center cursor-pointer italic rounded-full relative select-none`}>
         <div ref={greenRef3} onClick={handleChangeSearchType} className='flex bg-[#989999] text-white font-medium rounded-full hover:opacity-90'>
           <div ref={greenRef1} style={{ transition: "all 0.5s ease-in-out", opacity: 0 }} className={`py-3 pl-3 pr-[6px] `}>
             Địa điểm xanh
@@ -100,7 +105,12 @@ function SearchBar({ hidden, ...props }) {
           Toàn bản đồ
         </div>
       </div>
-      <div style={{ display: "flex", justifyContent: "space-between", borderRadius: "50px", padding: "8px 10px 8px 20px", height: "100%", border: "1px solid var(--border)" }} className={`bg-white hover:shadow-normal rounded-full ${isRegiterServiceLocationPage ? 'w-full' : 'w-[50%]'}`}>
+
+      <div onClick={context} className='p-3 text-2xl hover:bg-slate-100 relative hidden ssm767:block'>
+        <GiHamburgerMenu className='text-[#6d6b6b]'/>
+      </div>
+      
+      <div style={{ justifyContent: "space-between", borderRadius: "50px", padding: "8px 10px 8px 20px", height: "100%", border: "1px solid var(--border)" }} className={`bg-white hover:shadow-normal rounded-full ${hidden ? 'hidden' : 'flex'} ${isRegiterServiceLocationPage ? 'w-full' : 'w-[50%] ssm640:w-full'}`}>
         <div className='w-full'>
           <input
             className='placeholder:italic'
@@ -117,8 +127,8 @@ function SearchBar({ hidden, ...props }) {
         >
           <button
             variant="contained"
-            style={{ backgroundColor: "var(--primary)", padding: '6px' }}
-            className='h-full rounded-full w-full flex justify-center items-center hover:opacity-90 active:scale-[0.9]'
+            style={{ backgroundColor: "var(--primary)" }}
+            className='h-full rounded-full w-full flex justify-center items-center hover:opacity-90 active:scale-[0.9] p-[5px] slg1250:p-[6px]'
             onClick={(e) => {
               // Search
               if (typeSearch === 'full') {
@@ -134,10 +144,9 @@ function SearchBar({ hidden, ...props }) {
                   method: "GET",
                   redirect: "follow",
                 };
-                fetch(`${NOMINATIM_BASE_URL}${queryString}`, requestOptions)                                            
+                fetch(`${NOMINATIM_BASE_URL}${queryString}`, requestOptions)
                   .then((response) => response.text())
                   .then((result) => {
-                    console.log(JSON.parse(result));
                     setListPlace(JSON.parse(result));
                   })
                   .catch((err) => console.log("err: ", err));
@@ -145,128 +154,128 @@ function SearchBar({ hidden, ...props }) {
               else {
                 const searchList = positionList.filter((item) => {
                   if (district.length && ward.length && serviceTypes.length) {
-                    if(searchText === '') {
+                    if (searchText === '') {
                       return district.includes('Quận ' + item.district) && ward.includes('Phường ' + item.ward) && serviceTypes.includes(item.type)
                     }
                     else {
-                      return searchText.length >=3 && item.name.toLowerCase().includes(searchText.toLowerCase()) && district.includes('Quận ' + item.district) && ward.includes('Phường ' + item.ward) && serviceTypes.includes(item.type)
+                      return searchText.length >= 3 && item.name.toLowerCase().includes(searchText.toLowerCase()) && district.includes('Quận ' + item.district) && ward.includes('Phường ' + item.ward) && serviceTypes.includes(item.type)
                     }
                   } else if (district.length && ward.length && !serviceTypes.length) {
-                    if(searchText === '') {
+                    if (searchText === '') {
                       return district.includes('Quận ' + item.district) && ward.includes('Phường ' + item.ward)
                     }
                     else {
-                      return searchText.length >=3 && item.name.toLowerCase().includes(searchText.toLowerCase()) && district.includes('Quận ' + item.district) && ward.includes('Phường ' + item.ward)
+                      return searchText.length >= 3 && item.name.toLowerCase().includes(searchText.toLowerCase()) && district.includes('Quận ' + item.district) && ward.includes('Phường ' + item.ward)
                     }
                   } else if (district.length && !ward.length && serviceTypes.length) {
-                    if(searchText === '') {
+                    if (searchText === '') {
                       return district.includes('Quận ' + item.district) && serviceTypes.includes(item.type)
                     }
                     else {
-                      return searchText.length >=3 && item.name.toLowerCase().includes(searchText.toLowerCase()) && district.includes('Quận ' + item.district) && serviceTypes.includes(item.type)
+                      return searchText.length >= 3 && item.name.toLowerCase().includes(searchText.toLowerCase()) && district.includes('Quận ' + item.district) && serviceTypes.includes(item.type)
                     }
                   } else if (!district.length && ward.length && serviceTypes.length) {
-                    if(searchText === '') {
+                    if (searchText === '') {
                       return ward.includes('Phường ' + item.ward) && serviceTypes.includes(item.type)
                     }
                     else {
-                      return searchText.length >=3 && item.name.toLowerCase().includes(searchText.toLowerCase()) && ward.includes('Phường ' + item.ward) && serviceTypes.includes(item.type)
+                      return searchText.length >= 3 && item.name.toLowerCase().includes(searchText.toLowerCase()) && ward.includes('Phường ' + item.ward) && serviceTypes.includes(item.type)
                     }
                   } else if (district.length && !ward.length && !serviceTypes.length) {
-                    if(searchText === '') {
+                    if (searchText === '') {
                       return district.includes('Quận ' + item.district)
                     }
                     else {
-                      return searchText.length >=3 && item.name.toLowerCase().includes(searchText.toLowerCase()) && district.includes('Quận ' + item.district)
+                      return searchText.length >= 3 && item.name.toLowerCase().includes(searchText.toLowerCase()) && district.includes('Quận ' + item.district)
                     }
                   } else if (!district.length && ward.length && !serviceTypes.length) {
-                    if(searchText === '') {
+                    if (searchText === '') {
                       return ward.includes('Phường ' + item.ward)
                     }
                     else {
-                      return searchText.length >=3 && item.name.toLowerCase().includes(searchText.toLowerCase()) && ward.includes('Phường ' + item.ward)
+                      return searchText.length >= 3 && item.name.toLowerCase().includes(searchText.toLowerCase()) && ward.includes('Phường ' + item.ward)
                     }
                   } else if (!district.length && !ward.length && serviceTypes.length) {
-                    if(searchText === '') {
+                    if (searchText === '') {
                       return serviceTypes.includes(item.type)
                     }
                     else {
-                      return searchText.length >=3 && item.name.toLowerCase().includes(searchText.toLowerCase()) && serviceTypes.includes(item.type)
+                      return searchText.length >= 3 && item.name.toLowerCase().includes(searchText.toLowerCase()) && serviceTypes.includes(item.type)
                     }
                   } else if (!district.length && !ward.length && !serviceTypes.length) {
-                    if(searchText === '') {
+                    if (searchText === '') {
                       return true
                     }
                     else {
-                      return searchText.length >=3 && item.name.toLowerCase().includes(searchText.toLowerCase())
+                      return searchText.length >= 3 && item.name.toLowerCase().includes(searchText.toLowerCase())
                     }
                   }
                 })
 
 
-                
+
                 dispatch(setServiceSearch(searchList))
                 dispatch(setServiceType('search'))
               }
-              
+
             }}
           >
-            <BiSearch className='text-white w-full font-bold text-2xl flex justify-center'/>
+            <BiSearch className='text-white w-full font-bold text-2xl flex justify-center' />
           </button>
         </div>
       </div>
     </div>
 
     {typeSearch === 'full' &&
-      <div ref={recomment} className={`bg-white hidden absolute top-[130%] ${isRegiterServiceLocationPage ? 'w-full left-0 h-[30vh]' : 'w-[100%] left-[5%] h-[60vh]'}  overflow-scroll border border-solid border-normal rounded-2xl`}>
-      <List className='h-full' component="nav" aria-label="main mailbox folders">
-        {listPlace && listPlace.length !== 0 ? listPlace.map((item) => {
-          if (district.length && ward.length && serviceTypes.length) {
-            if (district.includes('Quận ' + item.address.city_district) && ward.includes(item.address.suburb) && serviceTypes.includes(item.type)) {
-              d++
-              return <SearchElement key={item?.place_id} item={item} recomment={recomment.current} setSelectPosition={setSelectPosition} positionList={positionList} />
-            }
-          } else if (district.length && ward.length && !serviceTypes.length) {
-            if (district.includes('Quận ' + item.address.city_district) && ward.includes(item.address.suburb)) {
+      <div ref={recomment} className={`bg-white hidden absolute top-[130%] ${isRegiterServiceLocationPage ? 'left-0 h-[30vh]' : ' left-[5%] h-[60vh]'} w-[100%] overflow-scroll border border-solid border-normal rounded-2xl ssm640:left-0 min640max1024:left-[50%] min640max1024:translate-x-[-25%]`}>
+        <List className='h-full' component="nav" aria-label="main mailbox folders">
+          {listPlace && listPlace.length !== 0 ? listPlace.map((item) => {
+            if (district.length && ward.length && serviceTypes.length) {
+              if (district.includes('Quận ' + item.address.city_district) && ward.includes(item.address.suburb) && serviceTypes.includes(item.type)) {
+                d++
+                return <SearchElement key={item?.place_id} item={item} recomment={recomment.current} setSelectPosition={setSelectPosition} positionList={positionList} />
+              }
+            } else if (district.length && ward.length && !serviceTypes.length) {
+              if (district.includes('Quận ' + item.address.city_district) && ward.includes(item.address.suburb)) {
+                d++
+                return <SearchElement handleRegisterLocation={handleRegisterLocation} key={item?.place_id} item={item} recomment={recomment.current} setSelectPosition={setSelectPosition} positionList={positionList} />
+              }
+            } else if (district.length && !ward.length && serviceTypes.length) {
+              if (district.includes('Quận ' + item.address.city_district) && serviceTypes.includes(item.type)) {
+                d++
+                return <SearchElement handleRegisterLocation={handleRegisterLocation} key={item?.place_id} item={item} recomment={recomment.current} setSelectPosition={setSelectPosition} positionList={positionList} />
+              }
+            } else if (!district.length && ward.length && serviceTypes.length) {
+              if (ward.includes(item.address.suburb) && serviceTypes.includes(item.type)) {
+                d++
+                return <SearchElement handleRegisterLocation={handleRegisterLocation} key={item?.place_id} item={item} recomment={recomment.current} setSelectPosition={setSelectPosition} positionList={positionList} />
+              }
+            } else if (district.length && !ward.length && !serviceTypes.length) {
+              if (district.includes('Quận ' + item.address.city_district)) {
+                d++
+                return <SearchElement handleRegisterLocation={handleRegisterLocation} key={item?.place_id} item={item} recomment={recomment.current} setSelectPosition={setSelectPosition} positionList={positionList} />
+              }
+            } else if (!district.length && ward.length && !serviceTypes.length) {
+              if (ward.includes(item.address.suburb)) {
+                d++
+                return <SearchElement handleRegisterLocation={handleRegisterLocation} key={item?.place_id} item={item} recomment={recomment.current} setSelectPosition={setSelectPosition} positionList={positionList} />
+              }
+            } else if (!district.length && !ward.length && serviceTypes.length) {
+              if (serviceTypes.includes(item.type)) {
+                d++
+                return <SearchElement handleRegisterLocation={handleRegisterLocation} key={item?.place_id} item={item} recomment={recomment.current} setSelectPosition={setSelectPosition} positionList={positionList} />
+              }
+            } else if (!district.length && !ward.length && !serviceTypes.length) {
               d++
               return <SearchElement handleRegisterLocation={handleRegisterLocation} key={item?.place_id} item={item} recomment={recomment.current} setSelectPosition={setSelectPosition} positionList={positionList} />
             }
-          } else if (district.length && !ward.length && serviceTypes.length) {
-            if (district.includes('Quận ' + item.address.city_district) && serviceTypes.includes(item.type)) {
-              d++
-              return <SearchElement handleRegisterLocation={handleRegisterLocation} key={item?.place_id} item={item} recomment={recomment.current} setSelectPosition={setSelectPosition} positionList={positionList} />
-            }
-          } else if (!district.length && ward.length && serviceTypes.length) {
-            if (ward.includes(item.address.suburb) && serviceTypes.includes(item.type)) {
-              d++
-              return <SearchElement handleRegisterLocation={handleRegisterLocation} key={item?.place_id} item={item} recomment={recomment.current} setSelectPosition={setSelectPosition} positionList={positionList} />
-            }
-          } else if (district.length && !ward.length && !serviceTypes.length) {
-            if (district.includes('Quận ' + item.address.city_district)) {
-              d++
-              return <SearchElement handleRegisterLocation={handleRegisterLocation} key={item?.place_id} item={item} recomment={recomment.current} setSelectPosition={setSelectPosition} positionList={positionList} />
-            }
-          } else if (!district.length && ward.length && !serviceTypes.length) {
-            if (ward.includes(item.address.suburb)) {
-              d++
-              return <SearchElement handleRegisterLocation={handleRegisterLocation} key={item?.place_id} item={item} recomment={recomment.current} setSelectPosition={setSelectPosition} positionList={positionList} />
-            }
-          } else if (!district.length && !ward.length && serviceTypes.length) {
-            if (serviceTypes.includes(item.type)) {
-              d++
-              return <SearchElement handleRegisterLocation={handleRegisterLocation} key={item?.place_id} item={item} recomment={recomment.current} setSelectPosition={setSelectPosition} positionList={positionList} />
-            }
-          } else if (!district.length && !ward.length && !serviceTypes.length) {
-            d++
-            return <SearchElement handleRegisterLocation={handleRegisterLocation} key={item?.place_id} item={item} recomment={recomment.current} setSelectPosition={setSelectPosition} positionList={positionList} />
-          }
 
 
-        }) : <div className='h-full flex justify-center items-center'>Không tìm thấy kết quả tìm kiếm</div>}
+          }) : <div className='h-full flex justify-center items-center'>Không tìm thấy kết quả tìm kiếm</div>}
 
-        {listPlace && listPlace.length!==0 && d === 0 && <div className='h-full flex justify-center items-center'>Không tìm thấy kết quả tìm kiếm</div>}
-      </List>
-    </div>
+          {listPlace && listPlace.length !== 0 && d === 0 && <div className='h-full flex justify-center items-center'>Không tìm thấy kết quả tìm kiếm</div>}
+        </List>
+      </div>
     }
   </div>);
 }

@@ -46,7 +46,7 @@ function Host({title, type}) {
 
 
 
-        <div className="wrap mt-8 mb-[80px]">
+        <div className="wrap mt-8 slg1250:mb-[80px]">
             <div className="text-xl font-semibold italic mb-3">Các địa điểm xanh của bạn (*<span>{positionList && positionList.length ? positionList.length : account ? 0 : 'Chưa đăng nhập'}</span>)</div>
             <div className="h-[90vh]">
                 <Map positionList={positionList}/>

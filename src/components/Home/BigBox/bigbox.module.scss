@@ -17,3 +17,9 @@
         border-radius: 10px;
     }
 }
+
+@media (max-width: 1024px) {
+    .wrap_content {
+        width: 100%;
+    }
+}

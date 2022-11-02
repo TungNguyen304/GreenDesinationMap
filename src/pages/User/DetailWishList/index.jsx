@@ -1,7 +1,10 @@
 import interestApi from "../../../api/interestApi";
 import serviceApi from "../../../api/serviceApi";
+import { Link } from "react-router-dom";
 import Header from "../../../components/common/Header";
+import Navbar from "../../../components/Home/Navbar";
 import MapService from "../../../components/Home/MapService";
+import {IoArrowBackOutline} from 'react-icons/io5'
 import { useState } from "react";
 import { useEffect } from "react";
 
@@ -33,9 +36,15 @@ function DetailWishList() {
 
     return ( <div>
         <Header/>
-        <div style={{marginTop: "var(--height_header)"}} className="">
+        <Navbar/>
+        <div style={{marginTop: "calc(var(--height_header) + var(--height_navbar) + 50px)"}} className="">
             <MapService positionList={serviceList}/>
         </div>
+
+        <Link to="/wishlist" className="absolute top-6 left-6 z-20 hidden max1029:flex items-center cursor-pointer hover:font-bold active:scale-95">
+            <IoArrowBackOutline className="text-xl"/>
+            <span className="text-lg">Back</span>
+        </Link>
     </div> );
 }
 

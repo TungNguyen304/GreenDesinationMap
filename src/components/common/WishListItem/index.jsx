@@ -7,14 +7,14 @@ function WishListItem({item, handleNavigateDetailWishList, findImageList}) {
     {findImageList(item.placeid) && findImageList(item.placeid).length !== 0 ? 
         <div className='flex h-[216px] rounded-3xl overflow-hidden'>
             <div className='w-[67%] h-full mr-[2px]'>
-                <img className='h-full w-full' src={findImageList(item.placeid).length && findImageList(item.placeid)[0].name} alt="" />
+                <img className='h-full w-full object-cover' src={findImageList(item.placeid).length && findImageList(item.placeid)[0].name} alt="" />
             </div>
             <div className='w-[33%] h-full'>
                 <div className='h-[50%] mb-[2px]'>
-                    <img className='h-full w-full' src={findImageList(item.placeid).length && findImageList(item.placeid)[1].name} alt="" />
+                    <img className='h-full w-full object-cover' src={findImageList(item.placeid).length && findImageList(item.placeid)[1].name} alt="" />
                 </div>
                 <div className='h-[50%]'>
-                    <img className='h-full w-full' src={findImageList(item.placeid).length && findImageList(item.placeid)[2].name} alt="" />
+                    <img className='h-full w-full object-cover' src={findImageList(item.placeid).length && findImageList(item.placeid)[2].name} alt="" />
                 </div>
             </div>
         </div> : 

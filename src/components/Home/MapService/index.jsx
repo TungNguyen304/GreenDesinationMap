@@ -58,16 +58,15 @@ function MapService(props) {
     useEffect(() => {
         (async() => {
             const data = await serviceApi.getAll()
-            console.log(data);
             setServiceList(data.data)
         })()
     }, [])
 
     
-    return ( <div style={{marginTop: `${isDetailWishListPage ? '' : 'calc(var(--height_header) + var(--height_navbar) + 30px)'}`}} className={`${cx('map_service')}`}>
-        <div className={`${isDetailWishListPage ? 'h-[88vh]' : 'wrap h-[67vh]'} `}>
-            <div className="grid grid-cols-4 h-full">
-                <div className={`${isDetailWishListPage ? 'h-[88vh]' : 'h-[67vh]'}`}>
+    return ( <div style={{marginTop: `${isDetailWishListPage ? '' : 'calc(var(--height_header) + var(--height_navbar) + 20px)'}`}} className={`${cx('map_service')}`}>
+        <div className={`${cx('container')} ${isDetailWishListPage ? 'h-[88vh]' : 'wrap pt-[30px]'} `}>
+            <div className="grid slg1250:grid-cols-4 h-full">
+                <div className={`${cx('list_service')} ${isDetailWishListPage ? 'h-[88vh]' : ''} hidden slg1250:block`}>
                     {isDetailWishListPage && <div className='flex items-center justify-between px-5 py-3 text-2xl font-semibold'>
                         <div className='flex items-center'>
                             <Link to='/wishlist' className='hover:bg-slate-50 active:scale-[0.9] rounded-full p-3 cursor-pointer'><MdArrowBack /></Link>
@@ -102,7 +101,7 @@ function MapService(props) {
                         </Suspense>
                     </div>
                 </div>
-                <div className="col-span-3">
+                <div className="slg1250:col-span-3 w-full ssm640:w-[100vw]">
                     <Map positionList={props.typeService==='search' ? searchList : serviceList} {...props}/>
                 </div>
             </div>

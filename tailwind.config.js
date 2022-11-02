@@ -25,6 +25,68 @@ module.exports = {
       },
       backgroundImage: {
         'special': 'linear-gradient(to right, #07D5DF, #7F6DEF, #F408FE)'
+      },
+      screens: {
+        'ssm': '0px',
+        'ssm640': {
+          "max": '640px'
+        },
+        'max1024': {
+          "max": "1024px"
+        },
+        'slg1250': {
+          'min': '1030px'
+        },
+        'slg1280': '1280px',
+        'max299': {
+          'max': '299px'
+        },
+        'min640max1024': {
+          "min": '640px',
+          "max": "1024px"
+        },
+        "max819": {
+          "min": "641px",
+          "max": "819px"
+        },
+        "min694max814": {
+          "min": "694px",
+          "max": "814px"
+        },
+        "min820max1195": {
+          "min": "820px",
+          "max": "1195px"
+        },
+        "max1380": {
+          "max": "1380px"
+        },
+        "min1200": {
+          "min": "1200px"
+        },
+        "ssm767": {
+          "max": "767px"
+        },
+        "max1029": {
+          "max": "1029px"
+        },
+        "max840": {
+          "max": "840px"
+        },
+        "max400": {
+          "max": "400px"
+        },
+        "max324": {
+          "max": "324px"
+        },
+        "max600": {
+          "max": "600px"
+        },
+        "max866": {
+          "max": "866px"
+        },
+        "max350": {
+          "max": "350px"
+        }
       }
     },
   },
