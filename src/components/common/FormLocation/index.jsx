@@ -27,7 +27,7 @@ function FormLocation({ amenity, type, tourism, road, name, house_number, suburb
         formRef.current.classList.remove('hidden');
     })
 
-    return (<div ref={formRef} className="absolute top-[50%] translate-y-[-50%] w-full left-0 px-20">
+    return (<div ref={formRef} className="absolute top-[50%] translate-y-[-50%] w-full left-0 px-20 max1024:px-5">
         <div className="bg-white rounded-2xl p-6">
             <div className="flex items-center mb-6">
                 <MdChevronLeft onClick={() => {

@@ -3,7 +3,7 @@ import classNames from 'classnames/bind';
 const cx = classNames.bind(style)
 
 function Comment({name, date, content, image}) {
-    return ( <div className="mb-7 mr-[95px]">
+    return ( <div className="mb-7 mr-[95px] ssm640:mr-[50px] max600:w-[90%] max600:mx-auto">
         <div>
             <div className="flex items-center">
                 <div className="mr-3">
@@ -15,7 +15,7 @@ function Comment({name, date, content, image}) {
                 </div>
             </div>
         </div>
-        <div className={`${cx('desc')} mt-4 text-[#444242] text-lg`}>
+        <div title={content} className={`${cx('desc')} mt-4 text-[#444242] text-lg`}>
         {content}
         </div>
     </div> );

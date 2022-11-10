@@ -60,7 +60,7 @@ function Profile() {
                 <div className=" mr-5 p-6 rounded-lg border border-solid border-normal">
                     <div className='flex flex-col items-center'>
                         <div className='flex justify-center mb-1 select-none'>
-                            <img className='w-[128px] h-[128px] rounded-full' src={account && account.image !== "" ? account.image : Avt} alt="" />
+                            <img className='w-[128px] h-[128px] rounded-full' src={account && account.image ? account.image : Avt} alt="" />
                         </div>
                         <div>
                             <div onClick={handleDisplayChangeAvt} className='text-sm font-medium underline cursor-pointer inline-block select-none'>Cập nhật ảnh</div>
@@ -171,7 +171,7 @@ function Profile() {
                     </div>
                     <div className='p-5 border border-solid border-normal flex max600:flex-col max600:items-center '>
                         <div className={`w-[225px] h-[225px] bg-normal max600:mb-10 ${path ? 'rounded-full' : ''}`}>
-                            <img className='w-[225px] h-[225px] rounded-full' src={path ? path : account && account.image !== "" ? account.image : Avt} alt="" />
+                            <img className='w-[225px] h-[225px] rounded-full' src={path ? path : account && account.image ? account.image : Avt} alt="" />
                         </div>
                         <div className='flex-1 ml-5 max600:ml-0'>
                             <div className={`${cx('description')} font-thin`}>

@@ -24,23 +24,44 @@ function App() {
   const wrapMenuRef = useRef();
   const menuRef = useRef();
 
-  useEffect(() => {
-    const cookie = document.cookie.split("; ");
-    cookie.forEach((item) => {
-      if (item.includes("user_id")) {
-        (async () => {
-          const res = await accountApi.get(Number(item.split("=")[1]));
-          dispatch(setUser(res.data));
-        })();
-      }
+  // useEffect(() => {
+  //   const cookie = document.cookie.split("; ");
+  //   cookie.forEach((item) => {
+  //     if (item.includes("user_id")) {
+  //       (async () => {
+  //         const res = await accountApi.get(Number(item.split("=")[1]));
+  //         dispatch(setUser(res.data));
+  //       })();
+  //     }
 
-      if (item.includes("supplier_id")) {
-        (async () => {
-          const res = await accountApi.get(Number(item.split("=")[1]));
-          dispatch(setSupplier(res.data));
-        })();
+  //     if (item.includes("supplier_id")) {
+  //       (async () => {
+  //         const res = await accountApi.get(Number(item.split("=")[1]));
+  //         dispatch(setSupplier(res.data));
+  //       })();
+  //     }
+  //   });
+  // }, []);
+
+  useEffect(() => {
+    (async () => {
+      const user = localStorage.getItem("user");
+      const supplier = localStorage.getItem("supplier");
+      if (user) {
+        const userdata = await accountApi.getLogin({}, user).catch((err) => {});
+        if (userdata) {
+          dispatch(setUser(userdata.data));
+        }
       }
-    });
+      if (supplier) {
+        const supplierdata = await accountApi
+          .getLogin({}, supplier)
+          .catch((err) => {});
+        if (supplierdata) {
+          dispatch(setSupplier(supplierdata.data));
+        }
+      }
+    })();
   }, []);
 
   function handleDisplayBigBox() {

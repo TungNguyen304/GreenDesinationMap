@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useState } from "react";
 import imageApi from "../../../api/imageApi";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import { IoMdArrowRoundBack } from 'react-icons/io'
+import { IoChevronBack } from 'react-icons/io5'
 
 function ViewListImage() {
     const [imageList, setImageList] = useState([])
@@ -23,7 +23,7 @@ function ViewListImage() {
     }
 
     return (<div>
-        <div className="w-[50%] mx-auto my-5 grid grid-cols-2 gap-2 pt-2">
+        <div className="w-[50%] max477:w-[80%] mx-auto my-6 grid grid-cols-2 ssm639:grid-cols-1 gap-2 pt-2">
             {
             imageList.length !== 0 && imageList.map((item) => {
                 if(Number(params.id) === item.placeid || isPreviewPage) {
@@ -35,9 +35,8 @@ function ViewListImage() {
                 else return <Fragment key={item.id}></Fragment>
             })}
         </div>
-        <div onClick={() => {navigate(-1)}} style={{ "backgroundImage": "linear-gradient(to right, #07D5DF, #7F6DEF, #F408FE)" }} className="text-white py-3 px-6 fixed top-[100px] cursor-pointer left-[20px] flex items-center mx-auto rounded-full hover:opacity-90 active:scale-[0.98]">
-            <IoMdArrowRoundBack/>
-            <span>Back</span>
+        <div onClick={() => {navigate(-1)}} className="py-3 px-6 fixed cursor-pointer top-0 left-0 flex items-center mx-auto rounded-full hover:opacity-90 active:scale-[0.98]">
+            <IoChevronBack />
         </div>
     </div>);
 }

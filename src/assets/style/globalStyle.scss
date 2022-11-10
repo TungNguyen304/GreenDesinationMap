@@ -40,6 +40,12 @@ body {
     margin: auto;
 }
 
+.small_wrap {
+    width: 1120px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 @media (max-width: 1024px) {
     .wrap {
         width: 100vw;
@@ -52,11 +58,14 @@ body {
     }
 }
 
-.small_wrap {
-    width: 1120px;
-    margin-left: auto;
-    margin-right: auto;
+@media (max-width: 1120px) {
+    .small_wrap {
+        width: 98vw;
+        height: auto;
+    }
 }
+
+
 
 .oneline {
     overflow: hidden;

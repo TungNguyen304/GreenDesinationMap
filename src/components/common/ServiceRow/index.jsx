@@ -40,17 +40,18 @@ function ServiceRow({ item, imageList }) {
         navigate(`/host/registerservice`)
     }
 
-    return (<tr onClick={handleNavigateToRoom}>
-        <td style={{ display: "flex", flex: "2" }} className='items-center relative'>
+    return (item && 
+        <tr onClick={handleNavigateToRoom}>
+        <td title={item.name} style={{ display: "flex", flex: "3" }} className='items-center relative'>
             <div className='mr-3 absolute'>
-                <img className='w-[60px] h-[40px] rounded-lg' src={img[0].name} alt="" />
+                <img className='w-[60px] h-[40px] rounded-lg' src={img.length!==0 ? img[0].name : ''} alt="" />
             </div>
             <div style={style} className='ml-[80px]'>
                 {item.name}
             </div>
         </td>
         <td>{item.status === "0" ? "Đang chờ" : "Địa điểm xanh"}</td>
-        <td style={{ flex: "2" }}>{item.address}</td>
+        <td title={item.address} style={{ flex: "3" }}>{item.address}</td>
         <td style={{ display: "flex", alignItems: "center" }}>{
             (() => {
                 const arr = []
@@ -77,7 +78,8 @@ function ServiceRow({ item, imageList }) {
                 <button className='px-3 py-2 hover:brightness-90 active:scale-95 rounded-lg bg-red-600'><RiDeleteBin5Fill /></button>
             </div>
         </td>
-    </tr>);
+    </tr>
+    );
 }
 
 

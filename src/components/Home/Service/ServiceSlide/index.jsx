@@ -18,9 +18,8 @@ function ServiceSlide({ typeComponent, id, imageList, type, previewPage, isInter
         })]
         console.log(imageList);
     }
-
+    const isSupplierPage = window.location.pathname.includes('/host')
     const isPreviewPage = window.location.pathname.includes('/preview')
-    console.log(isPreviewPage);
     const homePage = useSelector(state => state.homePageReducer.type)
     const imgRef = useRef()
     let clnImg
@@ -89,7 +88,7 @@ function ServiceSlide({ typeComponent, id, imageList, type, previewPage, isInter
 
 
     return (<div className={`relative rounded-xl ${typeComponent === "map" ? 'w-[200px] h-[180px]' : homePage === "map" ? "w-[280px] h-[240px]" : "w-[320px] h-[300px]"} relative overflow-hidden`}>
-        {!previewPage && <BsHeartFill style={{ 'fill': `${isInterest ? 'var(--color_heart)' : 'rgba(0, 0, 0, 0.6)'}`, 'stroke': 'white', 'strokeWidth': '1px' }} onClick={(e) => handleLike(e)} className={`text-base z-[1] w-[30px] h-[24px] absolute top-3 right-3 select-none active:scale-[0.8]`} />}
+        {!isSupplierPage && <BsHeartFill style={{ 'fill': `${isInterest ? 'var(--color_heart)' : 'rgba(0, 0, 0, 0.6)'}`, 'stroke': 'white', 'strokeWidth': '1px' }} onClick={(e) => handleLike(e)} className={`text-base z-[1] w-[30px] h-[24px] absolute top-3 right-3 select-none active:scale-[0.8]`} />}
         <div ref={imgRef} className={`flex absolute z-[0]`}>
             {imageList && imageList.map((item, index) => {
                 if (item.placeid === id) {

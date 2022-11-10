@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useValueContext } from '../../../hook';
 import React from 'react';
 
-function MenuMobile({ handleDisplayMenuMobile }, ref) {
+function MenuMobile({ handleDisplayMenuMobile, type }, ref) {
     const { handleSetBigBox, handleDisplayBigBox } = useValueContext()
     const navigate = useNavigate()
     const user = useSelector(state => state.accountReducer.user)
@@ -21,10 +21,15 @@ function MenuMobile({ handleDisplayMenuMobile }, ref) {
         "Đăng ký": handleRegister,
         "Hộp thư đến": handleNavigateMailBox,
         "Quản lý địa điểm": handleNavigateManagement,
-        "Đăng ký địa điểm": handleNavigateRegisterService
+        "Đăng ký địa điểm": handleNavigateRegisterService,
+        // "Tất cả tin nhắn": handleViewAll,
+        // "Đã đọc": handleView,
+        // "Chưa đọc": handleNotView
     }
     let funcList
-    if (user.id && !window.location.pathname.includes('/host')) {
+    if(type === "mailbox")
+        funcList = ["Tất cả tin nhắn", "Đã đọc", "Chưa đọc"]
+    else if (user.id && !window.location.pathname.includes('/host')) {
         funcList = ["Trở thành nhà cung cấp", "Tài khoản", "Bộ lọc", "Danh sách yêu thích", "Đăng xuất"]
     } else if (supplier.id && window.location.pathname.includes('/host')) {
         funcList = ["Trở thành người dùng", "Hộp thư đến", "Đăng ký địa điểm", "Quản lý địa điểm", "Tài khoản", "Đăng xuất"]

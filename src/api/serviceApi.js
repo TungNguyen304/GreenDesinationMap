@@ -2,13 +2,17 @@ import axiosClient from "./axiosApi";
 
 const serviceApi = {
     getAll: (params) => {
-        const url = '/getservices'
+        const url = '/place/information'
         return axiosClient.get(url, { 
             params
         })
     },
-    get: (id) => {
-        const url = `/getservices/${id}`
+    getById: (id) => {
+        const url = `/place/${id}`
+        return axiosClient.get(url)
+    },
+    getByUserId: (id) => {
+        const url = `/place/findByUserId/${id}`
         return axiosClient.get(url)
     },
     push: (data) => {
@@ -16,7 +20,7 @@ const serviceApi = {
         return axiosClient.post(url, data)
     },
     delete: (id) => {
-        const url = `/getservices/${id}`
+        const url = `/place/deletePlace/${id}`
         return axiosClient.delete(url)
     }
 }

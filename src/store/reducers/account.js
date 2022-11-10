@@ -19,5 +19,4 @@ export const accountReducer = (state=initState, action) => {
         }
         default: return state
     }
-
 }

@@ -8,7 +8,6 @@
 }
 
 .table {
-    display: block;
 
     thead {
         display: block;
@@ -34,7 +33,12 @@
         th {
             text-align: left;
             padding: 20px 14px;
-            flex: 1;
+            flex: 2;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 1;
+            white-space: nowrap;
         }
 
         td {
@@ -46,7 +50,7 @@
             -webkit-line-clamp: 1;
             padding: 20px 14px;
             white-space: nowrap;
-            flex: 1;
+            flex: 2;
         }
     }
 }

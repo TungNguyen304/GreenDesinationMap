@@ -10,7 +10,6 @@ import accountApi from "../../../api/accountApi";
 import interestApi from "../../../api/interestApi";
 import { useSelector } from "react-redux";
 import { GrStar } from 'react-icons/gr'
-import { IoMdArrowRoundBack } from 'react-icons/io'
 import { AiFillStar } from 'react-icons/ai'
 import { TiHeartFullOutline, TiLocation } from 'react-icons/ti'
 import { useNavigate } from "react-router-dom";
@@ -35,7 +34,7 @@ function Room({ type, title }) {
     const value = useValueContext()
     let service = {}
     let isServiceTemporary = false
-    if(sessionStorage.getItem('placeTemporary')) {
+    if (sessionStorage.getItem('placeTemporary')) {
         service = JSON.parse(sessionStorage.getItem('placeTemporary'))
         isServiceTemporary = true
     }
@@ -58,55 +57,55 @@ function Room({ type, title }) {
 
     })
 
-    useEffect(() => {
-        const count = commentList ? commentList.reduce((total, currentValue) => {
-            if (currentValue.placeid === service.id) {
-                return total + 1
-            }
-            return total
-        }, 0) : 0;
-        setTotalComment(count)
-    }, [commentList, service.id])
+    // useEffect(() => {
+    //     const count = commentList ? commentList.reduce((total, currentValue) => {
+    //         if (currentValue.placeid === service.id) {
+    //             return total + 1
+    //         }
+    //         return total
+    //     }, 0) : 0;
+    //     setTotalComment(count)
+    // }, [commentList, service.id])
 
 
-    useEffect(() => {
-        (async () => {
-            const data = await commentApi.getAll()
-            setCommentList(data.data)
-        })()
-    }, [])
+    // useEffect(() => {
+    //     (async () => {
+    //         const data = await commentApi.getAll()
+    //         setCommentList(data.data)
+    //     })()
+    // }, [])
 
-    useEffect(() => {
-        !isServiceTemporary ? (async () => {
-            const data = await imageApi.get(`?placeid=${service.id}`)
-            setImageList(data.data)
-        })() : (() => {
-            const data = service.imageList.map((item) => {
-                return {
-                    name: item.file
-                }
-            })
-            setImageList(data)
-        })()
-    }, [isServiceTemporary, service.id, JSON.stringify(service.imageList)])
+    // useEffect(() => {
+    //     !isServiceTemporary ? (async () => {
+    //         const data = await imageApi.get(`?placeid=${service.id}`)
+    //         setImageList(data.data)
+    //     })() : (() => {
+    //         const data = service.imageList.map((item) => {
+    //             return {
+    //                 name: item.file
+    //             }
+    //         })
+    //         setImageList(data)
+    //     })()
+    // }, [isServiceTemporary, service.id, JSON.stringify(service.imageList)])
 
-    useEffect(() => {
-        (async () => {
-            const data = await accountApi.get(service.userid)
-            setOwner(data.data)
-        })()
-    }, [service.userid])
+    // useEffect(() => {
+    //     (async () => {
+    //         const data = await accountApi.get(service.userid)
+    //         setOwner(data.data)
+    //     })()
+    // }, [service.userid])
 
-    useEffect(() => {
-        (async () => {
-            const data = await interestApi.getAll()
-            data.data.forEach((item) => {
-                if (item.placeid === service.id && account && item.userid === account.id) {
-                    setIsInterest(true)
-                }
-            })
-        })()
-    }, [account, service.id])
+    // useEffect(() => {
+    //     (async () => {
+    //         const data = await interestApi.getAll()
+    //         data.data.forEach((item) => {
+    //             if (item.placeid === service.id && account && item.userid === account.id) {
+    //                 setIsInterest(true)
+    //             }
+    //         })
+    //     })()
+    // }, [account, service.id])
 
 
     function handleLike(even) {
@@ -138,26 +137,29 @@ function Room({ type, title }) {
     }
 
     return (<div className={`${cx("room")}`}>
-        <Header isServiceTemporary={isServiceTemporary}/>
-        <div className={`small_wrap my-[100px]`}>
+        <Header isServiceTemporary={isServiceTemporary} />
+        <div className={`small_wrap mt-[100px] slg1250:mb-[100px] mb-5`}>
             <div className="text-2xl font-semibold">
                 {service.name}
             </div>
 
             <div className="flex justify-between cursor-pointer mt-3 mb-5">
-                <div className="flex">
-                    <div className="flex items-center mr-5">
-                        <AiFillStar />
-                        <span>{service.star || 4}</span>
-                    </div>
-                    <div className="flex underline mr-5">
-                        <div><span>180</span> Đánh giá</div>
+                <div className="flex max866:flex-col">
+                    <div className="flex items-center">
+                        <div className="flex items-center mr-5">
+                            <AiFillStar className="text-2xl text-yellow-600 w-[24px]"/>
+                            <span>{service.star || 4} </span>
+                        </div>
+                        <div className="flex underline mr-5">
+                            <div><span>180</span> Đánh giá</div>
+                        </div>
                     </div>
                     <div className="flex items-center underline">
-                        <TiLocation />
+                        <TiLocation className="text-2xl text-green-600 w-[24px]" />
                         {service.address || service.road + ', ' + service.ward + ', ' + service.district + ', ' + service.city}
                     </div>
                 </div>
+
                 {!isServiceTemporary && <div onClick={(e) => handleLike(e)} className="flex items-center underline active:scale-[0.8] select-none">
                     <TiHeartFullOutline style={{ 'fill': `${isInterest ? 'var(--color_heart)' : 'white'}`, 'stroke': 'black', 'strokeWidth': '1px' }} className="text-base w-[24px] h-[20px] select-none mr-1" />
                     <span>Lưu</span>
@@ -165,34 +167,34 @@ function Room({ type, title }) {
             </div>
 
             <div className="flex h-[390px] rounded-xl overflow-hidden">
-                <div className="flex-1 h-full mr-2">
-                    <img onClick={handleNavigateToViewImage} className="h-full w-full hover:brightness-[0.8] cursor-pointer" src={imageList.length!==0 ? imageList[0].name : ''} alt="" />
+                <div className="flex-1 h-full mr-2 ssm767:mr-0">
+                    <img onClick={handleNavigateToViewImage} className="h-full max505:h-[70%] max400:h-[50%] max505:rounded-xl  w-full hover:brightness-[0.8] cursor-pointer" src={imageList.length !== 0 ? imageList[0].name : ''} alt="" />
                 </div>
-                <div className="flex-1 flex flex-col h-full">
+                <div className="flex-1 flex flex-col h-full ssm767:hidden">
                     <div className="flex-1 flex h-[50%] mb-2">
                         <div className="flex-1 h-full mr-2">
-                            <img onClick={handleNavigateToViewImage} className="h-full w-full hover:brightness-[0.8] cursor-pointer" src={imageList.length!==0 ? imageList[1].name : ''} alt="" />
+                            <img onClick={handleNavigateToViewImage} className="h-full w-full hover:brightness-[0.8] cursor-pointer" src={imageList.length !== 0 ? imageList[1].name : ''} alt="" />
                         </div>
                         <div className="flex-1">
-                            <img onClick={handleNavigateToViewImage} className="h-full w-full hover:brightness-[0.8] cursor-pointer" src={imageList.length!==0 ? imageList[2].name : ''} alt="" />
+                            <img onClick={handleNavigateToViewImage} className="h-full w-full hover:brightness-[0.8] cursor-pointer" src={imageList.length !== 0 ? imageList[2].name : ''} alt="" />
                         </div>
                     </div>
                     <div className="flex-1 flex h-50%">
                         <div className="flex-1 h-full mr-2">
-                            <img onClick={handleNavigateToViewImage} className="h-full w-full hover:brightness-[0.8] cursor-pointer" src={imageList.length!==0 ? imageList[3].name : ''} alt="" />
+                            <img onClick={handleNavigateToViewImage} className="h-full w-full hover:brightness-[0.8] cursor-pointer" src={imageList.length !== 0 ? imageList[3].name : ''} alt="" />
                         </div>
                         <div className="flex-1">
-                            <img onClick={handleNavigateToViewImage} className="h-full w-full hover:brightness-[0.8] cursor-pointer" src={imageList.length!==0 ? imageList[4].name : ''} alt="" />
+                            <img onClick={handleNavigateToViewImage} className="h-full w-full hover:brightness-[0.8] cursor-pointer" src={imageList.length !== 0 ? imageList[4].name : ''} alt="" />
                         </div>
                     </div>
                 </div>
             </div>
 
             <div className="flex mt-9">
-                <div className="w-[50%] border-t border-solid border-normal pt-6">
+                <div className="w-[50%] ssm767:w-full border-t border-solid border-normal pt-6">
                     <div className="flex justify-between items-center">
                         <div className="text-2xl font-semibold mb-3">
-                            <span>Người đăng ký: {owner.username}</span>
+                            <span>Người đăng ký: {service.host}</span>
                         </div>
                         <div>
                             <div className="inline-block rounded-full overflow-hidden">
@@ -206,7 +208,7 @@ function Room({ type, title }) {
                 </div>
 
 
-                <div className="w-[50%]"></div>
+                <div className="w-[50%] ssm767:hidden"></div>
             </div>
 
             {!isServiceTemporary && <div className={`${cx('comment')} mt-6 border-t border-solid border-normal pt-9`}>
@@ -219,7 +221,7 @@ function Room({ type, title }) {
                     <div>{totalComment} Đánh giá</div>
                 </div>
                 <div className="mb-5">
-                    <div className="grid grid-cols-2">
+                    <div className="grid grid-cols-2 max600:grid-cols-1">
                         {commentList.map((item, index) => {
                             if (count < 6) {
                                 if (item.placeid === service.id) {
@@ -235,7 +237,7 @@ function Room({ type, title }) {
                         Hiển thị tất cả {totalComment} đánh giá
                     </div>}
                 </div>
-                <div className={`w-[50%]`}>
+                <div className={`w-[50%] ssm767:w-full`}>
                     {account ? <div>
                         <div className="flex items-center mb-6">
                             <div className="mr-5 text-xl font-semibold italic">{account && account.username}</div>
@@ -245,9 +247,9 @@ function Room({ type, title }) {
                         </div>
                         <div>
                             <div><label htmlFor="comment" className="text-[#5c5959] text-start">Nhận xét của bạn</label></div>
-                            <div className="flex justify-between items-center w-full">
-                                <textarea id="comment" type="text" placeholder="Comment ..." className="outline-none mr-5 py-3 px-4 flex-1 border border-solid border-normal placeholder:italic" />
-                                <div className="flex flex-col">
+                            <div className="flex max477:flex-col max477:items-start justify-between items-center w-full">
+                                <textarea id="comment" type="text" placeholder="Comment ..." className="max477:w-full outline-none mr-5 py-3 px-4 flex-1 border border-solid border-normal placeholder:italic" />
+                                <div className="flex flex-col max477:items-center max477:mt-5 max477:w-full">
                                     <button style={{ 'backgroundColor': 'var(--primary)', "backgroundImage": "linear-gradient(to right, #07D5DF, #7F6DEF, #F408FE)" }} className="hover:brightness-90 active:scale-[0.98] text-white py-2 px-4 rounded-full italic mb-3">Gửi đi</button>
                                     <Link to={`/evaluate/${service.id}`} style={{ 'backgroundColor': 'var(--primary)', "backgroundImage": "linear-gradient(to right, #07D5DF, #7F6DEF, #F408FE)" }} className="hover:brightness-90 active:scale-[0.98] text-white py-2 px-4 rounded-full italic">Đến trang đánh giá</Link>
                                 </div>
@@ -278,7 +280,7 @@ function Room({ type, title }) {
                     </div>
                     <div>
                         <div className="text-lg font-semibold">Người đăng ký: {service.host}</div>
-                        <div>Đã tham gia vào tháng {isServiceTemporary ? currentDay.getMonth() + 1 : service.startday.slice(3, 5)} năm {isServiceTemporary ? currentDay.getFullYear() : service.startday.slice(6, 10)}</div>
+                        <div>Đã tham gia vào tháng {isServiceTemporary ? currentDay.getMonth() + 1 : service.startday.slice(service.startday.indexOf("/")+1, service.startday.lastIndexOf("/"))} năm {isServiceTemporary ? currentDay.getFullYear() :  service.startday.slice(service.startday.lastIndexOf("/")+1, service.startday.length)}</div>
                     </div>
                 </div>
                 <div className="flex mt-4">
@@ -296,10 +298,6 @@ function Room({ type, title }) {
         {show && <div>
             <BigBox title={title} type={type} handleDisplayBigBox={value.handleDisplayBigBox} />
         </div>}
-        <div onClick={() => {navigate(-1)}} style={{ "backgroundImage": "linear-gradient(to right, #07D5DF, #7F6DEF, #F408FE)" }} className="text-white py-3 px-6 fixed top-[100px] cursor-pointer left-[20px] flex items-center mx-auto rounded-full hover:opacity-90 active:scale-[0.98]">
-            <IoMdArrowRoundBack/>
-            <span>Back</span>
-        </div>
         <Footer />
     </div>);
 }

@@ -66,7 +66,7 @@ function Image({optionList, handleDrag, handleDeleteImage, pathCurrent, type, po
     }
 
     return ( <div className='w-full h-full relative'>
-    <img ref={imgRef} className='w-full h-full hover:brightness-[0.8]' draggable onDragStart={handleDragStart} onDragEnd={handleDragEnd} src='' alt="" />
+    <img ref={imgRef} className='w-full h-full object-cover hover:brightness-[0.8]' draggable onDragStart={handleDragStart} onDragEnd={handleDragEnd} src='' alt="" />
     {type === "background" && <div onDragOver={(e) => { e.stopPropagation() }} onClick={(e) => { e.stopPropagation() }} className='cursor-not-allowed px-3 py-1 absolute top-3 left-3 bg-white'>Ảnh bìa</div>}
     <div onDragOver={(e) => { e.stopPropagation() }} onClick={(e) => handleOption(e)} className='absolute top-3 right-3 bg-white rounded-full p-3'>
         <BsThreeDots />

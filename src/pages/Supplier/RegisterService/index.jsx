@@ -21,10 +21,10 @@ function RegisterService() {
 
     return (<div>
         <div className="flex h-[100vh] relative">
-            <div style={{ "backgroundImage": "linear-gradient(to top, #441EA5, #CE247A)" }} className="w-[50%] flex justify-center items-center px-10">
+            <div style={{ "backgroundImage": "linear-gradient(to top, #441EA5, #CE247A)" }} className="w-[50%] justify-center items-center px-10 sm:flex hidden">
                 <div className="text-6xl font-bold text-white italic">Chọn loại dịch vụ bạn muốn đăng ký</div>
             </div>
-            <div className="w-[50%] h-full flex flex-col justify-center items-center px-10 relative">
+            <div className="w-full sm:bg-white sm:w-[50%] h-full flex flex-col justify-center items-center px-10 max299:px-3 relative">
                 <div className="w-full">
                     <div className="text-2xl font-medium mb-8">
                         Chọn loại dịch vụ bạn muốn đăng ký

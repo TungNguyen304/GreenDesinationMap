@@ -1,10 +1,10 @@
-import Loader from '../../common/Loader'
+import Loader from '../../common/Loader';
 import React, { Suspense, useEffect, useState } from 'react';
 import { memo } from 'react';
 import { useSelector } from 'react-redux';
 import serviceApi from '../../../api/serviceApi';
 import imageApi from '../../../api/imageApi';
-import style from './service.module.scss'
+import style from './service.module.scss';
 import classNames from 'classnames/bind';
 import interestApi from '../../../api/interestApi';
 const cx = classNames.bind(style)
@@ -47,6 +47,7 @@ function Service({typeService}) {
     useEffect(() => {
         (async() => {
             const data = await serviceApi.getAll()
+            console.log(data.data);
             setService(data.data)
         })()
     }, [])

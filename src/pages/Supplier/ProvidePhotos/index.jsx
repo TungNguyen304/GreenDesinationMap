@@ -167,12 +167,12 @@ function ProvidePhotos() {
 
     return (<div>
         <div className={`flex h-[100vh] relative ${cx('wrap_add_image')}`}>
-            <div style={{ "backgroundImage": "linear-gradient(to top, #441EA5, #CE247A)" }} className="w-[50%] flex justify-center items-center px-10">
+            <div style={{ "backgroundImage": "linear-gradient(to top, #441EA5, #CE247A)" }} className="w-[50%] max866:hidden flex justify-center items-center px-10">
                 <div className="text-6xl font-bold text-white italic">Tiếp theo, hãy cung cấp một số ảnh chụp về địa điểm của bạn</div>
             </div>
-            <div className="w-[50%] h-full flex flex-col justify-center items-center px-10 relative">
-                <div className={`w-full ${pathList.length ? 'px-5' : 'px-20'}`}>
-                    {pathList.length !== 0 && <div className="flex items-center justify-between mb-3">
+            <div className="max866:w-full w-[50%] h-full flex flex-col justify-center items-center px-10 max477:px-1 relative">
+                <div className={`w-full ${pathList.length ? 'px-5' : 'min1200:px-20 px-0'}`}>
+                    {pathList.length !== 0 && <div className="flex max350:flex-col max350:text-center items-center justify-between mb-3">
                         <div className="">
                             <div className="text-2xl font-semibold">Thêm ít nhất 5 ảnh</div>
                             <div className="text-[#717171] text-lg">Kéo để sắp xếp lại</div>
@@ -183,14 +183,14 @@ function ProvidePhotos() {
                             <input onChange={(e) => handleOnChangeImg(e)} className="hidden" ref={fileRef2} type="file" />
                         </div>
                     </div>}
-                    <div ref={wrapDropRef} className={`h-[65vh] overflow-y-scroll ${pathList.length ? '' : 'flex justify-center items-center'} ${cx('add_image')}`}>
+                    <div ref={wrapDropRef} className={`h-[65vh] max866:h-[55vh] overflow-y-scroll ${pathList.length ? '' : 'flex justify-center items-center'} ${cx('add_image')}`}>
                         {pathList.length ?
                             <div className="w-full pr-2 relative">
                                 <div>
                                     <div>
                                         <AddImage type="background" classname="w-full h-[420px]" path={pathList[0]} position={0} handleChangeImage={handleChangeImage} handleUploadImage={handleUploadImage} handleDeleteImage={handleDeleteImage} handleUploadImageDrop={handleUploadImageDrop} handleSortImage={handleSortImage} />
                                     </div>
-                                    <div className="grid grid-cols-2 gap-4 mt-4">
+                                    <div className="grid grid-cols-2 gap-2 mt-2 min867max1100:grid-cols-1 ssm639:grid-cols-1">
                                         {
                                             (() => {
                                                 const arr = []
@@ -207,7 +207,7 @@ function ProvidePhotos() {
                             <div ref={dropRef} onDragOver={(e) => handleDrag(e)} onDragLeave={(e) => handleDragLeave(e)} onDrop={(e) => handleDrop(e)} className={`mr-3 flex flex-col justify-center items-center h-full w-full border border-dashed border-black`}>
                                 <img className="w-[60px] h-[60px]" src={ImagesIcon} alt="" />
                                 <h2 className="hidden text-2xl font-semibold">Nhả chuột để tải ảnh lên</h2>
-                                <div className="text-2xl font-semibold">Kéo ảnh của bạn vào đây</div>
+                                <div className="text-2xl font-semibold max299:text-center">Kéo ảnh của bạn vào đây</div>
                                 <div className="text-lg mt-3">Thêm ít nhất 5 ảnh</div>
                                 <input onChange={(e) => { handleOnChangeImg(e) }} ref={fileRef} className="hidden" type="file" />
                                 <div onClick={() => { fileRef.current.click() }} className="mt-20 underline font-semibold text-sm">Tải lên từ thiết bị của bạn</div>
@@ -218,8 +218,8 @@ function ProvidePhotos() {
             </div>
 
             <Link onClick={() => { sessionStorage.removeItem('placeTemporary') }} to='/host' className="z-10 fixed top-4 right-4 text-sm italic bg-slate-50 px-3 py-1 rounded-lg cursor-pointer hover:brightness-95 active:scale-95 select-none">Thoát</Link>
-            <Link to={`/host/registerservice/location/${service.type}`} style={{ "backgroundImage": "linear-gradient(to right, #07D5DF, #7F6DEF, #F408FE)" }} className="z-10 fixed bottom-8 left-[55%] italic text-white px-6 py-2 font-semibold rounded-lg cursor-pointer hover:brightness-95 active:scale-95 select-none">Quay lại</Link>
-            <Link onClick={(e) => { handleDispatchValue(pathList, e) }} ref={nextRef} to='/host/registerservice/providetitle' style={{ "backgroundImage": "" }} className="bg-[#DDDDDD] z-10 fixed bottom-8 right-8 italic text-white px-6 py-2 font-semibold rounded-lg cursor-pointer hover:brightness-95 active:scale-95 select-none pointer-events-none">Lưu và đến bước tiếp theo</Link>
+            <Link to={`/host/registerservice/location/${service.type}`} style={{ "backgroundImage": "linear-gradient(to right, #07D5DF, #7F6DEF, #F408FE)" }} className="z-10 fixed bottom-8 max866:bottom-14 left-[55%] max866:left-[50%] max866:translate-x-[-50%] max505:w-[90%] italic text-white px-6 py-2 font-semibold rounded-lg cursor-pointer hover:brightness-95 active:scale-95 select-none">Quay lại</Link>
+            <Link onClick={(e) => { handleDispatchValue(pathList, e) }} ref={nextRef} to='/host/registerservice/providetitle' style={{ "backgroundImage": "" }} className="bg-[#DDDDDD] z-10 fixed bottom-8 max866:bottom-2 right-8 max866:left-[50%] max866:translate-x-[-50%] italic max505:w-[90%] max505:text-start text-center text-white px-6 py-2 font-semibold rounded-lg cursor-pointer hover:brightness-95 active:scale-95 select-none pointer-events-none">Lưu và đến bước tiếp theo</Link>
         </div>
     </div>);
 }

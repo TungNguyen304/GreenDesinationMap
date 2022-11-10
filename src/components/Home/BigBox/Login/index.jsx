@@ -21,39 +21,36 @@ function Login() {
     const usernameRef = useRef()
     const role = window.location.pathname.includes('/host') ? 2 : 1
 
-    useEffect(() => {
-        (async () => {
-            const data = await accountApi.getAll()
-            setAccountList(data.data)
-        })()
-    }, [])
-    function handleConditionLogin() {
-        let isYourAccount = false
-        let account = {}
-        accountList && accountList.forEach((item) => {
-            if (item.username === usernameRef.current.value && item.password === passwordRef.current.value && role === item.role) {
-                isYourAccount = true
-                account = item
-            }
-        })
-        if (isYourAccount) {
-            if (role === 1) {
-                document.cookie = `user_id=${account.id}; expires=thu, 25 Jan 2024 00:00:00 UTC`
-                value.handleDisplayBigBox()
-                navigate('/')
-            }
-            else {
-                document.cookie = `supplier_id=${account.id}; expires=thu, 25 Jan 2024 00:00:00 UTC`
-                value.handleDisplayBigBox()
-                navigate('/host')
-            }
-
-            window.location.reload()
-        }
-        else {
+    async function handleConditionLogin() {
+        const data = await accountApi.post(JSON.stringify({
+            "username": usernameRef.current.value,
+            "password": passwordRef.current.value
+        }))
+            .catch((err) => {
+                warning3.current.classList.remove('hidden')
+                warning3.current.classList.add('flex')
+            })
+        if (data && data.data.accessToken) {
+            (async () => {
+                const res = await accountApi.getLogin({}, data.data.accessToken)
+                console.log(res);
+                if (res && res.data.role === role) {
+                    if(role === 1) {
+                        localStorage.setItem('user', data.data.accessToken)
+                    } else {
+                        localStorage.setItem('supplier', data.data.accessToken)
+                    }
+                    window.location.reload()
+                } else {
+                    warning3.current.classList.remove('hidden')
+                    warning3.current.classList.add('flex')
+                }
+            })()
+        } else {
             warning3.current.classList.remove('hidden')
             warning3.current.classList.add('flex')
         }
+
     }
 
     function handleDisplayWarn(event, type) {

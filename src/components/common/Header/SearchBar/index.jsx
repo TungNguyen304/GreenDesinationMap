@@ -17,6 +17,7 @@ function SearchBar({ hidden, ...props }) {
   const context = useMenuMobileContext()
   const dispatch = useDispatch()
   const isUserHomePage = window.location.pathname === "/"
+  const isLocationPage = window.location.pathname.includes('/location/')
   const isRegiterServiceLocationPage = window.location.pathname.includes('/host/registerservice/location')
   const { district, ward, serviceTypes } = useSelector(state => state.filterReducer.filter)
   const { setSelectPosition, handleRegisterLocation } = props;
@@ -90,7 +91,7 @@ function SearchBar({ hidden, ...props }) {
   }
 
   return (<div className={`flex flex-1`} style={{ position: "relative", flexDirection: "column" }}>
-    <div className='flex items-center justify-center sm:flex-1 min640max1024:justify-around'>
+    <div className={`flex items-center sm:flex-1 ${isUserHomePage ? 'justify-center':''} min640max1024:justify-around`}>
       
       <div className={`${window.location.pathname.includes('/host') || hidden || !isUserHomePage ? 'hidden' : 'md:block'} hidden mr-5 text-xs text-center cursor-pointer italic rounded-full relative select-none`}>
         <div ref={greenRef3} onClick={handleChangeSearchType} className='flex bg-[#989999] text-white font-medium rounded-full hover:opacity-90'>
@@ -106,7 +107,7 @@ function SearchBar({ hidden, ...props }) {
         </div>
       </div>
 
-      <div onClick={context} className='p-3 text-2xl hover:bg-slate-100 relative hidden ssm767:block'>
+      <div onClick={context} className={`p-3 text-2xl hover:bg-slate-100 relative hidden ${isLocationPage ? "" : "ssm767:block"}`}>
         <GiHamburgerMenu className='text-[#6d6b6b]'/>
       </div>
       
@@ -227,7 +228,7 @@ function SearchBar({ hidden, ...props }) {
     </div>
 
     {typeSearch === 'full' &&
-      <div ref={recomment} className={`bg-white hidden absolute top-[130%] ${isRegiterServiceLocationPage ? 'left-0 h-[30vh]' : ' left-[5%] h-[60vh]'} w-[100%] overflow-scroll border border-solid border-normal rounded-2xl ssm640:left-0 min640max1024:left-[50%] min640max1024:translate-x-[-25%]`}>
+      <div ref={recomment} className={`bg-white hidden absolute top-[130%] ${isRegiterServiceLocationPage ? 'left-0 h-[30vh]' : 'min640max1024:left-[50%] min640max1024:translate-x-[-25%] left-[5%] h-[60vh]'} w-[100%] overflow-scroll border border-solid border-normal rounded-2xl ssm640:left-0 `}>
         <List className='h-full' component="nav" aria-label="main mailbox folders">
           {listPlace && listPlace.length !== 0 ? listPlace.map((item) => {
             if (district.length && ward.length && serviceTypes.length) {

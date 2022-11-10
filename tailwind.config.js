@@ -18,13 +18,14 @@ module.exports = {
         'normal': '#DDDDDD'
       },
       borderColor: {
-        'normal': '#DDDDDD'
+        'normal': '#DDDDDD',
       },
       boxShadow: {
         'normal': '2px 2px 6px 4px rgba(0,0,0,0.18)' 
       },
       backgroundImage: {
-        'special': 'linear-gradient(to right, #07D5DF, #7F6DEF, #F408FE)'
+        'special': 'linear-gradient(to right, #07D5DF, #7F6DEF, #F408FE)',
+        'linear': 'linear-gradient(to top, #441EA5, #CE247A)',
       },
       screens: {
         'ssm': '0px',
@@ -33,6 +34,13 @@ module.exports = {
         },
         'max1024': {
           "max": "1024px"
+        },
+        "max1100": {
+          "max": "1100px"
+        },
+        "min867max1100": {
+          "min": "867px",
+          "max": "1100px"
         },
         'slg1250': {
           'min': '1030px'
@@ -84,8 +92,31 @@ module.exports = {
         "max866": {
           "max": "866px"
         },
+        "min640max866": {
+          "min": "640px",
+          "max": "866px"
+        },
         "max350": {
           "max": "350px"
+        },
+        "max477": {
+          "max": "477px"
+        },
+        "ssm639": {
+          "max": "639px"
+        },
+        "max505": {
+          "max": "505px"
+        }, 
+        "max966": {
+          "max": "966px"
+        },
+        "max1195": {
+          "max": "1195px"
+        },
+        "min401max866": {
+          "min": "401px",
+          "max": "866px"
         }
       }
     },

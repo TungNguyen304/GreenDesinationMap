@@ -4,8 +4,9 @@ import Avt2 from '../../../assets/images/avt.png'
 import SearchBar from './SearchBar';
 import NavHeader from './NavHeader';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { AiFillSetting } from 'react-icons/ai'
-import { IoMenuOutline } from 'react-icons/io5'
+import { IoMenuOutline, IoChevronBack } from 'react-icons/io5'
 import Tippy from '../Tippy';
 import { useRef } from 'react';
 import { Link } from 'react-router-dom';
@@ -16,9 +17,11 @@ import { useState } from 'react';
 const cx = classNames.bind(style)
 
 function Header(props) {
+    const navigate = useNavigate()
     let topList = ['Đăng nhập', 'Đăng ký']
     let bottomList1 = ['Cung cấp dịch vụ', 'Tổ chức trải nghiệm', 'Trợ giúp']
     const isUserHomePage = window.location.pathname === '/'
+    const isHomePage = window.location.pathname === '/' || window.location.pathname === '/host'
     const [account, setAccount] = useState()
     const actor = window.location.pathname.includes('/host') ? 'supplier' : 'user'
     let acc = useSelector(state => state.accountReducer)
@@ -56,7 +59,11 @@ function Header(props) {
 
 
     return (<div className={`${cx("header")} ${props.isServiceTemporary ? 'pointer-events-none' : ''}`}>
-        <div className={`${window.location.pathname === '/room' ? 'small_wrap' : 'wrap'} ${cx('wrap_flex')} max-h-[54px] ${!isUserHomePage ? 'justify-center slg1250:justify-between' : ''}`}>
+        <div className={`${window.location.pathname === '/room' ? 'small_wrap' : 'wrap'} ${cx('wrap_flex')} max-h-[54px] ${!isUserHomePage ? 'slg1250:justify-between' : ''}`}>
+            {!isHomePage && <div onClick={() => {navigate(-1)}} className='flex items-center text-2xl mx-4 px-2 rounded-lg active:scale-95 hover:bg-normal'>
+                <IoChevronBack />
+            </div>}
+
             <div className='text-primary hidden items-center slg1250:flex'>
                 <a href="/"><img className='w-[150px]' src={Logo} alt="" /></a>
             </div>

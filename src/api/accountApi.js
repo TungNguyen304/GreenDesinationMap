@@ -1,7 +1,14 @@
 import axiosClient from "./axiosApi";
 const accountApi = {
     getAll: (params) => {
-        const url = "/getaccounts"
+        const url = `/getaccounts`
+        return axiosClient.get(url, {
+            params
+        })
+    },
+    getLogin: (params, token) => {
+        axiosClient.defaults.headers.common['Authorization'] = `Bearer ${token}`
+        const url = "/user/userInfor"
         return axiosClient.get(url, {
             params
         })
@@ -17,6 +24,10 @@ const accountApi = {
     delete: (id) => {
         const url = `/getaccounts${id}`
         return axiosClient.delete(url)
+    },
+    post: (data) => {
+        const url = `/api/login`
+        return axiosClient.post(url, data)
     }
 }
 export default accountApi 

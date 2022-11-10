@@ -13,6 +13,7 @@ const cx = classNames.bind(style)
 
 function ServiceItem({ name, phone, address, star, typeService, serviceItem, type, typeComponent, id, imageList, interestList, previewPage }) {
     const isPreviewPage = sessionStorage.getItem('placeTemporary') ? true : false
+    const isManagementPage = window.location.pathname.includes('/management')
     const value = useValueContext()
     const dispatch = useDispatch()
     const [hidden, setHidden] = useState(true)
@@ -84,18 +85,18 @@ function ServiceItem({ name, phone, address, star, typeService, serviceItem, typ
     }
 
 
-    return (<div onMouseOver={handelDisplay} onMouseLeave={handelHidden} onClick={handleNavigateToRoom} className={`${cx('service_item')} ${typeComponent === "map" ? 'w-[200px] mx-auto' : homePage === "map" ? "hover:scale-1 w-[90%] hover:shadow-normal mb-[40px] px-[13px] pt-[13px] pb-[4px]" : "hover:scale-[1.01] hover:shadow-normal mb-[40px] px-[13px] pt-[13px] pb-[4px]"} ${previewPage && 'border-2 border-solid border-[#4c4949]'} cursor-pointer`}>
+    return (<div onMouseOver={handelDisplay} onMouseLeave={handelHidden} onClick={handleNavigateToRoom} className={`${cx('service_item')} ${typeComponent === "map" ? 'w-[200px] mx-auto' : homePage === "map" ? `hover:scale-1 ${isPreviewPage?'w-[280px]':'w-[90%]'} hover:shadow-normal ${isManagementPage ? '' : 'mb-[40px]'} px-[13px] pt-[13px] pb-[4px]` : "hover:scale-[1.01] hover:shadow-normal mb-[40px] px-[13px] pt-[13px] pb-[4px]"} ${previewPage && 'border-2 border-solid border-[#4c4949]'} flex flex-col justify-center cursor-pointer`}>
         <div className={`relative mb-3 flex justify-center`}>
             <ServiceSlide imgList={imgList} hidden={hidden} previewPage={previewPage} handleLike={handleLike} isInterest={isInterest}  ref={imgRef} imageList={imageList} type={type} typeComponent={typeComponent} id={id} />
         </div>
-        <div className='max1380:flex max1380:flex-col max1380:items-center'>
+        <div className={`max1380:flex max1380:flex-col max1380:items-center`}>
             <div className="flex justify-between">
                 <span className={`oneline font-semibold text-lg text-[#222222]`}>{name}</span>
                 <span className="flex items-center ml-3">
-                    <FaStar className="mr-2" /> {star}
+                    <FaStar className="mr-2 text-yellow-600" /> {star}
                 </span>
             </div>
-            <div className="oneline text-base text-[#717171]">{address}</div>
+            <div title={address} className="oneline text-base text-[#717171]">{address}</div>
             <div className="text-[#717171]">
                 {phone}
             </div>

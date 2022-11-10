@@ -40,28 +40,30 @@ function MapService(props) {
         }, 2300)
     })
 
-    useEffect(() => {
-        (async () => {
-            const data = await imageApi.getAll()
-            setImageList([...data.data])
-        })()
-    }, [])
+    // useEffect(() => {
+    //     (async () => {
+    //         const data = await imageApi.getAll()
+    //         setImageList([...data.data])
+    //     })()
+    // }, [])
 
-    useEffect(() => {
-        (async () => {
-            const data = await interestApi.getAll()
-            setInterestList([...data.data])
-        })()
-    }, [])
+    // useEffect(() => {
+    //     (async () => {
+    //         const data = await interestApi.getAll()
+    //         setInterestList([...data.data])
+    //     })()
+    // }, [])
 
     const [serviceList, setServiceList] = useState()
     useEffect(() => {
         (async() => {
             const data = await serviceApi.getAll()
+            console.log(data.data);
             setServiceList(data.data)
         })()
     }, [])
 
+    console.log(serviceList);
     
     return ( <div style={{marginTop: `${isDetailWishListPage ? '' : 'calc(var(--height_header) + var(--height_navbar) + 20px)'}`}} className={`${cx('map_service')}`}>
         <div className={`${cx('container')} ${isDetailWishListPage ? 'h-[88vh]' : 'wrap pt-[30px]'} `}>
