@@ -13,7 +13,6 @@ import React from "react";
 import BigBox from "../../../components/Home/BigBox";
 import style from './management.module.scss'
 import classNames from 'classnames/bind';
-import imageApi from "../../../api/imageApi";
 import Loader from "../../../components/common/Loader";
 const cx = classNames.bind(style)
 
@@ -40,25 +39,14 @@ function Management({ title, type }) {
 
     const account = useSelector(state => state.accountReducer).supplier
     const [serviceList, setServiceList] = useState([])
-    const [imageList, setImageList] = useState([])
     const value = useValueContext()
     const { handleDisplayBigBox } = value
     const show = useSelector(state => state.bigboxReducer.show)
-
-    // useEffect(() => {
-    //     (async () => {
-    //         const data = await imageApi.getAll()
-    //         setImageList(data.data)
-    //     })()
-    // }, [])
 
     useEffect(() => {
         (async () => {
             const data = await serviceApi.getByUserId(account.id)
             .catch((err) => {})
-            // const list = data.data.filter((item) => {
-            //     return item.userid === account.id
-            // })
             setServiceList([...data.data])
         })()
     }, [account.id])
@@ -106,7 +94,7 @@ function Management({ title, type }) {
                     <Suspense fallback={<Loader />}>
                         <tbody>
                             {serviceList && serviceList.map((item) => {
-                                return <ServiceRow imageList={imageList} key={item.id} item={item} />
+                                return <ServiceRow key={item.id} item={item} />
                             })}
 
                         </tbody>
@@ -118,7 +106,7 @@ function Management({ title, type }) {
                         <Suspense fallback={<Loader />}>
                             {serviceList && serviceList.map((item) => {
                                 return <div key={item.id} className="flex flex-col items-center">
-                                    <ServiceItem imageList={imageList} serviceItem={item} key={item.id} id={item.id} typeService={item.type} name={item.name} phone={item.phone} star={item.star} address={item.address} />
+                                    <ServiceItem serviceItem={item} key={item.id} id={item.id} typeService={item.type} name={item.name} phone={item.phone} star={item.star} address={item.address} />
                                     <div className="flex justify-center mb-[40px]">
                                         <button className='px-3 py-2 hover:brightness-90 active:scale-95 rounded-lg mr-2 bg-green-400'><GrUpdate /></button>
                                         <button className='px-3 py-2 hover:brightness-90 active:scale-95 rounded-lg bg-red-600'><RiDeleteBin5Fill /></button>

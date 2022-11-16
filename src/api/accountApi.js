@@ -17,9 +17,14 @@ const accountApi = {
         const url = `/getaccounts/${id}`
         return axiosClient.get(url)
     },
-    update: (id) => {
-        const url = `/getaccounts${id}`
-        return axiosClient.put(url)
+    update: (data) => {
+        console.log(data);
+        const url = `/user/update`
+        return axiosClient.put(url, data)
+    },
+    verify: (data) => {
+        const url = '/user/updatePassword'
+        return axiosClient.post(url, data)
     },
     delete: (id) => {
         const url = `/getaccounts${id}`
@@ -27,6 +32,10 @@ const accountApi = {
     },
     post: (data) => {
         const url = `/api/login`
+        return axiosClient.post(url, data)
+    },
+    register: (data) => {
+        const url = '/user/register'
         return axiosClient.post(url, data)
     }
 }

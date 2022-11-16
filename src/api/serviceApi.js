@@ -15,8 +15,8 @@ const serviceApi = {
         const url = `/place/findByUserId/${id}`
         return axiosClient.get(url)
     },
-    push: (data) => {
-        const url = '/getservices'
+    addService: (data) => {
+        const url = '/place/addPlace'
         return axiosClient.post(url, data)
     },
     delete: (id) => {

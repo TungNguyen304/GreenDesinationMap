@@ -7,17 +7,17 @@ import {
   listAll,
   getDownloadURL,
 } from "firebase/storage";
-const placeFirebase = {
+const avatarFirebase = {
   push: async (name, file) => {
     const newname = name + v4();
-    const storageRef = ref(storage, `place/${newname}`);
+    const storageRef = ref(storage, `avatar/${newname}`);
     await uploadString(storageRef, file, "data_url").then((snapshot) => {
       console.log("Uploaded a data_url string!");
     });
     return newname;
   },
   delete: (name) => {
-    const desertRef = ref(storage, `place/${name}`);
+    const desertRef = ref(storage, `avatar/${name}`);
     deleteObject(desertRef)
       .then(() => {
       })
@@ -26,7 +26,7 @@ const placeFirebase = {
       });
   },
   getAll: () => {
-    const listRef = ref(storage, "place/");
+    const listRef = ref(storage, "avatar/");
     listAll(listRef).then((res) => {
       res.items.forEach((item) => {
         getDownloadURL(item).then((url) => {
@@ -36,10 +36,10 @@ const placeFirebase = {
     });
   },
   get: async (name) => {
-    const urlRef = ref(storage, `place/${name}`);
+    const urlRef = ref(storage, `avatar/${name}`);
     const url = await getDownloadURL(urlRef);
     return url;
   },
 };
 
-export default placeFirebase;
+export default avatarFirebase;

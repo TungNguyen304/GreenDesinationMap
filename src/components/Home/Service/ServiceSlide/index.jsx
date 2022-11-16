@@ -3,23 +3,17 @@ import { BsHeartFill } from 'react-icons/bs'
 import { useSelector } from 'react-redux';
 import Left from '../../../common/Left'
 import Right from '../../../common/Right'
+import imageApi from '../../../../api/imageApi';
 import React, { useEffect } from 'react';
 import style from './serviceslide.module.scss'
 import classNames from 'classnames/bind';
+import { useState } from 'react';
 const cx = classNames.bind(style)
 
-function ServiceSlide({ typeComponent, id, imageList, type, previewPage, isInterest, handleLike, hidden, imgList }, ref) {
+function ServiceSlide({ typeComponent, imageList, type, previewPage, isInterest, handleLike, hidden, imgList }, ref) {
     const left = useRef()
     const right = useRef()
-
-    if (type === "marker") {
-        imageList = [...imageList.filter((item) => {
-            return item.placeid === id
-        })]
-        console.log(imageList);
-    }
     const isSupplierPage = window.location.pathname.includes('/host')
-    const isPreviewPage = window.location.pathname.includes('/preview')
     const homePage = useSelector(state => state.homePageReducer.type)
     const imgRef = useRef()
     let clnImg
@@ -91,11 +85,9 @@ function ServiceSlide({ typeComponent, id, imageList, type, previewPage, isInter
         {!isSupplierPage && <BsHeartFill style={{ 'fill': `${isInterest ? 'var(--color_heart)' : 'rgba(0, 0, 0, 0.6)'}`, 'stroke': 'white', 'strokeWidth': '1px' }} onClick={(e) => handleLike(e)} className={`text-base z-[1] w-[30px] h-[24px] absolute top-3 right-3 select-none active:scale-[0.8]`} />}
         <div ref={imgRef} className={`flex absolute z-[0]`}>
             {imageList && imageList.map((item, index) => {
-                if (item.placeid === id) {
                     return (<div key={index} ref={ref} className={`${cx('img')} overflow-hidden ${typeComponent === "map" ? 'w-[200px] h-[180px]' : homePage === "map" ? "w-[280px] h-[240px]" : "w-[320px] h-[320px]"} flex justify-center`}>
-                        <img className={`${clnImg} object-cover`} src={isPreviewPage ? item.file : item.name} alt="" />
+                        <img className={`${clnImg} object-cover`} src={previewPage ? item.file : item.name} alt="" />
                     </div>)
-                }
             })}
         </div>
         <Left ref={left} className={hidden && 'hidden'} />

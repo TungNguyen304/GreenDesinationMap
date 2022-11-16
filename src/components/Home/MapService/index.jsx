@@ -42,13 +42,6 @@ function MapService(props) {
 
     // useEffect(() => {
     //     (async () => {
-    //         const data = await imageApi.getAll()
-    //         setImageList([...data.data])
-    //     })()
-    // }, [])
-
-    // useEffect(() => {
-    //     (async () => {
     //         const data = await interestApi.getAll()
     //         setInterestList([...data.data])
     //     })()
@@ -58,12 +51,10 @@ function MapService(props) {
     useEffect(() => {
         (async() => {
             const data = await serviceApi.getAll()
-            console.log(data.data);
             setServiceList(data.data)
         })()
     }, [])
 
-    console.log(serviceList);
     
     return ( <div style={{marginTop: `${isDetailWishListPage ? '' : 'calc(var(--height_header) + var(--height_navbar) + 20px)'}`}} className={`${cx('map_service')}`}>
         <div className={`${cx('container')} ${isDetailWishListPage ? 'h-[88vh]' : 'wrap pt-[30px]'} `}>
@@ -87,10 +78,10 @@ function MapService(props) {
                                     props.positionList.map((item, index) => {
                                         return <ServiceItem imageList={imageList} interestList={interestList} key={index} id={item.id} name={item.name} phone={item.phone} address={item.address} star={item.star} typeService={item.type} serviceItem={item}/>
                                     })  
-                                    : props.typeService==='search' && searchList && searchList.length ? searchList.map((item, index) => {
+                                    : props.typeService==='search' && searchList && searchList.length>0 ? searchList.map((item, index) => {
                                         return <ServiceItem imageList={imageList} interestList={interestList} key={index} id={item.id} name={item.name} phone={item.phone} address={item.address} star={item.star} typeService={item.type} serviceItem={item}/>
                                     })
-                                    : serviceList && serviceList.map((item, index) => {
+                                    : serviceList && serviceList.length>0 && serviceList.map((item, index) => {
                                         if(props.typeService === "noibat") {
                                             return <ServiceItem imageList={imageList} interestList={interestList} key={index} id={item.id} name={item.name} phone={item.phone} address={item.address} star={item.star} typeService={item.type} serviceItem={item}/>
                                         }

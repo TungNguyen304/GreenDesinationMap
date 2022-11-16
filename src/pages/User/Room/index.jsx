@@ -29,19 +29,18 @@ function Room({ type, title }) {
     const [commentList, setCommentList] = useState([])
     const [isInterest, setIsInterest] = useState(false)
     const [imageList, setImageList] = useState([])
-    const [owner, setOwner] = useState([])
     const [totalComment, setTotalComment] = useState(0)
     const value = useValueContext()
     let service = {}
-    let isServiceTemporary = false
-    if (sessionStorage.getItem('placeTemporary')) {
+    const isServiceTemporary = window.location.pathname.includes('/room/temporary')
+    if (isServiceTemporary) {
         service = JSON.parse(sessionStorage.getItem('placeTemporary'))
-        isServiceTemporary = true
     }
     else {
         service = JSON.parse(localStorage.getItem('service'))
     }
-    const account = useSelector(state => state.accountReducer).user
+    const accountCommon = useSelector(state => state.accountReducer)
+    const account = isServiceTemporary ? accountCommon.supplier : accountCommon.user
     const show = useSelector(state => state.bigboxReducer.show)
     let count = 0;
     const currentDay = new Date()
@@ -53,8 +52,6 @@ function Room({ type, title }) {
             duration: 500,
             smooth: true
         });
-
-
     })
 
     // useEffect(() => {
@@ -75,26 +72,19 @@ function Room({ type, title }) {
     //     })()
     // }, [])
 
-    // useEffect(() => {
-    //     !isServiceTemporary ? (async () => {
-    //         const data = await imageApi.get(`?placeid=${service.id}`)
-    //         setImageList(data.data)
-    //     })() : (() => {
-    //         const data = service.imageList.map((item) => {
-    //             return {
-    //                 name: item.file
-    //             }
-    //         })
-    //         setImageList(data)
-    //     })()
-    // }, [isServiceTemporary, service.id, JSON.stringify(service.imageList)])
-
-    // useEffect(() => {
-    //     (async () => {
-    //         const data = await accountApi.get(service.userid)
-    //         setOwner(data.data)
-    //     })()
-    // }, [service.userid])
+    useEffect(() => {
+        !isServiceTemporary ? (async () => {
+            const data = await imageApi.get(service.id)
+            setImageList(data.data)
+        })() : (() => {
+            const data = service.imageList.map((item) => {
+                return {
+                    name: item.file
+                }
+            })
+            setImageList(data)
+        })()
+    }, [isServiceTemporary, service.id, JSON.stringify(service.imageList)])
 
     // useEffect(() => {
     //     (async () => {
@@ -194,11 +184,11 @@ function Room({ type, title }) {
                 <div className="w-[50%] ssm767:w-full border-t border-solid border-normal pt-6">
                     <div className="flex justify-between items-center">
                         <div className="text-2xl font-semibold mb-3">
-                            <span>Người đăng ký: {service.host}</span>
+                            <span>Người đăng ký: {isServiceTemporary ? account.username : service.host}</span>
                         </div>
                         <div>
                             <div className="inline-block rounded-full overflow-hidden">
-                                <img className="w-[56px] h-[56px] " src={owner.image} alt="" />
+                                <img className="w-[56px] h-[56px] " src={isServiceTemporary ? account.image : service.useravt} alt="" />
                             </div>
                         </div>
                     </div>
@@ -276,10 +266,10 @@ function Room({ type, title }) {
             <div className="mt-6">
                 <div className="flex items-center">
                     <div className="mr-5">
-                        <img className="w-[64px] h-[64px] rounded-full" src={owner.image} alt="" />
+                        <img className="w-[64px] h-[64px] rounded-full" src={isServiceTemporary ? account.image : service.useravt} alt="" />
                     </div>
                     <div>
-                        <div className="text-lg font-semibold">Người đăng ký: {service.host}</div>
+                        <div className="text-lg font-semibold">Người đăng ký: {isServiceTemporary ? account.username : service.host}</div>
                         <div>Đã tham gia vào tháng {isServiceTemporary ? currentDay.getMonth() + 1 : service.startday.slice(service.startday.indexOf("/")+1, service.startday.lastIndexOf("/"))} năm {isServiceTemporary ? currentDay.getFullYear() :  service.startday.slice(service.startday.lastIndexOf("/")+1, service.startday.length)}</div>
                     </div>
                 </div>

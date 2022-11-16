@@ -8,7 +8,7 @@ const imageApi = {
         })
     },
     get: (id, params) => {
-        const url = `/getimages${id}`
+        const url = `/img/image/${id}`
         return axiosClient.get(url, {
             params
         })

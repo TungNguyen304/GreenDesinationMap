@@ -8,11 +8,11 @@ function Bottom({ list }) {
 
     function handleLogout() {
         if (role === 1) {
-            document.cookie = `user_id=; expires=thu, 25 Jan 2021 00:00:00 UTC`
+            localStorage.removeItem('user')
             navigate('/')
         }
         else if (role === 2) {
-            document.cookie = `supplier_id=; expires=thu, 25 Jan 2021 00:00:00 UTC`
+            localStorage.removeItem('supplier')
             navigate('/host')
         }
         window.location.reload()

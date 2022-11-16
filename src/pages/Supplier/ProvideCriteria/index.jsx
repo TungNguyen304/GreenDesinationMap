@@ -11,6 +11,11 @@ function ProvideCriteria() {
     const [criteriaList, setCriteriaList] = useState([])
     const service = JSON.parse(sessionStorage.getItem('placeTemporary'))
     const accountSupplier = useSelector(state => state.accountReducer).supplier
+    const placeTypeId = {
+        "cafe": 1,
+        "hotel": 2,
+        "restaurant": 3
+    }
 
 
     useEffect(() => {
@@ -26,10 +31,10 @@ function ProvideCriteria() {
 
     useEffect(() => {
         (async () => {
-            const data = await criteriaApi.getAll()
+            const data = await criteriaApi.getByPlaceTypeId(placeTypeId[service.type])
             setCriteriaList(data.data)
         })()
-    }, [])
+    }, [service.type])
 
     function handleDispatchValue(event) {
         const inputList = [...document.querySelectorAll(`.${style.wrap_list} div input:checked`)]
@@ -65,14 +70,13 @@ function ProvideCriteria() {
                     <div className="text-2xl italic font-medium mb-3">Bấm chọn vào các tiêu chí bạn muốn đăng ký</div>
                     <div className={`${cx('wrap_list')} h-[65vh] max966:h-[55vh] overflow-y-scroll px-3 pt-3`}>
                         {criteriaList.map((item) => {
-                            if(item.role === 1) {
+                            // if(item.actor === 1) {
                                 return (<div key={item.id} className="flex items-center px-3 py-4 border-2 border-solid border-normal rounded-lg mb-3 cursor-pointer hover:border-black active:scale-[0.98]">
-                                    <img className="w-[40px] h-[40px] rounded-lg" src={require(`../../../upload/criteria/${item.image}`)} alt="" />
                                     <div title={item.name} className="flex-1 ml-3 text-lg font-medium italic">{item.name}</div>
                                     <input value={item.name} className="w-[20px] h-[20px] pointer-events-none" type="checkbox" />
                                 </div>)
-                            }
-                            else return <></>
+                            // }
+                            // else return <></>
                         })}    
                     </div>
                 </div>

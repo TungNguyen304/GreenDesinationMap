@@ -1,26 +1,44 @@
 import { FiCheckCircle } from 'react-icons/fi'
-import { AiFillStar } from 'react-icons/ai'
+import { AiFillStar, AiFillWarning } from 'react-icons/ai'
 import { useSelector } from 'react-redux'
 import { RiArrowRightSLine } from 'react-icons/ri'
 import { HiOutlineUser } from 'react-icons/hi'
 import { MdLockOutline } from 'react-icons/md'
 import { AiOutlineArrowRight, AiOutlineMail, AiOutlinePhone } from 'react-icons/ai'
+import avatarFirebase from '../../../firebase/avatar'
 import style from './profile.module.scss'
 import Avt from '../../../assets/images/avt.png'
 import classNames from 'classnames/bind';
+import accountApi from '../../../api/accountApi'
 import { useRef } from 'react';
 import { useState, useEffect } from 'react';
 const cx = classNames.bind(style)
 
 function Profile() {
+    const passwordRef = useRef()
     const changeAvtRef = useRef()
+    const warnRef = useRef()
+    const buttonChangeAvtRef = useRef()
     const accountRef = useRef()
     const inputImg = useRef()
+    const verifyInputRef = useRef()
+    const [warn, setWarn] = useState()
+    const [warnAvt, setWarnAvt] = useState()
+    const [info, setInfo] = useState({
+        "email": "",
+        "firstname": "",
+        "lastname": "",
+        "phonenumber": "",
+        "gender": "",
+        "password": ""
+    })
     const [path, setPath] = useState()
     const [account, setAccount] = useState()
     const [show, setShow] = useState(false)
+    const [verifyPass, setVerifyPass] = useState()
     let acc = useSelector(state => state.accountReducer)
     const role = window.location.pathname.includes('/host') ? 2 : 1
+    const [isChangingPass, setIsChangingPass] = useState(false)
 
     useEffect(() => {
         if (role === 2) {
@@ -29,6 +47,21 @@ function Profile() {
             setAccount(acc.user)
         }
     }, [acc, role])
+    // useEffect(() => {
+    //     avatarFirebase.delete("a6d2dce2-d81f-4fee-9a24-f725d452dd92.webpe20d06a6-7bc2-47ed-b550-acb22a0dd4a4")
+    // }, [])
+    useEffect(() => {
+        account && setInfo({
+            "gender": account.gender === "Male",
+            "email": account.email,
+            "firstname": account.firstname,
+            "lastname": account.lastname,
+            "phonenumber": account.phonenumber,
+            "password": "",
+            "newPass": "1",
+            "reNewPass": "1"
+        })
+    }, [account])
 
     function handleDisplayChangeAccount() {
         if (show === true) {
@@ -50,9 +83,106 @@ function Profile() {
     }
 
     function handleOnChangeImg(event) {
-        const newPath = URL.createObjectURL(event.target.files[0])
-        setPath(newPath)
+        const reader = new FileReader()
+        reader.readAsDataURL(event.target.files[0])
+        reader.onload = async function () {
+            const blod = reader.result
+            setPath(blod);
+            // avatarFirebase.delete(account.image)
+            const name = await avatarFirebase.push(event.target.files[0].name, blod)
+            const url = await avatarFirebase.get(name)
+            accountApi.update({
+                "userid": account.id,
+                "gender": account.gender === "Male",
+                "email": account.email,
+                "avatar": url,
+                "stardate": new Date(account.startdate).toLocaleDateString("sv-SE"),
+                "firstname": account.firstname,
+                "lastname": account.lastname,
+                "username": account.username,
+                "password": verifyPass,
+                "roleid": {
+                    "rolesname": role === 1 ? "USER" : "SUPPLIER"
+                },
+                "phonenumber": account.phonenumber,
+            })
+        }
     }
+
+    async function handleUpdateProfile(e) {
+        let d = 0;
+        const mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+        const checkformat = Object.keys(info).every((item) => {
+            if (item === "phonenumber" && info[item].length !== 10) {
+                if (d === 0) {
+                    d++;
+                    setWarn("Số điện thoại không hợp lệ")
+                }
+                return false
+            } else if (isChangingPass && item === "reNewPass" && info[item] !== info["newPass"]) {
+                if (d === 0) {
+                    d++;
+                    setWarn("Mật khẩu nhập lại không khớp")
+                }
+                return false
+            } if (item === "email" && !info[item].match(mailformat)) {
+                if (d === 0) {
+                    d++;
+                    setWarn("Email không hợp lệ")
+                }
+                return false
+            }
+            return info[item] !== "";
+        })
+        const checkPass = checkformat && await accountApi.verify({
+            "username": account.username,
+            "password": info.password
+        })
+            .catch((err) => {
+                d++;
+                setWarn("Sai mật khẩu, vui lòng thử lại!")
+            })
+        if (checkPass && checkPass.data) {
+            setWarn("")
+            accountApi.update({
+                ...info,
+                "username": account.username,
+                "startdate": new Date(account.startdate).toLocaleDateString("sv-SE"),
+                "avatar": account.image,
+                "userid": account.id,
+                "roleid": {
+                    "rolesname": role === 1 ? "USER" : "SUPPLIER"
+                },
+                "gender": info.gender === "Male",
+                "password": isChangingPass ? info.newPass : info.password
+            })
+        } else {
+            if (d === 0) {
+                setWarn("Bạn cần nhập đủ thông tin")
+            }
+        }
+    }
+
+    async function handleVerifyPassword(event) {
+        if (!verifyInputRef.current.value) {
+            setWarnAvt("Vui lòng nhập mật khẩu của bạn.")
+        }
+        const checkPass = await accountApi.verify({
+            "username": account.username,
+            "password": verifyInputRef.current.value
+        })
+            .then((res) => {
+                setWarnAvt("")
+                setVerifyPass(verifyInputRef.current.value)
+                buttonChangeAvtRef.current.classList.remove('hidden')
+                event.nativeEvent.path[1].style.display = "none"
+            })
+            .catch((err) => {
+                setWarnAvt("Sai mật khẩu, vui lòng thử lại!")
+            })
+
+    }
+
 
     return (<div className={`${cx('profile')} w-full`}>
         <div ref={accountRef} className="w-[80%] max840:w-full mx-auto flex ssm640:flex-col ssm640:items-center">
@@ -99,46 +229,65 @@ function Profile() {
                         <div className='px-5'>
                             <div className='flex justify-between mb-5'>
                                 <div className='border-b-2 flex-1 mr-10 border-solid border-gray-600'>
-                                    <input className='w-[80%] py-2 placeholder:text-gray-600' type="text" placeholder="First Name" defaultValue={account.firstname} />
+                                    <input onChange={(e) => { setInfo({ ...info, "firstname": e.target.value }) }} className='w-[80%] py-2 placeholder:text-gray-600' type="text" placeholder="First Name" defaultValue={account.firstname} />
                                 </div>
                                 <div className='border-b-2 flex-1 border-solid border-gray-600'>
-                                    <input className='w-[80%] py-2 placeholder:text-gray-600' type="text" placeholder="Last Name" defaultValue={account.lastname} />
+                                    <input onChange={(e) => { setInfo({ ...info, "lastname": e.target.value }) }} className='w-[80%] py-2 placeholder:text-gray-600' type="text" placeholder="Last Name" defaultValue={account.lastname} />
                                 </div>
                             </div>
                             <div className='w-full flex items-center border-b-2 border-solid border-gray-600 mb-5'>
-                                <input className='w-full py-2 placeholder:text-gray-600' type="text" name="" id="" placeholder="Username" defaultValue={account.username} />
+                                <input readOnly className='w-full py-2 placeholder:text-gray-600' type="text" name="" id="" placeholder="Username" defaultValue={account.username} />
                                 <HiOutlineUser />
                             </div>
                             <div className='w-full flex items-center border-b-2 border-solid border-gray-600 mb-5'>
-                                <input className='w-full py-2 placeholder:text-gray-600' type="text" placeholder='Email Address' defaultValue={account.email} />
+                                <input onChange={(e) => { setInfo({ ...info, "email": e.target.value }) }} className='w-full py-2 placeholder:text-gray-600' type="text" placeholder='Email Address' defaultValue={account.email} />
                                 <AiOutlineMail />
                             </div>
 
                             <div className='w-full flex items-center border-b-2 border-solid border-gray-600 mb-5'>
-                                <input className='w-full py-2 placeholder:text-gray-600' type="text" placeholder='Phone Number' defaultValue={account.phonenumber} />
+                                <input onChange={(e) => { setInfo({ ...info, "phonenumber": e.target.value }) }} className='w-full py-2 placeholder:text-gray-600' type="text" placeholder='Phone Number' defaultValue={account.phonenumber} />
                                 <AiOutlinePhone />
                             </div>
 
                             <div className='w-full flex items-center border-b-2 border-solid border-gray-600 mb-5'>
-                                <input className='py-2 w-full placeholder:text-gray-600' type="text" name="city" list="gender" placeholder='Gender' defaultValue={account.gender} />
+                                <input onChange={(e) => { setInfo({ ...info, "gender": e.target.value }) }} className='py-2 w-full placeholder:text-gray-600' type="text" name="city" list="gender" placeholder='Gender' defaultValue={account.gender} />
                                 <datalist id='gender'>
                                     <option value="Male" />
                                     <option value="FeMale" />
-                                    <option value="Other" />
                                 </datalist>
                             </div>
                             <div className='w-full flex items-center border-b-2 border-solid border-gray-600 mb-5'>
-                                <input className='w-full py-2 placeholder:text-gray-600' type="text" placeholder='Password' defaultValue={account.password} />
+                                <input onChange={(e) => { setInfo({ ...info, "password": e.target.value }) }} className='w-full py-2 placeholder:text-gray-600' type="text" placeholder='Password' />
                                 <MdLockOutline />
                             </div>
-                            <div className='w-full flex items-center border-b-2 border-solid border-gray-600 mb-8'>
-                                <input className='w-full py-2 placeholder:text-gray-600' type="text" placeholder='Confirm Password' defaultValue={account.password} />
-                                <MdLockOutline />
+                            <div onClick={(e) => {
+                                passwordRef.current.classList.toggle('hidden')
+                                setIsChangingPass(!isChangingPass)
+                                if (isChangingPass)
+                                    setInfo({ ...info, "newPass": "1", "reNewPass": "1" })
+                                else
+                                    setInfo({ ...info, "newPass": "", "reNewPass": "" })
+                            }} className='italic cursor-pointer hover:underline mb-5'>
+                                Change password
+                            </div>
+                            <div ref={passwordRef} className='hidden'>
+                                <div className='w-full flex items-center border-b-2 border-solid border-gray-600 mb-5'>
+                                    <input onChange={(e) => { setInfo({ ...info, "newPass": e.target.value }) }} className='w-full py-2 placeholder:text-gray-600' type="text" placeholder='New Password' />
+                                    <MdLockOutline />
+                                </div>
+                                <div className='w-full flex items-center border-b-2 border-solid border-gray-600 mb-8'>
+                                    <input onChange={(e) => { setInfo({ ...info, "reNewPass": e.target.value }) }} className='w-full py-2 placeholder:text-gray-600' type="text" placeholder='Verify New Password' />
+                                    <MdLockOutline />
+                                </div>
                             </div>
                         </div>
+                        {warn && <div ref={warnRef} className='text-red-600 text-sm italic mb-5 flex items-center justify-end'>
+                            <AiFillWarning />
+                            <span>{warn}</span>
+                        </div>}
                         <div className='flex justify-between max324:flex-col'>
                             <div onClick={(e) => handleDisplayChangeAccount(e)} style={{ "backgroundImage": "linear-gradient(to right, #07D5DF, #7F6DEF, #F408FE)" }} className='text-white font-semibold italic hover:opacity-90 cursor-pointer py-3 px-5 text-center rounded-full min-w-[80px] active:scale-[0.98] max324:mx-7 max324:mb-5'>Hủy</div>
-                            <button style={{ "backgroundImage": "linear-gradient(to right, #07D5DF, #7F6DEF, #F408FE)" }} className='bg-[#333] text-white py-3 px-10 flex items-center justify-end max324:justify-center mx-5 max324:mx-7 rounded-full hover:opacity-90 active:scale-[0.98]'>
+                            <button onClick={handleUpdateProfile} style={{ "backgroundImage": "linear-gradient(to right, #07D5DF, #7F6DEF, #F408FE)" }} className='bg-[#333] text-white py-3 px-10 flex items-center justify-end max324:justify-center mx-5 max324:mx-7 rounded-full hover:opacity-90 active:scale-[0.98]'>
                                 <span className='font-semibold italic'>Lưu thay đổi</span>
                                 <AiOutlineArrowRight className='text-white ml-2' />
                             </button>
@@ -177,9 +326,17 @@ function Profile() {
                             <div className={`${cx('description')} font-thin`}>
                                 Ảnh đại diện cho thấy khuôn mặt của bạn có thể giúp các chủ nhà và khách khác làm quen với bạn. Green Desination Map yêu cầu tất cả chủ nhà phải có ảnh đại diện. Chúng tôi không yêu cầu khách phải có ảnh đại diện, nhưng chủ nhà có thể yêu cầu điều này. Nếu bạn là khách, ngay cả khi chủ nhà yêu cầu bạn đăng ảnh, họ sẽ không thể xem ảnh cho đến khi xác nhận yêu cầu đặt phòng của bạn.
                             </div>
-                            <div onClick={autoClick} className='w-full border border-solid border-normal text-center py-2 rounded-md mt-3 cursor-pointer active:scale-[0.9] hover:bg-primary select-none hover:text-white'>
+                            <div ref={buttonChangeAvtRef} onClick={autoClick} className='hidden w-full border border-solid border-normal text-center py-2 rounded-md mt-3 cursor-pointer active:scale-[0.9] hover:bg-primary select-none hover:text-white'>
                                 Tải lên tệp từ thiết bị của bạn
                                 <input ref={inputImg} onChange={handleOnChangeImg} className='hidden' type="file" name="" id="" />
+                            </div>
+                            {warnAvt && <div className='text-red-600 text-sm italic mb-5 flex items-center justify-end'>
+                                <AiFillWarning />
+                                <span>{warnAvt}</span>
+                            </div>}
+                            <div className='flex justify-between mt-5'>
+                                <input ref={verifyInputRef} className='border border-solid border-black flex-1 pl-3 py-1 rounded-lg' type="text" placeholder='Nhập mật khẩu để xác thực...' />
+                                <button onClick={(e) => handleVerifyPassword(e)} className='ml-3 py-1 px-3 bg-green-600 text-white rounded-lg'>Xác nhận</button>
                             </div>
                         </div>
                     </div>

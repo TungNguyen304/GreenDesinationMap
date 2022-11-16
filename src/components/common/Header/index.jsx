@@ -23,7 +23,7 @@ function Header(props) {
     const isUserHomePage = window.location.pathname === '/'
     const isHomePage = window.location.pathname === '/' || window.location.pathname === '/host'
     const [account, setAccount] = useState()
-    const actor = window.location.pathname.includes('/host') ? 'supplier' : 'user'
+    const actor = window.location.pathname.includes('/host') || window.location.pathname.includes('/room/temporary') ? 'supplier' : 'user'
     let acc = useSelector(state => state.accountReducer)
     const tippyRef = useRef()
     let bottomList2
@@ -60,7 +60,7 @@ function Header(props) {
 
     return (<div className={`${cx("header")} ${props.isServiceTemporary ? 'pointer-events-none' : ''}`}>
         <div className={`${window.location.pathname === '/room' ? 'small_wrap' : 'wrap'} ${cx('wrap_flex')} max-h-[54px] ${!isUserHomePage ? 'slg1250:justify-between' : ''}`}>
-            {!isHomePage && <div onClick={() => {navigate(-1)}} className='flex items-center text-2xl mx-4 px-2 rounded-lg active:scale-95 hover:bg-normal'>
+            {!isHomePage && <div onClick={() => {navigate(-1)}} className='pointer-events-auto flex items-center text-2xl mx-4 px-2 rounded-lg active:scale-95 hover:bg-normal'>
                 <IoChevronBack />
             </div>}
 

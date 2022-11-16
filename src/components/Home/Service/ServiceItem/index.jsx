@@ -5,18 +5,19 @@ import { setService } from '../../../../store/actions/service'
 import { useValueContext } from '../../../../hook'
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-
+import imageApi from "../../../../api/imageApi";
 import ServiceSlide from "../ServiceSlide";
 import style from './serviceitem.module.scss'
 import classNames from 'classnames/bind';
 const cx = classNames.bind(style)
 
-function ServiceItem({ name, phone, address, star, typeService, serviceItem, type, typeComponent, id, imageList, interestList, previewPage }) {
+function ServiceItem({ name, phone, address, imageListTemp, star, typeService, serviceItem, type, typeComponent, id, interestList, previewPage }) {
     const isPreviewPage = sessionStorage.getItem('placeTemporary') ? true : false
     const isManagementPage = window.location.pathname.includes('/management')
     const value = useValueContext()
     const dispatch = useDispatch()
     const [hidden, setHidden] = useState(true)
+    const [imageList, setImageList] = useState([])
     const [isInterest, setIsInterest] = useState(false)
     const account = useSelector(state => state.accountReducer).user
     const imgRef = useRef()
@@ -24,9 +25,6 @@ function ServiceItem({ name, phone, address, star, typeService, serviceItem, typ
     const navigate = useNavigate()
     const homePage = useSelector(state => state.homePageReducer.type)
     const [imgList, setImgList] = useState()
-
-    
-
 
     useEffect(() => {
         if (imgRef.current) {
@@ -44,6 +42,17 @@ function ServiceItem({ name, phone, address, star, typeService, serviceItem, typ
             })
         })()
     }, [account, id, interestList])
+    
+    useEffect(() => {
+        (async () => {
+            if(previewPage) {
+                setImageList(imageListTemp)
+            } else {
+                const data = await imageApi.get(id)
+                setImageList(data.data);
+            }
+        })()
+    }, [previewPage, imageListTemp])
 
     function handelHidden() {
         setHidden(true)
@@ -52,8 +61,6 @@ function ServiceItem({ name, phone, address, star, typeService, serviceItem, typ
     function handelDisplay() {
         setHidden(false)
     }
-
-    
 
     function handleLike(even) {
         even.stopPropagation()

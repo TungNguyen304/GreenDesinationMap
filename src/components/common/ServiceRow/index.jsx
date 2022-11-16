@@ -1,11 +1,14 @@
+import { useState } from 'react'
 import { BsStarFill, BsStarHalf } from 'react-icons/bs'
 import { GrUpdate } from 'react-icons/gr'
 import { RiDeleteBin5Fill } from 'react-icons/ri'
 import { useNavigate } from 'react-router-dom'
+import imageApi from '../../../api/imageApi'
+import { useEffect } from 'react'
 
-
-function ServiceRow({ item, imageList }) {
+function ServiceRow({ item }) {
     const navigate = useNavigate()
+    const [imageList, setImageList] = useState([])
     const style = {
         "overflow": "hidden",
         "display": "-webkit-box",
@@ -13,9 +16,12 @@ function ServiceRow({ item, imageList }) {
         "WebkitLineClamp": "1"
     }
 
-    const img = imageList.filter((e) => {
-        return e.placeid === item.id
-    })
+    useEffect(() => {
+        (async () => {
+            const data = await imageApi.get(item.id)
+            setImageList(data.data)
+        })()
+    }, [item.id])
 
     function handleNavigateToRoom() {
         localStorage.setItem('service', JSON.stringify(item))
@@ -24,8 +30,7 @@ function ServiceRow({ item, imageList }) {
 
     function handleUpdatePlace(event) {
         event.stopPropagation()
-        console.log(img);
-        const newImg = img.map((item) => {
+        const newImg = imageList.map((item) => {
             return {
                 file: item.name,
                 id: item.id
@@ -33,7 +38,7 @@ function ServiceRow({ item, imageList }) {
         })
         const place = {
             ...item,
-            imageList: [...newImg]
+            "imageList": [...newImg]
         }
         sessionStorage.setItem("placeTemporary", JSON.stringify(place))
         sessionStorage.setItem("statusUpdate", "updating")
@@ -44,7 +49,7 @@ function ServiceRow({ item, imageList }) {
         <tr onClick={handleNavigateToRoom}>
         <td title={item.name} style={{ display: "flex", flex: "3" }} className='items-center relative'>
             <div className='mr-3 absolute'>
-                <img className='w-[60px] h-[40px] rounded-lg' src={img.length!==0 ? img[0].name : ''} alt="" />
+                <img className='w-[60px] h-[40px] rounded-lg' src={imageList.length!==0 ? imageList[0].name : ''} alt="" />
             </div>
             <div style={style} className='ml-[80px]'>
                 {item.name}
