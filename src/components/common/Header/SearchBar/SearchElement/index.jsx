@@ -15,7 +15,7 @@ function SearchElement({item, recomment, positionList, setSelectPosition, handle
         >
           <ListItemIcon>
             <img
-              src={positionList.some((element) => element.mapid === item.place_id) ? "https://png.pngtree.com/png-clipart/20220530/original/pngtree-drop-in-house-location-icon-png-image_7769293.png" : "https://png.pngtree.com/png-vector/20220706/ourmid/pngtree-vector-location-icon-free-and-png-png-image_5708678.png"}
+              src={positionList && positionList.some((element) => element.mapid === item.place_id) ? "https://png.pngtree.com/png-clipart/20220530/original/pngtree-drop-in-house-location-icon-png-image_7769293.png" : "https://png.pngtree.com/png-vector/20220706/ourmid/pngtree-vector-location-icon-free-and-png-png-image_5708678.png"}
               alt="Placeholder"
               style={{ width: 38, height: 38 }}
             />

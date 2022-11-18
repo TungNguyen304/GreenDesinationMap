@@ -18,7 +18,6 @@ const accountApi = {
         return axiosClient.get(url)
     },
     update: (data) => {
-        console.log(data);
         const url = `/user/update`
         return axiosClient.put(url, data)
     },

@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
@@ -9,12 +9,13 @@ const cx = classNames.bind(style)
 
 function ProvideCriteria() {
     const [criteriaList, setCriteriaList] = useState([])
+    const nextRef = useRef()
     const service = JSON.parse(sessionStorage.getItem('placeTemporary'))
     const accountSupplier = useSelector(state => state.accountReducer).supplier
     const placeTypeId = {
         "cafe": 1,
-        "hotel": 2,
-        "restaurant": 3
+        "restaurant": 2,
+        "hotel": 3,
     }
 
 
@@ -23,8 +24,10 @@ function ProvideCriteria() {
         list.forEach((item) => {
             item.onclick = () => {
                 const criteria = item.querySelector('input')
-                if(criteria)
+                if (criteria) {
                     criteria.checked = !criteria.checked
+                    handleCountTick()
+                }
             }
         })
     })
@@ -32,14 +35,28 @@ function ProvideCriteria() {
     useEffect(() => {
         (async () => {
             const data = await criteriaApi.getByPlaceTypeId(placeTypeId[service.type])
-            setCriteriaList(data.data)
+            data.data && setCriteriaList(data.data.filter((item) => item.actor === 1))
         })()
     }, [service.type])
+
+    function handleCountTick() {
+        const inputList = [...document.querySelectorAll(`.${style.wrap_list} div input:checked`)]
+        if (Math.round((10 * inputList.length) / criteriaList.length) >= 7) {
+            nextRef.current.classList.remove('pointer-events-none')
+            nextRef.current.style.backgroundImage = "linear-gradient(to right, #07D5DF, #7F6DEF, #F408FE)"
+        } else {
+            nextRef.current.classList.add('pointer-events-none')
+            nextRef.current.style.backgroundImage = "unset"
+        }
+    }
 
     function handleDispatchValue(event) {
         const inputList = [...document.querySelectorAll(`.${style.wrap_list} div input:checked`)]
         const criteriaTickList = inputList.map((item) => {
-            return item.value
+            return {
+                "id": item.id,
+                "name": item.value
+            }
         })
         const currdentData = JSON.parse(sessionStorage.getItem('placeTemporary'))
         sessionStorage.setItem('placeTemporary', JSON.stringify({
@@ -50,13 +67,15 @@ function ProvideCriteria() {
     }
 
     useEffect(() => {
-        if(service.criteriaList) {
+        if (service.criteriaList) {
             const inputList = [...document.querySelectorAll(`.${style.wrap_list} div input`)]
             inputList.forEach((item) => {
-                if(service.criteriaList.includes(item.value)) {
-                    item.checked = true
-                }
+                service.criteriaList.forEach((item1) => {
+                    if(item1.id === item.id)
+                        item.checked = true
+                })
             })
+            handleCountTick()
         }
     })
 
@@ -67,24 +86,21 @@ function ProvideCriteria() {
             </div>
             <div className="w-[50%] max966:w-full h-full flex flex-col justify-center items-center px-[120px] max1100:px-[50px] max477:px-[10px] relative">
                 <div className="w-full">
-                    <div className="text-2xl italic font-medium mb-3">Bấm chọn vào các tiêu chí bạn muốn đăng ký</div>
+                    <div className="text-2xl italic font-medium mb-3">Bấm chọn vào các tiêu chí bạn muốn đăng ký (tối thiểu 70%)</div>
                     <div className={`${cx('wrap_list')} h-[65vh] max966:h-[55vh] overflow-y-scroll px-3 pt-3`}>
                         {criteriaList.map((item) => {
-                            // if(item.actor === 1) {
-                                return (<div key={item.id} className="flex items-center px-3 py-4 border-2 border-solid border-normal rounded-lg mb-3 cursor-pointer hover:border-black active:scale-[0.98]">
-                                    <div title={item.name} className="flex-1 ml-3 text-lg font-medium italic">{item.name}</div>
-                                    <input value={item.name} className="w-[20px] h-[20px] pointer-events-none" type="checkbox" />
-                                </div>)
-                            // }
-                            // else return <></>
-                        })}    
+                            return (<div key={item.id} className="flex items-center px-3 py-4 border-2 border-solid border-normal rounded-lg mb-3 cursor-pointer hover:border-black active:scale-[0.98]">
+                                <div title={item.name} className="flex-1 ml-3 text-lg font-medium italic">{item.name}</div>
+                                <input onChange={handleCountTick} id={item.id} value={item.name} className="w-[20px] h-[20px] pointer-events-none" type="checkbox" />
+                            </div>)
+                        })}
                     </div>
                 </div>
             </div>
 
-            <Link onClick={() => {sessionStorage.removeItem('placeTemporary')}} to='/host' className="z-10 fixed top-4 right-4 text-sm italic bg-slate-50 px-3 py-1 rounded-lg cursor-pointer hover:brightness-95 active:scale-95 select-none">Thoát</Link>
+            <Link onClick={() => { sessionStorage.removeItem('placeTemporary') }} to='/host' className="z-10 fixed top-4 right-4 text-sm italic bg-slate-50 px-3 py-1 rounded-lg cursor-pointer hover:brightness-95 active:scale-95 select-none">Thoát</Link>
             <Link to='/host/registerservice/providetitle' style={{ "backgroundImage": "linear-gradient(to right, #07D5DF, #7F6DEF, #F408FE)" }} className="z-10 fixed bottom-8 max966:bottom-14 left-[55%] max966:left-[50%] max966:translate-x-[-50%] ssm640:w-[90%] italic text-white px-6 py-2 font-semibold rounded-lg cursor-pointer hover:brightness-95 active:scale-95 select-none">Quay lại</Link>
-            <Link onClick={(e) => handleDispatchValue(e)} to='/host/registerservice/preview' style={{ "backgroundImage": "linear-gradient(to right, #07D5DF, #7F6DEF, #F408FE)" }} className="bg-[#DDDDDD] z-10 fixed bottom-8 max966:bottom-2 right-8 max966:left-[50%] whitespace-nowrap max966:translate-x-[-50%] italic ssm640:w-[90%] ssm640:text-start text-center text-white px-6 py-2 font-semibold rounded-lg cursor-pointer hover:brightness-95 active:scale-95 select-none">Lưu và xem lại địa điểm của bạn</Link>
+            <Link ref={nextRef} onClick={(e) => handleDispatchValue(e)} to='/host/registerservice/preview' style={{ "backgroundImage": "" }} className="bg-[#DDDDDD] z-10 fixed bottom-8 max966:bottom-2 right-8 max966:left-[50%] whitespace-nowrap max966:translate-x-[-50%] italic ssm640:w-[90%] ssm640:text-start text-center text-white px-6 py-2 font-semibold rounded-lg cursor-pointer hover:brightness-95 pointer-events-none active:scale-95 select-none">Lưu và xem lại địa điểm của bạn</Link>
         </div>
     </div>);
 }

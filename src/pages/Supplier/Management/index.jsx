@@ -44,7 +44,7 @@ function Management({ title, type }) {
     const show = useSelector(state => state.bigboxReducer.show)
 
     useEffect(() => {
-        (async () => {
+        account.id && (async () => {
             const data = await serviceApi.getByUserId(account.id)
             .catch((err) => {})
             setServiceList([...data.data])

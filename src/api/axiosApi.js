@@ -33,7 +33,7 @@ axiosClient.interceptors.response.use(function (response) {
         const data = {
             ...response.data,
             image: response.data.avatar,
-            gender: response.data.gender ? 'Male' : 'FeMail',
+            gender: response.data.gender ? 'Male' : 'FeMale',
             id: response.data.userid,
             role: response.data.roleid.role,
             startdate: new Date(response.data.startdate).toLocaleDateString("vi-VN")
@@ -47,15 +47,18 @@ axiosClient.interceptors.response.use(function (response) {
     }
     else if((response.request.responseURL.includes(`http://localhost:8080/place/findByUserId/`)) || 
     response.request.responseURL === 'http://localhost:8080/place/information') {
-        const data = response.data.map((e) => {
-            const startday = new Date(e.startday).toLocaleDateString("vi-VN")
-            const browserday = new Date(e.browserday).toLocaleDateString("vi-VN")
-            return create(e.placeid, e.mapid, e.userid.userid, e.placename, e.road, e.wrad, e.district, e.city, e.phone, e.road + ", " + e.ward + ", " + e.district, 
-            e.placetypeid.type, e.lat, e.lon, e.star, e.userid.username, e.description, startday, e.status, browserday, e.userid.avatar)
-        })
-        return {
-            data: data
+        if(response.data) {
+            const data = response.data.map((e) => {
+                const startday = new Date(e.startday).toLocaleDateString("vi-VN")
+                const browserday = new Date(e.browserday).toLocaleDateString("vi-VN")
+                return create(e.placeid, e.mapid, e.userid.userid, e.placename, e.road, e.wrad, e.district, e.city, e.phone, e.road + ", " + e.ward + ", " + e.district, 
+                e.placetypeid.type, e.lat, e.lon, e.star, e.userid.username, e.description, startday, e.status, browserday, e.userid.avatar)
+            })
+            return {
+                data: data
+            }
         }
+        return response
     }
     else if(response.request.responseURL === `http://localhost:8080/place/${response.data.placeid}`) {
         const e = response.data
@@ -77,11 +80,11 @@ axiosClient.interceptors.response.use(function (response) {
             data: data
         }
     } else if(response.request.responseURL.includes(`http://localhost:8080/criterias/getCriteriasByPlaceTypeId/`) && response.config.method === "get"){
-        function create(id, name) {
-            return {id, name}
+        function create(id, name, actor) {
+            return {id, name, actor}
         }
         const data = response.data.map((e) => {
-            return create(e.criteriaid, e.criterianame)
+            return create(e.criteriaid, e.criterianame, e.actor)
         })
         return {
             data: data

@@ -22,10 +22,12 @@ function Host({title, type}) {
     useEffect(() => {
         (async () => {
             const data = await serviceApi.getAll()
-            const list = data.data.filter((item) => {
-                return item.userid === account.id
-            })
-            setPositionList(list)
+            if(data.data) {
+                const list = data.data.filter((item) => {
+                    return item.userid === account.id
+                })
+                setPositionList(list)
+            }
         })()
     }, [])
 

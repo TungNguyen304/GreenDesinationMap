@@ -96,6 +96,7 @@ function Profile() {
                 "gender": account.gender === "Male",
                 "email": account.email,
                 "avatar": url,
+                "avatarkey": name,
                 "stardate": new Date(account.startdate).toLocaleDateString("sv-SE"),
                 "firstname": account.firstname,
                 "lastname": account.lastname,

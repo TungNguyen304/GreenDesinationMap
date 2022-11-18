@@ -1,19 +1,23 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import ServiceItem from '../../../components/Home/Service/ServiceItem'
 import placeFirebase from "../../../firebase/place";
 import serviceApi from "../../../api/serviceApi";
+import BigLoader from "../../../components/common/BigLoader";
+import { useRef } from "react";
 
 function Preview() {
+    const navigate = useNavigate()
     const currdentData = JSON.parse(sessionStorage.getItem('placeTemporary'))
     const accountSupplier = useSelector(state => state.accountReducer).supplier
+    const loaderRef = useRef()
     const state = sessionStorage.getItem("statusUpdate")
     const [imageList, setImageList] = useState([])
     const typeId = {
         "cafe": 1,
-        "hotel": 2,
-        "restaurant": 3
+        "restaurant": 2,
+        "hotel": 3,
     }
 
     useEffect(() => {
@@ -21,27 +25,24 @@ function Preview() {
         setImageList([...data.imageList])
     }, [])
 
-    useEffect(() => {
-        
-    })
-
     async function handlePostService(event) {
-        const imgListUrl = await currdentData.imageList.map(async (item) => {
+        event.preventDefault()
+        loaderRef.current.classList.remove('hidden')
+        const imgListUrl = await currdentData.imageList.map(async (item, index) => {
             const name = await placeFirebase.push(item.name, item.file)
-            console.log(name)
             const url = await placeFirebase.get(name)
-            console.log(url)
-            return url
+            return {
+                "imagekey": name,
+                "imagename": url
+            }
         })
+        console.log(imgListUrl);
 
         const ratingsCollection = currdentData.criteriaList.map((item) => {
             return {
                 "criteriavalue": true,
-                "criteriaid": {
-                    "placetypeid": {
-                        "placetypeid": typeId[currdentData.type]
-                    },
-                    "criterianame": item
+                "criteriasModel": {
+                    "criteriaid": item.id,
                 },
                 "useridfr": {
                     "userid": accountSupplier.id
@@ -51,7 +52,7 @@ function Preview() {
 
         Promise.all(imgListUrl).then((imagesCollection) => {
             const data = {
-                "startdate": new Date().toISOString().slice(0, 10),
+                "startday": new Date().toISOString().slice(0, 10),
                 "mapid": currdentData.mapid,
                 "status": false,
                 "placename": currdentData.name,
@@ -75,18 +76,17 @@ function Preview() {
                 "ratingsCollection": ratingsCollection
             }
             serviceApi.addService(data)
-            .then((res) => {
-                alert("Post Success!")
-            })
-            .catch((err) => {
-                alert("Fail!")
-            })
+                .then((res) => {
+                    alert("Post Success!")
+                    sessionStorage.removeItem('placeTemporary')
+                    navigate("/host/management")
+                })
+                .catch((err) => {
+                    alert("Fail!")
+                    sessionStorage.removeItem('placeTemporary')
+                    navigate("/host/management")
+                })
         })
-
-        
-
-        
-        
     }
 
     return (<div>
@@ -103,6 +103,9 @@ function Preview() {
             <Link onClick={() => { sessionStorage.removeItem('placeTemporary') }} to='/host' className="z-10 fixed top-4 right-4 text-sm italic bg-slate-50 px-3 py-1 rounded-lg cursor-pointer hover:brightness-95 active:scale-95 select-none">Thoát</Link>
             <Link to='/host/registerservice/providecriteria' style={{ "backgroundImage": "linear-gradient(to right, #07D5DF, #7F6DEF, #F408FE)" }} className="z-10 fixed bottom-8 max966:bottom-14 left-[55%] max966:left-[50%] max966:translate-x-[-50%] ssm640:w-[90%] italic text-white px-6 py-2 font-semibold rounded-lg cursor-pointer hover:brightness-95 active:scale-95 select-none">Quay lại</Link>
             <div onClick={(e) => { handlePostService(e) }} style={{ "backgroundImage": "linear-gradient(to right, #07D5DF, #7F6DEF, #F408FE)" }} className="bg-[#DDDDDD] z-10 fixed bottom-8 max966:bottom-2 right-8 max966:left-[50%] whitespace-nowrap max966:translate-x-[-50%] italic ssm640:w-[90%] ssm640:text-start text-center text-white px-6 py-2 font-semibold rounded-lg cursor-pointer hover:brightness-95 active:scale-95 select-none">{state ? "Cập nhật địa điểm và chờ xét duyệt" : "Đăng địa điểm và chờ xét duyệt"}</div>
+        </div>
+        <div ref={loaderRef} className="hidden">
+            <BigLoader />
         </div>
     </div>);
 }
