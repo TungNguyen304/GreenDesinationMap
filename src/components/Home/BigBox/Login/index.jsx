@@ -4,15 +4,10 @@ import { MdLockOutline } from 'react-icons/md'
 import { AiFillWarning, AiFillGoogleCircle, AiFillTwitterCircle } from 'react-icons/ai'
 import { useValueContext } from "../../../../hook";
 import { useRef } from "react";
-import { useEffect } from "react";
 import accountApi from '../../../../api/accountApi'
-import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
 
 
 function Login() {
-    const [accountList, setAccountList] = useState()
-    const navigate = useNavigate()
     const value = useValueContext()
     const warning1 = useRef()
     const warning2 = useRef()
@@ -20,9 +15,12 @@ function Login() {
     const passwordRef = useRef()
     const usernameRef = useRef()
     const role = window.location.pathname.includes('/host') ? 2 : 1
-
+    console.log(value.loadRef.classList.add("abc"));
+    console.log(value.loadRef.classList.remove("abc"));
+    console.log(value.loadRef.classList);
     function handleConditionLogin() {
         (async () => {
+            value.loadRef.classList.remove("hidden")
             const data = await accountApi.post({
                 "username": usernameRef.current.value,
                 "password": passwordRef.current.value
@@ -30,6 +28,7 @@ function Login() {
                 .catch((err) => {
                     warning3.current.classList.remove('hidden')
                     warning3.current.classList.add('flex')
+                    value.loadRef.classList.add("hidden")
                 })
             if (data && data.data.accessToken) {
                 (async () => {
@@ -44,11 +43,13 @@ function Login() {
                     } else {
                         warning3.current.classList.remove('hidden')
                         warning3.current.classList.add('flex')
+                        value.loadRef.classList.add("hidden")
                     }
                 })()
             } else {
                 warning3.current.classList.remove('hidden')
                 warning3.current.classList.add('flex')
+                value.loadRef.classList.add("hidden")
             }
         })()
 

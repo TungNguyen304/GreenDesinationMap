@@ -2,33 +2,28 @@ import { AiOutlineClose } from 'react-icons/ai'
 import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { RiArrowLeftSLine, RiArrowRightSLine } from 'react-icons/ri'
-import imageApi from "../../../api/imageApi";
 import { useRef } from 'react';
-import { parse } from 'uuid';
 
 function ViewImage() {
     const navigate = useNavigate()
-    const [imageList, setImageList] = useState([])
     const wrapImageListRef = useRef()
     const [imageListRef, setImageListRef] = useState([])
     const [index, setIndex] = useState(1)
     const isPreviewPage = sessionStorage.getItem('placeTemporary') ? true : false
     const leftRef = useRef()
     const rightRef = useRef()
-    const params = useParams()
+
+    let imageList
+    if (isPreviewPage) {
+        imageList = JSON.parse(sessionStorage.getItem('placeTemporary')).imageList
+    }
+    else {
+        imageList = JSON.parse(localStorage.getItem('service')).imagesCollection
+    }
 
     useEffect(() => {
-        !isPreviewPage ? (async () => {
-            const data = await imageApi.getAll()
-            const newdata = data.data.filter((item) => {
-                return item.placeid === Number(params.id)
-            })
-            setImageList(newdata)
-        })() : setImageList([...JSON.parse(sessionStorage.getItem('placeTemporary')).imageList])
-    }, [])
-    useEffect(() => {
         wrapImageListRef.current && setImageListRef([...wrapImageListRef.current.children])
-    }, [imageList])
+    }, [])
 
     useEffect(() => {
         handleSlideRight(Number(localStorage.getItem('indexImage')))

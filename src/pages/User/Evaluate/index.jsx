@@ -1,27 +1,25 @@
 import Header from "../../../components/common/Header";
 import criteriaApi from "../../../api/criteriaApi";
 import { useEffect } from "react";
+import { Fragment } from "react";
 import { useState } from "react";
 import serviceApi from "../../../api/serviceApi";
 import { Link } from "react-router-dom";
 
 
 function Evaluate() {
-    const id = window.location.pathname.replace('/evaluate/', '')
     const [criteriaList, setCriteriaList] = useState([])
-    const [place, setPlace] = useState([])
-
+    const place = JSON.parse(localStorage.getItem('service'))
+    const placeTypeId = {
+        "cafe": 1,
+        "restaurant": 2,
+        "hotel": 3,
+    }
     useEffect(() => {
         (async () => {
-            const data = await criteriaApi.getAll()
+            const data = await criteriaApi.getByPlaceTypeId(placeTypeId[place.type])
+            console.log(data.data);
             setCriteriaList(data.data)
-        })()
-    }, [])
-
-    useEffect(() => {
-        (async () => {
-            const data = await serviceApi.get(id)
-            setPlace(data.data)
         })()
     }, [])
 
@@ -46,18 +44,15 @@ function Evaluate() {
                     <div className="p-3">
                         {
                             criteriaList.map((item) => {
-                                if (item.role === 1) {
+                                if (item.actor) {
                                     return (<div key={item.id} className="flex items-center my-8">
-                                        <div className="w-[65px] h-[65px] mr-10 border border-solid border-green-600">
-                                            <img className="w-full h-full" src={require(`../../../upload/criteria/${item.image}`)} alt="" />
-                                        </div>
                                         <div className="flex items-center">
-                                            <input className="w-6 h-6 mr-7" type="checkbox" id={item.id} value={item.name} />
+                                            <input className="w-6 h-6 mr-7 shrink-0" type="checkbox" id={item.id} value={item.name} />
                                             <label className="font-medium" htmlFor={item.id}>{item.name}</label>
                                         </div>
                                     </div>)
                                 }
-                                else return <></>
+                                else return <Fragment key={item.id}></Fragment>
                             })
                         }
                     </div>

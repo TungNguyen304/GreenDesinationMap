@@ -78,7 +78,7 @@ function Header(props) {
                 <div onClick={(e) => handleDisplayTippy(e)} className={`flex justify-between relative items-center select-none cursor-pointer ${cx('avt')}`}>
                     <div ><IoMenuOutline /></div>
                     <div className='w-7 rounded-full overflow-hidden h-7 ml-3'>
-                        <img src={
+                        <img style={{height: "100%", width: "100%"}} src={
                             account && account.image ? account.image : account ? Avt2 : Avt
                         } alt="" />
                     </div>

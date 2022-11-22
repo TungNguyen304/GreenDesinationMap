@@ -98,12 +98,11 @@ function Map(props) {
 
       {positionList && (
         positionList.map((item, index) => {
-          // console.log(serviceType);
           if (serviceType === 'search') {
             return (
               <Marker key={index} position={item} icon={selectPosition && item.mapid === selectPosition.place_id ? greenIcon2 : greenIcon}>
                 <Popup>
-                  <ServiceItem serviceItem={item} typeComponent="map" id={item.id} typeService={item.type} name={item.name} type="marker" phone={item.phone} star={item.star} address={item.address} />
+                  <ServiceItem serviceItem={item} imageList={item.imagesCollection} typeComponent="map" id={item.id} typeService={item.type} name={item.name} type="marker" phone={item.phone} star={item.star} address={item.address} />
                 </Popup>
               </Marker>
             )
@@ -112,7 +111,7 @@ function Map(props) {
             return (
               <Marker key={index} position={item} icon={selectPosition && item.mapid === selectPosition.place_id ? greenIcon2 : greenIcon}>
                 <Popup>
-                  <ServiceItem serviceItem={item} type="marker" typeComponent="map" id={item.id} typeService={item.type} name={item.name} phone={item.phone} star={item.star} address={item.address} />
+                  <ServiceItem serviceItem={item} imageList={item.imagesCollection} type="marker" typeComponent="map" id={item.id} typeService={item.type} name={item.name} phone={item.phone} star={item.star} address={item.address} />
                 </Popup>
               </Marker>
             )
@@ -121,7 +120,7 @@ function Map(props) {
             return (
               <Marker key={index} position={item} icon={selectPosition && item.mid === selectPosition.place_id ? greenIcon2 : greenIcon}>
                 <Popup>
-                  <ServiceItem serviceItem={item} typeComponent="map" id={item.id} typeService={item.type} name={item.name} phone={item.phone} star={item.star} address={item.address} />
+                  <ServiceItem serviceItem={item} imageList={item.imagesCollection} typeComponent="map" id={item.id} typeService={item.type} name={item.name} phone={item.phone} star={item.star} address={item.address} />
                 </Popup>
               </Marker>
             )

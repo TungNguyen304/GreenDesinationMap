@@ -47,9 +47,6 @@ function Profile() {
             setAccount(acc.user)
         }
     }, [acc, role])
-    // useEffect(() => {
-    //     avatarFirebase.delete("a6d2dce2-d81f-4fee-9a24-f725d452dd92.webpe20d06a6-7bc2-47ed-b550-acb22a0dd4a4")
-    // }, [])
     useEffect(() => {
         account && setInfo({
             "gender": account.gender === "Male",
@@ -88,7 +85,9 @@ function Profile() {
         reader.onload = async function () {
             const blod = reader.result
             setPath(blod);
-            // avatarFirebase.delete(account.image)
+            if (account.avatarkey) {
+                avatarFirebase.delete(account.avatarkey)
+            }
             const name = await avatarFirebase.push(event.target.files[0].name, blod)
             const url = await avatarFirebase.get(name)
             accountApi.update({
@@ -107,6 +106,9 @@ function Profile() {
                 },
                 "phonenumber": account.phonenumber,
             })
+                .then(() => {
+                    window.location.reload()
+                })
         }
     }
 
@@ -143,20 +145,29 @@ function Profile() {
                 d++;
                 setWarn("Sai mật khẩu, vui lòng thử lại!")
             })
-        if (checkPass && checkPass.data) {
-            setWarn("")
-            accountApi.update({
-                ...info,
-                "username": account.username,
-                "startdate": new Date(account.startdate).toLocaleDateString("sv-SE"),
-                "avatar": account.image,
-                "userid": account.id,
-                "roleid": {
-                    "rolesname": role === 1 ? "USER" : "SUPPLIER"
-                },
-                "gender": info.gender === "Male",
-                "password": isChangingPass ? info.newPass : info.password
-            })
+        if (checkPass) {
+            if (checkPass.data === true) {
+                setWarn("")
+                accountApi.update({
+                    ...info,
+                    "username": account.username,
+                    "startdate": new Date(account.startdate).toLocaleDateString("sv-SE"),
+                    "avatar": account.image,
+                    "userid": account.id,
+                    "roleid": {
+                        "rolesname": role === 1 ? "USER" : "SUPPLIER"
+                    },
+                    "gender": info.gender === "Male",
+                    "password": isChangingPass ? info.newPass : info.password
+                }).then(() => {
+                    window.location.reload()
+                    alert("Update success!")
+                }).catch(() => {
+                    alert("Update fail!")
+                })
+            } else {
+                setWarn("Sai mật khẩu, vui lòng thử lại")
+            }
         } else {
             if (d === 0) {
                 setWarn("Bạn cần nhập đủ thông tin")
@@ -168,15 +179,19 @@ function Profile() {
         if (!verifyInputRef.current.value) {
             setWarnAvt("Vui lòng nhập mật khẩu của bạn.")
         }
-        const checkPass = await accountApi.verify({
+        accountApi.verify({
             "username": account.username,
             "password": verifyInputRef.current.value
         })
             .then((res) => {
-                setWarnAvt("")
-                setVerifyPass(verifyInputRef.current.value)
-                buttonChangeAvtRef.current.classList.remove('hidden')
-                event.nativeEvent.path[1].style.display = "none"
+                if (res.data === true) {
+                    setWarnAvt("")
+                    setVerifyPass(verifyInputRef.current.value)
+                    buttonChangeAvtRef.current.classList.remove('hidden')
+                    event.nativeEvent.path[1].style.display = "none"
+                } else {
+                    setWarnAvt("Sai mật khẩu, vui lòng thử lại!")
+                }
             })
             .catch((err) => {
                 setWarnAvt("Sai mật khẩu, vui lòng thử lại!")
@@ -258,7 +273,7 @@ function Profile() {
                                 </datalist>
                             </div>
                             <div className='w-full flex items-center border-b-2 border-solid border-gray-600 mb-5'>
-                                <input onChange={(e) => { setInfo({ ...info, "password": e.target.value }) }} className='w-full py-2 placeholder:text-gray-600' type="text" placeholder='Password' />
+                                <input onChange={(e) => { setInfo({ ...info, "password": e.target.value }) }} value={info.password} defaultValue={info.password} className='w-full py-2 placeholder:text-gray-600' type="text" placeholder='Password' />
                                 <MdLockOutline />
                             </div>
                             <div onClick={(e) => {

@@ -75,9 +75,15 @@ function ProvidePhotos() {
         setPathList([...pathList])
     }
 
-    function handleDeleteImage(path) {
+    function handleDeleteImage(path, exits) {
         const newPathList = pathList.filter((item) => {
-            return item.path !== path
+            if (exits) {
+                if (!item.key) return true
+                else return item.key !== path
+            } else {
+                if (item.key) return true
+                else return item.path !== path
+            }
         })
         setPathList([...newPathList])
     }
@@ -142,12 +148,12 @@ function ProvidePhotos() {
     function handleDispatchValue(pathList, event) {
         if (JSON.stringify(pathList) !== JSON.stringify(service.imageList)) {
             pathList.forEach((item) => {
-                if(typeof item.file !== 'string') {
+                if (typeof item.file !== 'string') {
                     var reader = new FileReader()
                     reader.readAsDataURL(item.file)
                     reader.onload = function () {
-                    item.file = reader.result
-                }
+                        item.file = reader.result
+                    }
                 }
             })
             const interval = setInterval(() => {

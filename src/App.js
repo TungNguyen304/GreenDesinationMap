@@ -1,5 +1,5 @@
 import { publicRouters } from "./router";
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import accountApi from "./api/accountApi";
 import { setshowdisplay, setshowhidden } from "./store/actions/bigbox";
@@ -7,6 +7,7 @@ import { setUser, setSupplier } from "./store/actions/account";
 import MenuMobile from "./components/common/MenuMobile";
 import { createContext, useEffect, useRef } from "react";
 import { useState } from "react";
+import BigLoader from "./components/common/BigLoader";
 
 export const menuMobileContext = createContext();
 
@@ -18,6 +19,7 @@ function App() {
   });
 
   const dispatch = useDispatch();
+  const loadRef = useRef();
   const show = useSelector((state) => state.bigboxReducer.show);
   const [title, setTitle] = useState("");
   const [type, setType] = useState("");
@@ -82,24 +84,65 @@ function App() {
   const bigBoxEvent = {
     handleDisplayBigBox,
     handleSetBigBox,
+    "loadRef": loadRef.current,
   };
+
+  const checkLoginUser = localStorage.getItem("user");
+  const checkLoginSupplier = localStorage.getItem("supplier");
+
   return (
     <menuMobileContext.Provider value={handleDisplayMenuMobile}>
       <bigBoxContext.Provider value={bigBoxEvent}>
         <Routes>
-          {publicRouters.map((item) => (
-            <Route
-              key={item.path}
-              path={item.path}
-              element={<item.component type={type} title={title} />}
-            />
-          ))}
+          {publicRouters.map((item) => {
+            if (item.path === "/host" || item.path === "/" || item.path.includes("/room/")) {
+              return <Route
+                key={item.path}
+                path={item.path}
+                element={
+                    <item.component type={type} title={title} />
+                }
+              />;
+            } 
+            else if (item.path.includes("/host")) {
+              return (
+                <Route
+                  key={item.path}
+                  path={item.path}
+                  element={
+                    checkLoginSupplier ? (
+                      <item.component type={type} title={title} />
+                    ) : (
+                      <Navigate to="/host" />
+                    )
+                  }
+                />
+              );
+            } else {
+              return (
+                <Route
+                  key={item.path}
+                  path={item.path}
+                  element={
+                    checkLoginUser ? (
+                      <item.component type={type} title={title} />
+                    ) : (
+                      <Navigate to="/" />
+                    )
+                  }
+                />
+              );
+            }
+          })}
         </Routes>
         <div ref={wrapMenuRef} className="hidden">
           <MenuMobile
             handleDisplayMenuMobile={handleDisplayMenuMobile}
             ref={menuRef}
           />
+        </div>
+        <div ref={loadRef} className="hidden">
+          <BigLoader/>
         </div>
       </bigBoxContext.Provider>
     </menuMobileContext.Provider>

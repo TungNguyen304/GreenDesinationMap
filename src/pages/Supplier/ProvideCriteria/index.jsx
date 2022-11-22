@@ -35,7 +35,7 @@ function ProvideCriteria() {
     useEffect(() => {
         (async () => {
             const data = await criteriaApi.getByPlaceTypeId(placeTypeId[service.type])
-            data.data && setCriteriaList(data.data.filter((item) => item.actor === 1))
+            data.data && setCriteriaList(data.data)
         })()
     }, [service.type])
 
@@ -71,7 +71,7 @@ function ProvideCriteria() {
             const inputList = [...document.querySelectorAll(`.${style.wrap_list} div input`)]
             inputList.forEach((item) => {
                 service.criteriaList.forEach((item1) => {
-                    if(item1.id === item.id)
+                    if(item1.criteriasModel.criterianame === item.value)
                         item.checked = true
                 })
             })
@@ -91,7 +91,7 @@ function ProvideCriteria() {
                         {criteriaList.map((item) => {
                             return (<div key={item.id} className="flex items-center px-3 py-4 border-2 border-solid border-normal rounded-lg mb-3 cursor-pointer hover:border-black active:scale-[0.98]">
                                 <div title={item.name} className="flex-1 ml-3 text-lg font-medium italic">{item.name}</div>
-                                <input onChange={handleCountTick} id={item.id} value={item.name} className="w-[20px] h-[20px] pointer-events-none" type="checkbox" />
+                                <input onChange={handleCountTick} value={item.name} className="w-[20px] h-[20px] pointer-events-none" type="checkbox" />
                             </div>)
                         })}
                     </div>

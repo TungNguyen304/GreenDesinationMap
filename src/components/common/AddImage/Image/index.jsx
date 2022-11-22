@@ -29,7 +29,10 @@ function Image({optionList, handleDrag, handleDeleteImage, pathCurrent, type, po
     })
 
     function removeImage() {
-        handleDeleteImage(pathCurrent.path)
+        if(pathCurrent.key) {
+            handleDeleteImage(pathCurrent.key, true)
+        } else
+            handleDeleteImage(pathCurrent.path)
     }
 
     function removeClass() {

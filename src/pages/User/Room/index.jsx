@@ -15,6 +15,7 @@ import { TiHeartFullOutline, TiLocation } from 'react-icons/ti'
 import { useNavigate } from "react-router-dom";
 import { MdVerifiedUser } from 'react-icons/md'
 import { useValueContext } from "../../../hook";
+import { BsPatchCheckFill } from 'react-icons/bs'
 import commentApi from "../../../api/commentApi";
 import Scroll from 'react-scroll'
 import { Link } from "react-router-dom";
@@ -28,7 +29,6 @@ function Room({ type, title }) {
     const navigate = useNavigate()
     const [commentList, setCommentList] = useState([])
     const [isInterest, setIsInterest] = useState(false)
-    const [imageList, setImageList] = useState([])
     const [totalComment, setTotalComment] = useState(0)
     const value = useValueContext()
     let service = {}
@@ -39,6 +39,7 @@ function Room({ type, title }) {
     else {
         service = JSON.parse(localStorage.getItem('service'))
     }
+    const imageList = service.imagesCollection
     const accountCommon = useSelector(state => state.accountReducer)
     const account = isServiceTemporary ? accountCommon.supplier : accountCommon.user
     const show = useSelector(state => state.bigboxReducer.show)
@@ -72,19 +73,6 @@ function Room({ type, title }) {
     //     })()
     // }, [])
 
-    useEffect(() => {
-        !isServiceTemporary ? (async () => {
-            const data = await imageApi.get(service.id)
-            setImageList(data.data)
-        })() : (() => {
-            const data = service.imageList.map((item) => {
-                return {
-                    name: item.file
-                }
-            })
-            setImageList(data)
-        })()
-    }, [isServiceTemporary, service.id, JSON.stringify(service.imageList)])
 
     // useEffect(() => {
     //     (async () => {
@@ -100,7 +88,7 @@ function Room({ type, title }) {
 
     function handleLike(even) {
         even.stopPropagation()
-        if (localStorage.getItem('account')) {
+        if (localStorage.getItem('user')) {
             if (even.target.farthestViewportElement.style.fill !== 'var(--color_heart)') {
                 value.handleSetBigBox('Danh sách yêu thích của bạn', 'interests')
                 value.handleDisplayBigBox()
@@ -137,7 +125,7 @@ function Room({ type, title }) {
                 <div className="flex max866:flex-col">
                     <div className="flex items-center">
                         <div className="flex items-center mr-5">
-                            <AiFillStar className="text-2xl text-yellow-600 w-[24px]"/>
+                            <AiFillStar className="text-2xl text-yellow-600 w-[24px]" />
                             <span>{service.star || 4} </span>
                         </div>
                         <div className="flex underline mr-5">
@@ -145,7 +133,7 @@ function Room({ type, title }) {
                         </div>
                     </div>
                     <div className="flex items-center underline">
-                        <TiLocation className="text-2xl text-green-600 w-[24px]" />
+                        <TiLocation className="text-2xl shrink-0 text-green-600 w-[24px]" />
                         {service.address || service.road + ', ' + service.ward + ', ' + service.district + ', ' + service.city}
                     </div>
                 </div>
@@ -196,9 +184,19 @@ function Room({ type, title }) {
                         {service.description}
                     </div>
                 </div>
-
-
                 <div className="w-[50%] ssm767:hidden"></div>
+            </div>
+
+            <div className="border-t border-solid border-normal pt-9">
+                <div className="text-2xl font-semibold mb-3">Các tiêu chí xanh được chứng nhận bởi <span className="underline text-green-600">GREEN DESTINATION TEAM</span></div>
+                <div className="">
+                    {service.criteriaList.map((item, index) => {
+                        return <div key={index} className="flex items-center mb-3">
+                            <BsPatchCheckFill className="mt-[-3px] shrink-0 text-2xl mr-3 text-green-600"/>
+                            <div>{isServiceTemporary ? item.name : item.criteriasModel.criterianame}</div>
+                        </div>
+                    })}
+                </div>
             </div>
 
             {!isServiceTemporary && <div className={`${cx('comment')} mt-6 border-t border-solid border-normal pt-9`}>
@@ -228,7 +226,7 @@ function Room({ type, title }) {
                     </div>}
                 </div>
                 <div className={`w-[50%] ssm767:w-full`}>
-                    {account ? <div>
+                    {account.username ? <div>
                         <div className="flex items-center mb-6">
                             <div className="mr-5 text-xl font-semibold italic">{account && account.username}</div>
                             <div>
@@ -270,7 +268,7 @@ function Room({ type, title }) {
                     </div>
                     <div>
                         <div className="text-lg font-semibold">Người đăng ký: {isServiceTemporary ? account.username : service.host}</div>
-                        <div>Đã tham gia vào tháng {isServiceTemporary ? currentDay.getMonth() + 1 : service.startday.slice(service.startday.indexOf("/")+1, service.startday.lastIndexOf("/"))} năm {isServiceTemporary ? currentDay.getFullYear() :  service.startday.slice(service.startday.lastIndexOf("/")+1, service.startday.length)}</div>
+                        <div>Đã tham gia vào tháng {isServiceTemporary ? currentDay.getMonth() + 1 : service.startday.slice(service.startday.indexOf("/") + 1, service.startday.lastIndexOf("/"))} năm {isServiceTemporary ? currentDay.getFullYear() : service.startday.slice(service.startday.lastIndexOf("/") + 1, service.startday.length)}</div>
                     </div>
                 </div>
                 <div className="flex mt-4">

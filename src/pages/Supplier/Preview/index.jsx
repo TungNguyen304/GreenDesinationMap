@@ -28,16 +28,37 @@ function Preview() {
     async function handlePostService(event) {
         event.preventDefault()
         loaderRef.current.classList.remove('hidden')
+
+        // Check status update is yes or no
+        if (state) {
+            const listNew = currdentData.imageList.filter((item) => {
+                return item.key
+            })
+            const listKeyNew = listNew.map((item) => {
+                return item.key
+            })
+            currdentData.originImage.forEach((item) => {
+                if (!listKeyNew.includes(item)) {
+                    placeFirebase.delete(item)
+                }
+            })
+        }
+
         const imgListUrl = await currdentData.imageList.map(async (item, index) => {
-            const name = await placeFirebase.push(item.name, item.file)
-            const url = await placeFirebase.get(name)
-            return {
-                "imagekey": name,
-                "imagename": url
+            if (!item.key) {
+                const name = await placeFirebase.push(item.name, item.file)
+                const url = await placeFirebase.get(name)
+                return {
+                    "imagekey": name,
+                    "imagename": url
+                }
+            } else {
+                return {
+                    "imagekey": item.key,
+                    "imagename": item.file
+                }
             }
         })
-        console.log(imgListUrl);
-
         const ratingsCollection = currdentData.criteriaList.map((item) => {
             return {
                 "criteriavalue": true,
@@ -52,7 +73,7 @@ function Preview() {
 
         Promise.all(imgListUrl).then((imagesCollection) => {
             const data = {
-                "startday": new Date().toISOString().slice(0, 10),
+                "startday": state ? currdentData.startday.split("/").reverse().join("-") : new Date().toISOString().slice(0, 10),
                 "mapid": currdentData.mapid,
                 "status": false,
                 "placename": currdentData.name,
@@ -75,18 +96,44 @@ function Preview() {
                 "imagesCollection": imagesCollection,
                 "ratingsCollection": ratingsCollection
             }
-            serviceApi.addService(data)
+            Object.keys(data).forEach((item) => {
+                if(data[item] === "") {
+                    delete data[item]
+                }
+            })
+            if(state) {
+                data.placeid = currdentData.id
+                console.log(data);
+                serviceApi.updateService(data)
                 .then((res) => {
-                    alert("Post Success!")
                     sessionStorage.removeItem('placeTemporary')
+                    sessionStorage.removeItem('statusUpdate')
                     navigate("/host/management")
+                    alert("Update Success!")
                 })
                 .catch((err) => {
+                    sessionStorage.removeItem('placeTemporary')
+                    sessionStorage.removeItem('statusUpdate')
+                    navigate("/host/management")
                     alert("Fail!")
+                })
+            } else {
+                serviceApi.addService(data)
+                .then((res) => {
                     sessionStorage.removeItem('placeTemporary')
                     navigate("/host/management")
+                    alert("Post Success!")
                 })
+                .catch((err) => {
+                    sessionStorage.removeItem('placeTemporary')
+                    navigate("/host/management")
+                    alert("Fail!")
+                })
+            }
+                
         })
+
+        
     }
 
     return (<div>
