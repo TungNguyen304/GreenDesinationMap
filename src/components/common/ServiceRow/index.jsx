@@ -7,23 +7,15 @@ import { useNavigate } from 'react-router-dom'
 import imageApi from '../../../api/imageApi'
 import { useEffect } from 'react'
 
-function ServiceRow({ place, handleDelete }) {
+function ServiceRow({ imageList, place, handleDelete }) {
     const navigate = useNavigate()
     const item = JSON.parse(place)
-    const [imageList, setImageList] = useState([])
     const style = {
         "overflow": "hidden",
         "display": "-webkit-box",
         "WebkitBoxOrient": "vertical",
         "WebkitLineClamp": "1"
     }
-
-    useEffect(() => {
-        (async () => {
-            const data = await imageApi.get(item.id)
-            setImageList(data.data)
-        })()
-    }, [item.id])
 
     function handleNavigateToRoom() {
         localStorage.setItem('service', JSON.stringify(item))

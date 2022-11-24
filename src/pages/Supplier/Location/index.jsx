@@ -2,13 +2,27 @@ import Map from "../../../components/common/Map";
 import SearchBar from "../../../components/common/Header/SearchBar";
 import { Link } from "react-router-dom";
 import FormLocation from "../../../components/common/FormLocation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import criteriaApi from "../../../api/criteriaApi";
 
 function Location() {
     const [selectPosition, setSelectPosition] = useState()
     const service = JSON.parse(sessionStorage.getItem('placeTemporary'))
     const style = useParams()
+
+    const placeTypeId = {
+        "cafe": 1,
+        "restaurant": 2,
+        "hotel": 3,
+    }
+
+    useEffect(() => {
+        (async () => {
+            const data = await criteriaApi.getByPlaceTypeId(placeTypeId[service.type])
+            data.data && sessionStorage.setItem("criteriaList", JSON.stringify(data.data))
+        })()
+    }, [service.type])
 
     function handleRegisterLocation(service) {
         if (service.type !== style.style) {

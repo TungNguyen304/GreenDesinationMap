@@ -108,12 +108,14 @@ function Preview() {
                 .then((res) => {
                     sessionStorage.removeItem('placeTemporary')
                     sessionStorage.removeItem('statusUpdate')
+                    sessionStorage.removeItem('criteriaList')
                     navigate("/host/management")
                     alert("Update Success!")
                 })
                 .catch((err) => {
                     sessionStorage.removeItem('placeTemporary')
                     sessionStorage.removeItem('statusUpdate')
+                    sessionStorage.removeItem('criteriaList')
                     navigate("/host/management")
                     alert("Fail!")
                 })
@@ -121,6 +123,7 @@ function Preview() {
                 serviceApi.addService(data)
                 .then((res) => {
                     sessionStorage.removeItem('placeTemporary')
+                    sessionStorage.removeItem('criteriaList')
                     navigate("/host/management")
                     alert("Post Success!")
                 })

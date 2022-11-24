@@ -15,12 +15,9 @@ function Login() {
     const passwordRef = useRef()
     const usernameRef = useRef()
     const role = window.location.pathname.includes('/host') ? 2 : 1
-    console.log(value.loadRef.classList.add("abc"));
-    console.log(value.loadRef.classList.remove("abc"));
-    console.log(value.loadRef.classList);
     function handleConditionLogin() {
         (async () => {
-            value.loadRef.classList.remove("hidden")
+            value.loadRef().classList.remove("hidden")
             const data = await accountApi.post({
                 "username": usernameRef.current.value,
                 "password": passwordRef.current.value
@@ -28,7 +25,7 @@ function Login() {
                 .catch((err) => {
                     warning3.current.classList.remove('hidden')
                     warning3.current.classList.add('flex')
-                    value.loadRef.classList.add("hidden")
+                    value.loadRef().classList.add("hidden")
                 })
             if (data && data.data.accessToken) {
                 (async () => {
@@ -43,13 +40,13 @@ function Login() {
                     } else {
                         warning3.current.classList.remove('hidden')
                         warning3.current.classList.add('flex')
-                        value.loadRef.classList.add("hidden")
+                        value.loadRef().classList.add("hidden")
                     }
                 })()
             } else {
                 warning3.current.classList.remove('hidden')
                 warning3.current.classList.add('flex')
-                value.loadRef.classList.add("hidden")
+                value.loadRef().classList.add("hidden")
             }
         })()
 

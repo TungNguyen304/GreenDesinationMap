@@ -5,7 +5,6 @@ import Map from '../../../components/common/Map'
 import Comment from "../../../components/Room/Comment";
 import Avt from '../../../assets/logo/avt.svg'
 import Avt2 from '../../../assets/images/avt.png'
-import imageApi from "../../../api/imageApi";
 import accountApi from "../../../api/accountApi";
 import interestApi from "../../../api/interestApi";
 import { useSelector } from "react-redux";
@@ -20,7 +19,6 @@ import commentApi from "../../../api/commentApi";
 import Scroll from 'react-scroll'
 import { Link } from "react-router-dom";
 import style from './room.module.scss'
-
 import classNames from 'classnames/bind';
 import { Fragment, useEffect, useState } from "react";
 const cx = classNames.bind(style)
@@ -30,6 +28,7 @@ function Room({ type, title }) {
     const [commentList, setCommentList] = useState([])
     const [isInterest, setIsInterest] = useState(false)
     const [totalComment, setTotalComment] = useState(0)
+    const [contentCmt, setContentCmt] = useState("")
     const value = useValueContext()
     let service = {}
     const isServiceTemporary = window.location.pathname.includes('/room/temporary')
@@ -236,10 +235,10 @@ function Room({ type, title }) {
                         <div>
                             <div><label htmlFor="comment" className="text-[#5c5959] text-start">Nhận xét của bạn</label></div>
                             <div className="flex max477:flex-col max477:items-start justify-between items-center w-full">
-                                <textarea id="comment" type="text" placeholder="Comment ..." className="max477:w-full outline-none mr-5 py-3 px-4 flex-1 border border-solid border-normal placeholder:italic" />
+                                <textarea onChange={(e) => {setContentCmt(e.target.value)}} value={contentCmt} id="comment" type="text" placeholder="Comment ..." className="max477:w-full outline-none mr-5 py-3 px-4 flex-1 border border-solid border-normal placeholder:italic" />
                                 <div className="flex flex-col max477:items-center max477:mt-5 max477:w-full">
-                                    <button style={{ 'backgroundColor': 'var(--primary)', "backgroundImage": "linear-gradient(to right, #07D5DF, #7F6DEF, #F408FE)" }} className="hover:brightness-90 active:scale-[0.98] text-white py-2 px-4 rounded-full italic mb-3">Gửi đi</button>
-                                    <Link to={`/evaluate/${service.id}`} style={{ 'backgroundColor': 'var(--primary)', "backgroundImage": "linear-gradient(to right, #07D5DF, #7F6DEF, #F408FE)" }} className="hover:brightness-90 active:scale-[0.98] text-white py-2 px-4 rounded-full italic">Đến trang đánh giá</Link>
+                                    <button style={{ 'backgroundColor': 'var(--primary)', "backgroundImage": "linear-gradient(to right, #07D5DF, #7F6DEF, #F408FE)" }} className="hover:brightness-90 active:scale-[0.98] text-white py-2 px-4 rounded-md italic mb-3">Gửi đi</button>
+                                    <Link to={`/evaluate/${service.id}`} style={{ 'backgroundColor': 'var(--primary)', "backgroundImage": "linear-gradient(to right, #07D5DF, #7F6DEF, #F408FE)" }} className="hover:brightness-90 active:scale-[0.98] text-white py-2 px-4 rounded-md italic">Đến trang đánh giá</Link>
                                 </div>
                             </div>
                         </div>

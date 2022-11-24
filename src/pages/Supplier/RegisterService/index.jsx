@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { setServiceRegisterType } from "../../../store/actions/service";
 import { Link } from "react-router-dom";
 import { Fragment } from "react";
+import { useEffect } from "react";
 
 function RegisterService() {
     const serviceList = useSelector(state => state.serviceReducer.serviceComponent)

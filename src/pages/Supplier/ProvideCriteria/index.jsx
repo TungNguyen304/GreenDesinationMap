@@ -8,15 +8,11 @@ import classNames from 'classnames/bind';
 const cx = classNames.bind(style)
 
 function ProvideCriteria() {
-    const [criteriaList, setCriteriaList] = useState([])
+    
     const nextRef = useRef()
     const service = JSON.parse(sessionStorage.getItem('placeTemporary'))
     const accountSupplier = useSelector(state => state.accountReducer).supplier
-    const placeTypeId = {
-        "cafe": 1,
-        "restaurant": 2,
-        "hotel": 3,
-    }
+    const criteriaList = JSON.parse(sessionStorage.getItem('criteriaList'))
 
 
     useEffect(() => {
@@ -32,16 +28,11 @@ function ProvideCriteria() {
         })
     })
 
-    useEffect(() => {
-        (async () => {
-            const data = await criteriaApi.getByPlaceTypeId(placeTypeId[service.type])
-            data.data && setCriteriaList(data.data)
-        })()
-    }, [service.type])
+    
 
     function handleCountTick() {
         const inputList = [...document.querySelectorAll(`.${style.wrap_list} div input:checked`)]
-        if (Math.round((10 * inputList.length) / criteriaList.length) >= 7) {
+        if (inputList && criteriaList && Math.round((10 * inputList.length) / criteriaList.length) >= 7) {
             nextRef.current.classList.remove('pointer-events-none')
             nextRef.current.style.backgroundImage = "linear-gradient(to right, #07D5DF, #7F6DEF, #F408FE)"
         } else {
@@ -54,7 +45,7 @@ function ProvideCriteria() {
         const inputList = [...document.querySelectorAll(`.${style.wrap_list} div input:checked`)]
         const criteriaTickList = inputList.map((item) => {
             return {
-                "id": item.id,
+                "id": item.dataset.criteriaid,
                 "name": item.value
             }
         })
@@ -71,7 +62,7 @@ function ProvideCriteria() {
             const inputList = [...document.querySelectorAll(`.${style.wrap_list} div input`)]
             inputList.forEach((item) => {
                 service.criteriaList.forEach((item1) => {
-                    if(item1.criteriasModel.criterianame === item.value)
+                    if(item1.criteriasModel && item1.criteriasModel.criterianame === item.value || item1.name === item.value)
                         item.checked = true
                 })
             })
@@ -88,10 +79,10 @@ function ProvideCriteria() {
                 <div className="w-full">
                     <div className="text-2xl italic font-medium mb-3">Bấm chọn vào các tiêu chí bạn muốn đăng ký (tối thiểu 70%)</div>
                     <div className={`${cx('wrap_list')} h-[65vh] max966:h-[55vh] overflow-y-scroll px-3 pt-3`}>
-                        {criteriaList.map((item) => {
+                        {criteriaList && criteriaList.map((item) => {
                             return (<div key={item.id} className="flex items-center px-3 py-4 border-2 border-solid border-normal rounded-lg mb-3 cursor-pointer hover:border-black active:scale-[0.98]">
                                 <div title={item.name} className="flex-1 ml-3 text-lg font-medium italic">{item.name}</div>
-                                <input onChange={handleCountTick} value={item.name} className="w-[20px] h-[20px] pointer-events-none" type="checkbox" />
+                                <input data-criteriaid={item.id} onChange={handleCountTick} value={item.name} className="w-[20px] h-[20px] pointer-events-none" type="checkbox" />
                             </div>)
                         })}
                     </div>

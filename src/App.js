@@ -84,7 +84,7 @@ function App() {
   const bigBoxEvent = {
     handleDisplayBigBox,
     handleSetBigBox,
-    "loadRef": loadRef.current,
+    "loadRef": () => loadRef.current,
   };
 
   const checkLoginUser = localStorage.getItem("user");

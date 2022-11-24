@@ -120,7 +120,7 @@ function Management({ title, type }) {
                     <Suspense fallback={<Loader />}>
                         <tbody>
                             {serviceList && serviceList.map((item) => {
-                                return <ServiceRow handleDelete={handleDelete} key={item.id} place={JSON.stringify(item)} />
+                                return <ServiceRow imageList={item.imagesCollection} handleDelete={handleDelete} key={item.id} place={JSON.stringify(item)} />
                             })}
 
                         </tbody>
