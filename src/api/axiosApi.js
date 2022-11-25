@@ -22,9 +22,14 @@ axiosClient.interceptors.request.use(function (request) {
 });
 
 axiosClient.interceptors.response.use(function (response) {
-    function create(id,mapid,userid,name,road,ward,district,city,phone,address,type,lat,lon,star,host,description,startday,status,browserday, useravt, criteriaList, imagesCollection){
-        return {id,mapid, userid, name, road, ward, district, city, phone, address, type, lat, lon, star, host, description, startday, status, browserday, useravt, criteriaList, imagesCollection}
+    function create(id,mapid,userid,name,road,ward,district,city,phone,address,type,lat,lon,star,host,description,startday,status,browserday, useravt, criteriaList, imagesCollection, commentsCollection){
+        return {id,mapid, userid, name, road, ward, district, city, phone, address, type, lat, lon, star, host, description, startday, status, browserday, useravt, criteriaList, imagesCollection, commentsCollection}
     }
+
+    function comment(id, userid, username, content, image, date, entireDate) {
+        return {id, userid, username, content, image, date, entireDate}
+    }
+
     if(response.request.responseURL === 'http://localhost:8080/user/userInfor') {
         const data = {
             ...response.data,
@@ -52,6 +57,7 @@ axiosClient.interceptors.response.use(function (response) {
                     "name": item.imagename,
                     "key": item.imagekey
                 }))
+                
                 const address = (e.road ? e.road + ", " : "") + (e.ward ? e.ward + ", " : "") + (e.district ? e.district : "");
                 return create(e.placeid, e.mapid, e.userid.userid, e.placename, e.road, e.wrad, e.district, e.city, e.phone, address, 
                 e.placetypeid.type, e.lat, e.lon, e.star, e.userid.username, e.description, startday, e.status, browserday, e.userid.avatar, e.ratingsCollection, newImageList)
@@ -68,7 +74,7 @@ axiosClient.interceptors.response.use(function (response) {
         const browserday = new Date(e.browserday).toLocaleDateString("vi-VN")
         return {
             data: create(e.placeid, e.mapid, e.userid.userid, e.placename, e.road, e.wrad, e.district, e.city, e.phone, e.road + ", " + e.ward + ", " + e.district, 
-            e.placetypeid.type, e.lat, e.lon, e.star, e.userid.username, e.description, startday, e.status, browserday, e.userid.avatar, e.ratingsCollection, e.imagesCollection)
+            e.placetypeid.type, e.lat, e.lon, e.star, e.userid.username, e.description, startday, e.status, browserday, e.userid.avatar, e.ratingsCollection, e.imagesCollection, e.commentsCollection)
         }
     } 
     else if(response.request.responseURL.includes(`http://localhost:8080/img/image/`) && response.config.method === "get") {
@@ -91,6 +97,24 @@ axiosClient.interceptors.response.use(function (response) {
         })
         return {
             data: data
+        }
+    } if(response.request.responseURL.includes('http://localhost:8080/comment/getCommentByPlaceId')) {
+        const commentList = response.data.map((item) => {
+            return comment(item.commentid, item.userModel.userid, item.userModel.username, item.content, item.userModel.avatar, item.postdate, item.postdate)
+        })
+        const sortCommentList = commentList.sort((a, b) => {
+            const prev = new Date(a.date)
+            const next = new Date(b.date)
+            return prev - next
+        })
+        const newCommentList = [...sortCommentList.reverse()].map((item) => {
+            return {
+                ...item,
+                "date": new Date(item.date).toLocaleDateString("vi-VN")
+            }
+        })
+        return {
+            data: newCommentList
         }
     }
     

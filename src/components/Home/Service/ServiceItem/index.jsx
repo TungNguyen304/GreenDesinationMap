@@ -70,7 +70,9 @@ function ServiceItem({ imageList, name, phone, address, imageListTemp, star, typ
 
     function handleNavigateToRoom() {
         if (isPreviewPage) {
-            navigate(`/room/temporary`)
+            navigate(`/host/management/room/temporary`)
+        } else if(isManagementPage) {
+            navigate(`/host/management/room/${id}`)
         }
         else {
             dispatch(setService(serviceItem))

@@ -19,7 +19,7 @@ function ServiceRow({ imageList, place, handleDelete }) {
 
     function handleNavigateToRoom() {
         localStorage.setItem('service', JSON.stringify(item))
-        navigate(`/room/${item.id}`)
+        navigate(`/host/management/room/${item.id}`)
     }
 
     function handleUpdatePlace(event) {

@@ -7,6 +7,7 @@ import Avt from '../../../assets/logo/avt.svg'
 import Avt2 from '../../../assets/images/avt.png'
 import accountApi from "../../../api/accountApi";
 import interestApi from "../../../api/interestApi";
+import { v4 } from "uuid";
 import { useSelector } from "react-redux";
 import { GrStar } from 'react-icons/gr'
 import { AiFillStar } from 'react-icons/ai'
@@ -25,22 +26,25 @@ const cx = classNames.bind(style)
 
 function Room({ type, title }) {
     const navigate = useNavigate()
-    const [commentList, setCommentList] = useState([])
     const [isInterest, setIsInterest] = useState(false)
     const [totalComment, setTotalComment] = useState(0)
+    const [commentList, setCommentList] = useState([])
     const [contentCmt, setContentCmt] = useState("")
     const value = useValueContext()
-    let service = {}
     const isServiceTemporary = window.location.pathname.includes('/room/temporary')
+    const isHost = window.location.pathname.includes('/host/')
+    let service = {}
+    let imageList = []
     if (isServiceTemporary) {
         service = JSON.parse(sessionStorage.getItem('placeTemporary'))
+        imageList = service.imageList
     }
     else {
         service = JSON.parse(localStorage.getItem('service'))
+        imageList = service.imagesCollection
     }
-    const imageList = service.imagesCollection
     const accountCommon = useSelector(state => state.accountReducer)
-    const account = isServiceTemporary ? accountCommon.supplier : accountCommon.user
+    const account = isServiceTemporary || isHost ? accountCommon.supplier : accountCommon.user
     const show = useSelector(state => state.bigboxReducer.show)
     let count = 0;
     const currentDay = new Date()
@@ -52,17 +56,21 @@ function Room({ type, title }) {
             duration: 500,
             smooth: true
         });
-    })
+    }, [])
 
-    // useEffect(() => {
-    //     const count = commentList ? commentList.reduce((total, currentValue) => {
-    //         if (currentValue.placeid === service.id) {
-    //             return total + 1
-    //         }
-    //         return total
-    //     }, 0) : 0;
-    //     setTotalComment(count)
-    // }, [commentList, service.id])
+    useEffect(() => {
+        !isServiceTemporary && (async () => {
+            value.loadRef().classList.remove("hidden")
+            const data = await commentApi.getCommentByPlaceId(service.id)
+            value.loadRef().classList.add("hidden")
+            setCommentList(data.data)
+        })()
+    }, [service.id])
+
+    useEffect(() => {
+        const count = commentList.length
+        setTotalComment(count)
+    }, [commentList.length, service.id])
 
 
     // useEffect(() => {
@@ -112,6 +120,54 @@ function Room({ type, title }) {
     function handleNavigateToViewImage() {
         navigate(`${window.location.pathname}/viewlistimage`)
     }
+    
+    function formatTime(time) {
+        if(String(time).length === 1) {
+            return '0' + time
+        }
+        return time
+    }
+
+    function handleSubmitCommentCallBack() {
+        setContentCmt("")
+        var today = new Date();
+        var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+        var time = formatTime(today.getHours()) + ":" + formatTime(today.getMinutes()) + ":" + formatTime(today.getSeconds());
+        var dateTime = date + 'T' + time;
+
+        
+        setCommentList([ {
+            "id": v4(),
+            "userid": account.id,
+            "placeid": service.id,
+            "username":account.username,
+            "content": contentCmt,
+            "image": account.image,
+            "date": new Date(date).toLocaleDateString("vi-VN")
+        }, ...commentList])
+
+
+        commentApi.postComment({
+            "postdate": dateTime,
+            "content": contentCmt,
+            "placeModel": {
+                "placeid": service.id
+            },
+            "userModel": {
+                "userid": account.id
+            }
+        })
+    }
+
+    function handleSubmitComment(event) {
+        if (event.type === "keydown") {
+            if ((event.code === "Enter")) {
+                handleSubmitCommentCallBack()
+            }
+        } else {
+            handleSubmitCommentCallBack()
+        }
+    }
 
     return (<div className={`${cx("room")}`}>
         <Header isServiceTemporary={isServiceTemporary} />
@@ -145,23 +201,23 @@ function Room({ type, title }) {
 
             <div className="flex h-[390px] rounded-xl overflow-hidden">
                 <div className="flex-1 h-full mr-2 ssm767:mr-0">
-                    <img onClick={handleNavigateToViewImage} className="h-full max505:h-[70%] max400:h-[50%] max505:rounded-xl  w-full hover:brightness-[0.8] cursor-pointer" src={imageList.length !== 0 ? imageList[0].name : ''} alt="" />
+                    <img onClick={handleNavigateToViewImage} className="h-full max505:h-[70%] max400:h-[50%] max505:rounded-xl  w-full hover:brightness-[0.8] cursor-pointer" src={imageList && imageList.length !== 0 ? isServiceTemporary ? imageList[0].file : imageList[0].name : ''} alt="" />
                 </div>
                 <div className="flex-1 flex flex-col h-full ssm767:hidden">
                     <div className="flex-1 flex h-[50%] mb-2">
                         <div className="flex-1 h-full mr-2">
-                            <img onClick={handleNavigateToViewImage} className="h-full w-full hover:brightness-[0.8] cursor-pointer" src={imageList.length !== 0 ? imageList[1].name : ''} alt="" />
+                            <img onClick={handleNavigateToViewImage} className="h-full w-full hover:brightness-[0.8] cursor-pointer" src={imageList && imageList.length !== 0 ? isServiceTemporary ? imageList[1].file : imageList[1].name : ''} alt="" />
                         </div>
                         <div className="flex-1">
-                            <img onClick={handleNavigateToViewImage} className="h-full w-full hover:brightness-[0.8] cursor-pointer" src={imageList.length !== 0 ? imageList[2].name : ''} alt="" />
+                            <img onClick={handleNavigateToViewImage} className="h-full w-full hover:brightness-[0.8] cursor-pointer" src={imageList && imageList.length !== 0 ? isServiceTemporary ? imageList[2].file : imageList[2].name : ''} alt="" />
                         </div>
                     </div>
                     <div className="flex-1 flex h-50%">
                         <div className="flex-1 h-full mr-2">
-                            <img onClick={handleNavigateToViewImage} className="h-full w-full hover:brightness-[0.8] cursor-pointer" src={imageList.length !== 0 ? imageList[3].name : ''} alt="" />
+                            <img onClick={handleNavigateToViewImage} className="h-full w-full hover:brightness-[0.8] cursor-pointer" src={imageList && imageList.length !== 0 ? isServiceTemporary ? imageList[3].file : imageList[3].name : ''} alt="" />
                         </div>
                         <div className="flex-1">
-                            <img onClick={handleNavigateToViewImage} className="h-full w-full hover:brightness-[0.8] cursor-pointer" src={imageList.length !== 0 ? imageList[4].name : ''} alt="" />
+                            <img onClick={handleNavigateToViewImage} className="h-full w-full hover:brightness-[0.8] cursor-pointer" src={imageList && imageList.length !== 0 ? isServiceTemporary ? imageList[4].file : imageList[4].name : ''} alt="" />
                         </div>
                     </div>
                 </div>
@@ -175,7 +231,7 @@ function Room({ type, title }) {
                         </div>
                         <div>
                             <div className="inline-block rounded-full overflow-hidden">
-                                <img className="w-[56px] h-[56px] " src={isServiceTemporary ? account.image : service.useravt} alt="" />
+                                <img className="w-[56px] h-[56px]" src={isServiceTemporary ? account.image : service.useravt} alt="" />
                             </div>
                         </div>
                     </div>
@@ -191,7 +247,7 @@ function Room({ type, title }) {
                 <div className="">
                     {service.criteriaList.map((item, index) => {
                         return <div key={index} className="flex items-center mb-3">
-                            <BsPatchCheckFill className="mt-[-3px] shrink-0 text-2xl mr-3 text-green-600"/>
+                            <BsPatchCheckFill className="mt-[-3px] shrink-0 text-2xl mr-3 text-green-600" />
                             <div>{isServiceTemporary ? item.name : item.criteriasModel.criterianame}</div>
                         </div>
                     })}
@@ -201,7 +257,7 @@ function Room({ type, title }) {
             {!isServiceTemporary && <div className={`${cx('comment')} mt-6 border-t border-solid border-normal pt-9`}>
                 <div className="flex items-center text-2xl mb-4">
                     <div className="flex items-center">
-                        <GrStar />
+                        <GrStar className="text-yellow-600 mt-[-2px]" />
                         {service.star}
                     </div>
                     <div className="px-3"> - </div>
@@ -209,35 +265,32 @@ function Room({ type, title }) {
                 </div>
                 <div className="mb-5">
                     <div className="grid grid-cols-2 max600:grid-cols-1">
-                        {commentList.map((item, index) => {
+                        {commentList.length > 0 && commentList.map((item) => {
                             if (count < 6) {
-                                if (item.placeid === service.id) {
-                                    count++;
-                                    return <Comment key={index} name={item.username} date={item.date} content={item.content} image={item.image} />
-                                }
-                                else return <Fragment key={index}></Fragment>
+                                count++;
+                                return <Comment key={item.id} id={item.id} name={item.username} date={item.date} content={item.content} image={item.image} />
                             }
-                            else return <Fragment key={index}></Fragment>
+                            else return <Fragment key={item.id}></Fragment>
                         })}
                     </div>
-                    {totalComment >= 6 && <div onClick={(e) => handleDisplayComment(e)} className="border border-solid border-black rounded-xl inline-block py-3 px-5 cursor-pointer hover:bg-slate-100 active:scale-[0.98] font-semibold">
+                    {<div onClick={(e) => handleDisplayComment(e)} className="border border-solid border-black rounded-xl inline-block py-3 px-5 cursor-pointer hover:bg-slate-100 active:scale-[0.98] font-semibold">
                         Hiển thị tất cả {totalComment} đánh giá
                     </div>}
                 </div>
                 <div className={`w-[50%] ssm767:w-full`}>
                     {account.username ? <div>
                         <div className="flex items-center mb-6">
-                            <div className="mr-5 text-xl font-semibold italic">{account && account.username}</div>
                             <div>
                                 <img className="w-[56px] h-[56px] rounded-full" src={account && account.image !== "" ? account.image : account ? Avt2 : Avt} alt="" />
                             </div>
+                            <div className="ml-5 text-xl font-semibold italic">{account && account.username}</div>
                         </div>
                         <div>
                             <div><label htmlFor="comment" className="text-[#5c5959] text-start">Nhận xét của bạn</label></div>
                             <div className="flex max477:flex-col max477:items-start justify-between items-center w-full">
-                                <textarea onChange={(e) => {setContentCmt(e.target.value)}} value={contentCmt} id="comment" type="text" placeholder="Comment ..." className="max477:w-full outline-none mr-5 py-3 px-4 flex-1 border border-solid border-normal placeholder:italic" />
+                                <textarea onKeyDown={(e) => {handleSubmitComment(e)}} onChange={(e) => { setContentCmt(e.target.value) }} value={contentCmt} id="comment" type="text" placeholder="Comment ..." className="max477:w-full outline-none mr-5 py-3 px-4 flex-1 border border-solid border-normal placeholder:italic" />
                                 <div className="flex flex-col max477:items-center max477:mt-5 max477:w-full">
-                                    <button style={{ 'backgroundColor': 'var(--primary)', "backgroundImage": "linear-gradient(to right, #07D5DF, #7F6DEF, #F408FE)" }} className="hover:brightness-90 active:scale-[0.98] text-white py-2 px-4 rounded-md italic mb-3">Gửi đi</button>
+                                    <button onClick={(e) => {handleSubmitComment(e)}} style={{ 'backgroundColor': 'var(--primary)', "backgroundImage": "linear-gradient(to right, #07D5DF, #7F6DEF, #F408FE)" }} className="hover:brightness-90 active:scale-[0.98] text-white py-2 px-4 rounded-md italic mb-3">Gửi đi</button>
                                     <Link to={`/evaluate/${service.id}`} style={{ 'backgroundColor': 'var(--primary)', "backgroundImage": "linear-gradient(to right, #07D5DF, #7F6DEF, #F408FE)" }} className="hover:brightness-90 active:scale-[0.98] text-white py-2 px-4 rounded-md italic">Đến trang đánh giá</Link>
                                 </div>
                             </div>
@@ -283,7 +336,7 @@ function Room({ type, title }) {
             </div>
         </div>
         {show && <div>
-            <BigBox title={title} type={type} handleDisplayBigBox={value.handleDisplayBigBox} />
+            <BigBox title={title} type={type} handleDisplayBigBox={value.handleDisplayBigBox} setCommentList={setCommentList} />
         </div>}
         <Footer />
     </div>);

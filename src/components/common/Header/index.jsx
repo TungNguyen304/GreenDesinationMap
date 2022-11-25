@@ -64,7 +64,7 @@ function Header(props) {
                 <IoChevronBack />
             </div>}
 
-            <div className='text-primary hidden items-center slg1250:flex'>
+            <div className='text-primary hidden items-center slg1250:flex flex-shrink-0'>
                 <a href="/"><img className='w-[150px]' src={Logo} alt="" /></a>
             </div>
 

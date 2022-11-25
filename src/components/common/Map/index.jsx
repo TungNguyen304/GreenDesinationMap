@@ -91,7 +91,7 @@ function Map(props) {
       {serviceRoom && (
         <Marker position={locationServiceRoom} icon={greenIcon2}>
           <Popup>
-            <div>Hello</div>
+          <ServiceItem serviceItem={serviceRoom} imageList={serviceRoom.imagesCollection} typeComponent="map" id={serviceRoom.id} typeService={serviceRoom.type} name={serviceRoom.name} type="marker" phone={serviceRoom.phone} star={serviceRoom.star} address={serviceRoom.address} />
           </Popup>
         </Marker>
       )}
