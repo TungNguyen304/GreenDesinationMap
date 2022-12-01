@@ -72,27 +72,6 @@ function Room({ type, title }) {
         setTotalComment(count)
     }, [commentList.length, service.id])
 
-
-    // useEffect(() => {
-    //     (async () => {
-    //         const data = await commentApi.getAll()
-    //         setCommentList(data.data)
-    //     })()
-    // }, [])
-
-
-    // useEffect(() => {
-    //     (async () => {
-    //         const data = await interestApi.getAll()
-    //         data.data.forEach((item) => {
-    //             if (item.placeid === service.id && account && item.userid === account.id) {
-    //                 setIsInterest(true)
-    //             }
-    //         })
-    //     })()
-    // }, [account, service.id])
-
-
     function handleLike(even) {
         even.stopPropagation()
         if (localStorage.getItem('user')) {

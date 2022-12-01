@@ -3,3 +3,8 @@
     margin-top: var(--height_header);
     min-height: calc(100vh - var(--height_header));
 }   
+
+.active {
+    background-color: black;
+    color: white;
+}

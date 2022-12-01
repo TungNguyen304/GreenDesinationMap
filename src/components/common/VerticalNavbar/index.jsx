@@ -1,17 +1,15 @@
 import { useRef } from "react";
 
-function VerticalNarbar({title, listNavItem}) {
+function VerticalNarbar({title, listNavItem, cx, style, setTypeMail}) {
+    const type = ["all", "yes", "no"]
     const wrapRef = useRef()
     function handleActive(event, index) {
         const list = [...wrapRef.current.getElementsByTagName('li')]
         list.forEach((item) => {
-            item.style.backgroundColor = '#F7F7F7'
-            item.style.color = '#717171'
+            item.classList.remove(style.active)
         })
-
-        list[index].style.backgroundColor = 'black';
-        list[index].style.color = 'white'
-
+        list[index].classList.add(style.active);
+        setTypeMail(type[index])
     }
 
     return ( <div>
@@ -21,9 +19,9 @@ function VerticalNarbar({title, listNavItem}) {
         <div>
             <ul ref={wrapRef} className="mt-5">
                 {listNavItem && listNavItem.map((item, index) => {
-                    return <li className="text-[#717171] rounded-full" onClick={(e) => {handleActive(e, index)}} key={index}>
-                        <div className="flex items-center rounded-full hover:bg-[#EBEBEB] hover:text-[#717171] px-4 pt-[6px] pb-2 mt-1 cursor-pointer">
-                            <item.component className="mt-1 text-xl mr-3"/>
+                    return <li className={`${index === 0 ? cx('active') : ''} rounded-lg italic`} onClick={(e) => {handleActive(e, index)}} key={index}>
+                        <div className="flex items-center rounded-lg hover:bg-[#c3c0c0] px-4 pt-[6px] pb-2 mt-2 cursor-pointer">
+                            <item.component className={`text-xl mr-3 shrink-0 ${index === 1 ? 'text-green-600' : index === 2 ? 'text-red-600' : ''}`}/>
                             <span>{item.name}</span>
                         </div>
                     </li>

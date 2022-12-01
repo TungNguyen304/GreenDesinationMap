@@ -15,6 +15,7 @@ import style from './management.module.scss'
 import classNames from 'classnames/bind';
 import Loader from "../../../components/common/Loader";
 import { useCallback, useRef } from "react";
+import FloatBox from "../../../components/common/FloatBox";
 import BigLoader from "../../../components/common/BigLoader";
 import imageApi from "../../../api/imageApi";
 import placeFirebase from "../../../firebase/place";
@@ -53,7 +54,7 @@ function Management({ title, type }) {
             const data = await serviceApi.getByUserId(account.id)
             .catch((err) => {})
             loadRef.current && loadRef.current.classList.add("hidden")
-            setServiceList([...data.data])
+            data && setServiceList([...data.data])
         })()
     }, [account.id])
 
@@ -152,6 +153,8 @@ function Management({ title, type }) {
         <div ref={loadRef} className="">
             <BigLoader/>
         </div>
+
+        <div><FloatBox/></div>
     </div>);
 }
 
