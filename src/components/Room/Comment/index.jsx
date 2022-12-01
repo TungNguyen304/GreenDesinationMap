@@ -3,17 +3,20 @@ import { BiDotsVerticalRounded } from 'react-icons/bi'
 import classNames from 'classnames/bind';
 import { useRef, useState, useEffect } from 'react';
 import commentApi from '../../../api/commentApi';
+import { useSelector } from 'react-redux';
 const cx = classNames.bind(style)
 
 function Comment({ id, name, date, placeid, userid, entireDate, handleEditComment, content, commentList, setCommentListFromRoom, setCommentList, image, position, handleDeleteCmt }) {
     const optionRef = useRef()
     const textareaRef = useRef()
     const divRef = useRef()
+    const accountCommon = useSelector(state => state.accountReducer)
+    const isHost = window.location.pathname.includes('/host/')
+    const account = isHost ? accountCommon.supplier : accountCommon.user
     const [inputContent, setInputContent] = useState("")
     function handleDisplayOption() {
         optionRef.current.classList.toggle("hidden")
     }
-
     function handleEditCmt(event) {
         if(content !== inputContent) {
             if (event.type === "keydown") {
@@ -63,7 +66,7 @@ function Comment({ id, name, date, placeid, userid, entireDate, handleEditCommen
             </div>
             <textarea onBlur={(e) => { handleEditCmt(e) }} onKeyDown={(e) => { handleEditCmt(e) }} ref={textareaRef} onChange={(e) => { setInputContent(e.target.value) }} className={`mt-4 px-3 text-[#444242] hidden outline-none rounded-md py-1 border border-solid border-black`} value={inputContent} />
         </div>
-        <div onClick={handleDisplayOption} className={`p-2 hover:bg-neutral-100 rounded-full cursor-pointer ${position ? '' : 'hidden'}`}>
+        <div onClick={handleDisplayOption} className={`p-2 hover:bg-neutral-100 rounded-full cursor-pointer ${account.id !== userid ? 'hidden' : ''} ${position ? '' : 'hidden'}`}>
             <BiDotsVerticalRounded className='text-2xl' />
         </div>
         <div ref={optionRef} className='hidden absolute top-full right-0 w-full bg-[#282e4b] z-10 text-white text-center rounded-md overflow-hidden px-1 py-1'>

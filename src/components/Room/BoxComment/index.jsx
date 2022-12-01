@@ -10,7 +10,7 @@ import { useRef } from 'react'
 import Loader from '../../common/Loader'
 const cx = classNames.bind(style)
 
-function BoxComment({setCommentListFromRoom}) {
+function BoxComment({setCommentListFromRoom, commentListFromRoom}) {
     const loadRef = useRef()
     const service = JSON.parse(localStorage.getItem('service'))
     const [commentList, setCommentList] = useState([])
@@ -53,6 +53,13 @@ function BoxComment({setCommentListFromRoom}) {
         
     }
 
+    function handleSearchComment(event) {
+        const serachList = commentListFromRoom.filter((item) => {
+            return item.username.toLowerCase().includes(event.target.value.toLowerCase()) || item.content.toLowerCase().includes(event.target.value.toLowerCase())
+        })
+        setCommentList(serachList)
+    }
+
     return (<div className={`${cx('box_comment')} w-[1032px]`}>
         <div className="flex">
             <div className='w-[33.3333%] mr-[8.333%]'>
@@ -78,7 +85,7 @@ function BoxComment({setCommentListFromRoom}) {
                 <div>
                     <div className='flex items-center border border-solid border-[#B0B0B0] px-3 py-2 rounded-full bg-[#F7F7F7] mb-3'>
                         <IoSearchOutline className='text-[#222222] text-xl' />
-                        <input type="text" className='ml-3 w-full bg-[#F7F7F7]' placeholder='Tìm kiếm đánh giá' />
+                        <input onKeyDown={(e) => handleSearchComment(e)} type="text" className='ml-3 w-full bg-[#F7F7F7]' placeholder='Tìm kiếm đánh giá' />
                     </div>
                 </div>
                 <div onTouchMove={(e) => { e.preventDefault() }} className={`overflow-y-scroll h-[70vh] relative ${cx('comment_list')}`}>

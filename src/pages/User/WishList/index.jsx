@@ -3,86 +3,54 @@ import Footer from '../../../components/common/Footer';
 import interestApi from '../../../api/interestApi';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import React, { useState, useEffect, Suspense } from 'react';
-import serviceApi from '../../../api/serviceApi';
-import imageApi from '../../../api/imageApi';
+import { useValueContext } from '../../../hook';
+import React, { useState, useEffect, useRef } from 'react';
 import Loader from '../../../components/common/Loader';
-// import WishListItem from '../../../components/common/WishListItem';
+import WishListItem from '../../../components/common/WishListItem';
 
 
 
 function WishList() {
-
-    const WishListItem = React.lazy(async () => {
-        return new Promise(resolve => setTimeout(resolve, 2000))
-            .then(
-                () => import('../../../components/common/WishListItem')
-            )
-            .catch((error) => {
-                console.log(error);
-            })
-    });
-
     const navigate = useNavigate()
-    const [interestList, setInterestList] = useState()
-    const [serviceList, setServiceList] = useState()
-    const [imageList, setImageList] = useState()
-    const account = useSelector(state => state.accountReducer).user
-    const checkNameInterest = []
+    const { loadRef } = useValueContext()
+    const [interestList, setInterestList] = useState([])
+    const loadRefSml = useRef()
+    const account = useSelector(state => state.accountReducer.user)
 
     useEffect(() => {
-        (async ()=> {
-            const data = await interestApi.getAll()
-            setInterestList(data.data)
+        (async () => {
+            if (account.id) {
+                const data = await interestApi.getByUserid(account.id)
+                loadRefSml.current.classList.add("hidden")
+                setInterestList(data.data)
+            }
         })()
-    }, [])
+    }, [account.id])
 
-    useEffect(() => {
-        (async ()=> {
-            const data = await serviceApi.getAll()
-            setServiceList(data.data)
-        })()
-    }, [])
-
-    useEffect(() => {
-        (async ()=> {
-            const data = await imageApi.getAll()
-            setImageList(data.data)
-        })()
-    }, [])
-
-    function findImageList(id) {
-        return imageList ? imageList.filter((item) => {
-            return item.placeid === id
-        }) : []
-    }
-
-    function handleNavigateDetailWishList(id) {
+    function handleNavigateDetailWishList(id, wishlistname) {
         navigate(`/detailwishlist/${id}`)
+        sessionStorage.setItem("interest", wishlistname)
+        loadRef().classList.remove("hidden")
     }
 
-    return ( <div>
-        <Header/>
+    return (<div>
+        <Header />
         <div className='wrap my-24 w-[90%]'>
             <div className='text-3xl font-bold text-[#222222] mb-11 pt-7'>Yêu thích</div>
-            <Suspense fallback={<Loader/>}>
+            {interestList.length > 0 &&
                 <div className='grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 mx-[-16px]'>
-                    {interestList && interestList.map((item) => {
-                        return serviceList && serviceList.map((item2) => {
-                            if(item.placeid === item2.id && account.id === item.userid && checkNameInterest.includes(item.name) === false) {
-                                checkNameInterest.push(item.name)
-                                return (
-                                    <WishListItem key={item.id} item={item} handleNavigateDetailWishList={handleNavigateDetailWishList} findImageList={findImageList}/>
-                                )
-                            }
-                            
-                        })
+                    {interestList.length > 0 && interestList.map((item) => {
+                        return (
+                            <WishListItem key={item.wishlistid} item={item} handleNavigateDetailWishList={handleNavigateDetailWishList} image={item.image} />
+                        )
                     })}
-                </div>
-            </Suspense>
+                </div>}
+            <div ref={loadRefSml} className=''>
+                <Loader/>
+            </div>
         </div>
-        <Footer/>
-    </div> );
+        <Footer />
+    </div>);
 }
 
 export default WishList;

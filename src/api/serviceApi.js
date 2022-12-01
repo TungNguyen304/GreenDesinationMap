@@ -28,6 +28,10 @@ const serviceApi = {
         console.log(data);
         const url = '/place/updatePlace'
         return axiosClient.put(url, data)
+    },
+    getByWishListId: (id) => {
+        const url = `/place/findPlacesByWishlistId/${id}`
+        return axiosClient.get(url)
     }
 }
 

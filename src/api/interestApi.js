@@ -1,39 +1,33 @@
 import axiosClient from "./axiosApi";
 
 const interestApi = {
-    getAll: (params) => {
-        const url = '/getinterests'
-        return axiosClient.get(url, { 
-            params
-        })
+    getByUserid: (id) => {
+        const url = `/wishList/getWishlistByUserId/${id}`
+        return axiosClient.get(url)
     },
-    get: (id, params) => {
-        const url = `/getinterests/${id}`
-        return axiosClient.get(url, { 
-            params
-        })
+    add: (data) => {
+        const url = `/wishList/addWishList`
+        return axiosClient.post(url, data)
     },
-    getListService: (params, query) => {
-        const url = `/getinterests/${query}`
-        return axiosClient.get(url, { 
-            params
-        })
-    },
-    push: (data) => {
-        // const url = '/getinterests'
-        // return axiosClient.post(url, data)
-    },
-    pushListService: (data, id) => {
-        // const url = `/getinterests/service`
-        // return axiosClient.post(url, data)
+    update: (data) => {
+        const url = `/wishList/updateWishList`
+        return axiosClient.put(url, data)
     },
     delete: (id) => {
-        const url = `/getinterests/${id}`
+        const url = `/wishList/deleteWishList/${id}`
         return axiosClient.delete(url)
     },
-    deleteListService: ( query) => {
-        const url = `/getinterests/${query}`
+    addInterestPlace: (data) => {
+        const url = `/wishlistItem/addWishlistItem`
+        return axiosClient.post(url, data)
+    },
+    deleteInterestPlace: (id) => {
+        const url = `/wishlistItem/deleteWishListItem/${id}`
         return axiosClient.delete(url)
+    },
+    getInterestPlace: (id) => {
+        const url = `/getWishlistItemByWishlistId/${id}`
+        return axiosClient.get(url)
     }
 }
 

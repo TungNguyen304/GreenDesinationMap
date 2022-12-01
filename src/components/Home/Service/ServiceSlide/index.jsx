@@ -14,6 +14,7 @@ function ServiceSlide({ typeComponent, imageList, type, previewPage, isInterest,
     const left = useRef()
     const right = useRef()
     const isSupplierPage = window.location.pathname.includes('/host')
+    const account = useSelector(state => state.accountReducer.user)
     const homePage = useSelector(state => state.homePageReducer.type)
     const imgRef = useRef()
     let clnImg

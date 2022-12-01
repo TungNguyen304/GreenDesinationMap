@@ -129,7 +129,6 @@ function Room({ type, title }) {
     }
 
     function handleSubmitCommentCallBack() {
-        setContentCmt("")
         var today = new Date();
         var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
         var time = formatTime(today.getHours()) + ":" + formatTime(today.getMinutes()) + ":" + formatTime(today.getSeconds());
@@ -157,11 +156,14 @@ function Room({ type, title }) {
                 "userid": account.id
             }
         })
+
+        setContentCmt("")
     }
 
     function handleSubmitComment(event) {
         if (event.type === "keydown") {
-            if ((event.code === "Enter")) {
+            console.log(event);
+            if ((event.code === "Enter" && event.keyCode === 13)) {
                 handleSubmitCommentCallBack()
             }
         } else {
@@ -336,7 +338,7 @@ function Room({ type, title }) {
             </div>
         </div>
         {show && <div>
-            <BigBox title={title} type={type} handleDisplayBigBox={value.handleDisplayBigBox} setCommentList={setCommentList} />
+            <BigBox title={title} type={type} handleDisplayBigBox={value.handleDisplayBigBox} commentList={commentList} setCommentList={setCommentList} />
         </div>}
         <Footer />
     </div>);

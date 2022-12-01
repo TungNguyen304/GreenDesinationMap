@@ -35,7 +35,7 @@ function BigBox({title, type, ...props}) {
                 </div>
             </div>
             <div className={`${type === 'login'?'h-[78vh]':'h-auto max-h-[82vh]'} p-5 ${type === 'comment' ? '' : 'overflow-y-scroll'} ${cx('box_content')}`}>
-                {type === 'filter' ? <Filter/> : type === 'login' ? <Login/> : type ==='register' ? <Register/> : type === 'interests' ? <Interests/> : type === 'comment' ? <BoxComment setCommentListFromRoom={props.setCommentList}/> : <CreateInterest/> }
+                {type === 'filter' ? <Filter/> : type === 'login' ? <Login/> : type ==='register' ? <Register/> : type === 'interests' ? <Interests/> : type === 'comment' ? <BoxComment commentListFromRoom={props.commentList} setCommentListFromRoom={props.setCommentList}/> : type === "optionInterest" ? <CreateInterest name={props.nameInterest}/> : <CreateInterest /> }
             </div>
         </div>
     </div> );

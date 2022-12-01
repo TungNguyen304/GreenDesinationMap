@@ -22,8 +22,8 @@ axiosClient.interceptors.request.use(function (request) {
 });
 
 axiosClient.interceptors.response.use(function (response) {
-    function create(id,mapid,userid,name,road,ward,district,city,phone,address,type,lat,lon,star,host,description,startday,status,browserday, useravt, criteriaList, imagesCollection, commentsCollection){
-        return {id,mapid, userid, name, road, ward, district, city, phone, address, type, lat, lon, star, host, description, startday, status, browserday, useravt, criteriaList, imagesCollection, commentsCollection}
+    function create(id,mapid,userid,name,road,ward,district,city,phone,address,type,lat,lon,star,host,description,startday,status,browserday, useravt, criteriaList, imagesCollection, commentsCollection, wishList){
+        return {id,mapid, userid, name, road, ward, district, city, phone, address, type, lat, lon, star, host, description, startday, status, browserday, useravt, criteriaList, imagesCollection, commentsCollection, wishList}
     }
 
     function comment(id, userid, username, content, image, date, entireDate) {
@@ -47,7 +47,7 @@ axiosClient.interceptors.response.use(function (response) {
         }
     }
     else if((response.request.responseURL.includes(`http://localhost:8080/place/findByUserId/`)) || 
-    response.request.responseURL === 'http://localhost:8080/place/information') {
+    response.request.responseURL === 'http://localhost:8080/place/information' || response.request.responseURL.includes(`http://localhost:8080/place/findPlacesByWishlistId/`)) {
         if(response.data) {
             const data = response.data.map((e) => {
                 const startday = new Date(e.startday).toLocaleDateString("vi-VN")
@@ -58,9 +58,16 @@ axiosClient.interceptors.response.use(function (response) {
                     "key": item.imagekey
                 }))
                 
+                const wishList = e.wishListItemsCollection.map((item) => {
+                    return {
+                        userid: item.wishListsModel.userModel.userid,
+                        id: item.wishlistitemid
+                    }
+                })
+
                 const address = (e.road ? e.road + ", " : "") + (e.ward ? e.ward + ", " : "") + (e.district ? e.district : "");
                 return create(e.placeid, e.mapid, e.userid.userid, e.placename, e.road, e.wrad, e.district, e.city, e.phone, address, 
-                e.placetypeid.type, e.lat, e.lon, e.star, e.userid.username, e.description, startday, e.status, browserday, e.userid.avatar, e.ratingsCollection, newImageList)
+                e.placetypeid.type, e.lat, e.lon, e.star, e.userid.username, e.description, startday, e.status, browserday, e.userid.avatar, e.ratingsCollection, newImageList, [], wishList)
             })
             return {
                 data: data
@@ -72,9 +79,12 @@ axiosClient.interceptors.response.use(function (response) {
         const e = response.data
         const startday = new Date(e.startday).toLocaleDateString("vi-VN")
         const browserday = new Date(e.browserday).toLocaleDateString("vi-VN")
+        const wishList = e.wishListItemsCollection.map((item) => {
+            return item.wishListsModel.userModel.userid
+        })
         return {
             data: create(e.placeid, e.mapid, e.userid.userid, e.placename, e.road, e.wrad, e.district, e.city, e.phone, e.road + ", " + e.ward + ", " + e.district, 
-            e.placetypeid.type, e.lat, e.lon, e.star, e.userid.username, e.description, startday, e.status, browserday, e.userid.avatar, e.ratingsCollection, e.imagesCollection, e.commentsCollection)
+            e.placetypeid.type, e.lat, e.lon, e.star, e.userid.username, e.description, startday, e.status, browserday, e.userid.avatar, e.ratingsCollection, e.imagesCollection, e.commentsCollection, [])
         }
     } 
     else if(response.request.responseURL.includes(`http://localhost:8080/img/image/`) && response.config.method === "get") {

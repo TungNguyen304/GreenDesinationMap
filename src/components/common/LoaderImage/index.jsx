@@ -1,6 +1,7 @@
 import './loaderimage.scss'
 function LoaderImage() {
-    return (<div className='border border-dashed border-black w-full h-full'>
+    const isProvidePhoto = window.location.pathname === "/host/registerservice/providephotos"
+    return (<div className={`${isProvidePhoto ? 'border border-dashed border-black' : ''} w-full h-full`}>
         <div className="loader">
             <div className="inner one"></div>
             <div className="inner two"></div>

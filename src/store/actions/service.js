@@ -19,4 +19,11 @@ const setServiceRegisterType = (type) => {
     }
 }
 
-export {setServiceType, setService, setServiceRegisterType}
+const setServiceIdInterest = (service) => {
+    return {
+        type: 'SET_SERVICE_ID_INTEREST',
+        payload: service
+    }
+}
+
+export {setServiceType, setService, setServiceRegisterType, setServiceIdInterest}

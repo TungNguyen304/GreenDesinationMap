@@ -7,19 +7,17 @@ import classNames from 'classnames/bind';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import serviceApi from '../../../api/serviceApi';
-import interestApi from '../../../api/interestApi';
-import imageApi from '../../../api/imageApi';
 import Loader from '../../common/Loader';
-import { Suspense } from 'react';
+import { useValueContext } from '../../../hook';
 import ServiceItem from '../Service/ServiceItem';
 import { useEffect } from 'react';
 import { useState } from 'react';
 const cx = classNames.bind(style)
 
-function MapService(props) {
-    const [interestList, setInterestList] = useState([])
+function MapService({ isWishList, ...props }) {
     const loadRef = useRef()
     const showRef = useRef()
+    const { handleSetBigBox, handleDisplayBigBox } = useValueContext()
     let serviceListElement
     const isDetailWishListPage = window.location.pathname.includes('/detailwishlist')
     const searchList = useSelector(state => state.searchReducer.service)
@@ -42,7 +40,7 @@ function MapService(props) {
 
     const [serviceList, setServiceList] = useState()
     useEffect(() => {
-        (async() => {
+        !isWishList && (async() => {
             const data = await serviceApi.getAll()
             loadRef.current && loadRef.current.classList.add("hidden")
             showRef.current && showRef.current.classList.remove("hidden")
@@ -63,29 +61,33 @@ function MapService(props) {
                             <span className='ml-5 text-3xl font-semibold'>Perfect</span>
                         </div>
                         <div>
-                            <div className='hover:bg-slate-50 rounded-full p-3 cursor-pointer'><HiDotsHorizontal/></div>
+                            <div onClick={() => {
+                                console.log(1);
+                                handleSetBigBox('Tùy chọn', 'optionInterest')
+                                handleDisplayBigBox()
+                            }} className='hover:bg-slate-50 rounded-full p-3 cursor-pointer'><HiDotsHorizontal/></div>
                         </div>
                     </div>}
                     <div className={`h-full relative`}>
-                        <div ref={loadRef}>
+                        {!isWishList && <div ref={loadRef}>
                             <Loader/>
-                        </div>
+                        </div>}
                         <div ref={showRef} className={`${isDetailWishListPage ? 'h-[78vh]' : 'h-full hidden'} ${cx('wrap_list')}`}>
                             <div className={`flex flex-col items-center mt-[10px] ${isDetailWishListPage ? '' : ''}`}>
                                 {
                                 isDetailWishListPage ?
-                                props.positionList.map((item, index) => {
-                                    return <ServiceItem imageList={item.imagesCollection} interestList={interestList} key={index} id={item.id} name={item.name} phone={item.phone} address={item.address} star={item.star} typeService={item.type} serviceItem={item}/>
+                                props.positionList && props.positionList.map((item, index) => {
+                                    return <ServiceItem imageList={item.imagesCollection} wishList={item.wishList} key={index} id={item.id} name={item.name} phone={item.phone} address={item.address} star={item.star} typeService={item.type} serviceItem={item}/>
                                 })  
                                 : props.typeService==='search' && searchList && searchList.length>0 ? searchList.map((item, index) => {
-                                    return <ServiceItem imageList={item.imagesCollection} interestList={interestList} key={index} id={item.id} name={item.name} phone={item.phone} address={item.address} star={item.star} typeService={item.type} serviceItem={item}/>
+                                    return <ServiceItem imageList={item.imagesCollection} wishList={item.wishList} key={index} id={item.id} name={item.name} phone={item.phone} address={item.address} star={item.star} typeService={item.type} serviceItem={item}/>
                                 })
                                 : serviceList && serviceList.length > 0 ? serviceList.map((item, index) => {
                                     if(props.typeService === "noibat") {
-                                        return <ServiceItem imageList={item.imagesCollection} interestList={interestList} key={index} id={item.id} name={item.name} phone={item.phone} address={item.address} star={item.star} typeService={item.type} serviceItem={item}/>
+                                        return <ServiceItem imageList={item.imagesCollection} wishList={item.wishList} key={index} id={item.id} name={item.name} phone={item.phone} address={item.address} star={item.star} typeService={item.type} serviceItem={item}/>
                                     }
                                     else if(props.typeService === item.type) {
-                                        return <ServiceItem imageList={item.imagesCollection} interestList={interestList} key={index} id={item.id} name={item.name} phone={item.phone} address={item.address} star={item.star} typeService={item.type} serviceItem={item}/>
+                                        return <ServiceItem imageList={item.imagesCollection} wishList={item.wishList} key={index} id={item.id} name={item.name} phone={item.phone} address={item.address} star={item.star} typeService={item.type} serviceItem={item}/>
                                     }
                                 }) : <div className="italic mt-[50%]">Danh sách địa điểm trống</div>}
                             </div>

@@ -2,29 +2,15 @@ import style from './wishlistitem.module.scss'
 import classNames from 'classnames/bind';
 const cx = classNames.bind(style)
 
-function WishListItem({item, handleNavigateDetailWishList, findImageList}) {
-    return ( <div onClick={() => handleNavigateDetailWishList(item.id)} className={`${cx('wishlist')} px-4 py-3 rounded-lg cursor-pointer`}>
-    {findImageList(item.placeid) && findImageList(item.placeid).length !== 0 ? 
+function WishListItem({item, handleNavigateDetailWishList, image}) {
+    return ( <div onClick={() => handleNavigateDetailWishList(item.wishlistid, item.wishlistname)} className={`${cx('wishlist')} px-4 py-3 rounded-2xl cursor-pointer`}>
         <div className='flex h-[216px] rounded-3xl overflow-hidden'>
-            <div className='w-[67%] h-full mr-[2px]'>
-                <img className='h-full w-full object-cover' src={findImageList(item.placeid).length && findImageList(item.placeid)[0].name} alt="" />
-            </div>
-            <div className='w-[33%] h-full'>
-                <div className='h-[50%] mb-[2px]'>
-                    <img className='h-full w-full object-cover' src={findImageList(item.placeid).length && findImageList(item.placeid)[1].name} alt="" />
-                </div>
-                <div className='h-[50%]'>
-                    <img className='h-full w-full object-cover' src={findImageList(item.placeid).length && findImageList(item.placeid)[2].name} alt="" />
-                </div>
-            </div>
-        </div> : 
-        <div className='flex h-[216px] rounded-3xl overflow-hidden'>
-            <div className='w-full h-full mr-[2px] bg-[#dddddd]'>
+            <div className='w-[100%] h-full mr-[2px]'>
+                <img className='h-full w-full object-cover' src={image ? image : "https://a0.muscache.com/im/pictures/1366a633-171a-4592-9a51-cd4e6f46a897.jpg"} alt="" />
             </div>
         </div>
-    }
     <div className='text-xl font-semibold mt-3'>
-        {item.name}
+        {item.wishlistname}
     </div>
 </div> );
 }

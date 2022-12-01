@@ -5,19 +5,23 @@ import { setService } from '../../../../store/actions/service'
 import { useValueContext } from '../../../../hook'
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import imageApi from "../../../../api/imageApi";
+import { setServiceIdInterest } from "../../../../store/actions/service";
 import ServiceSlide from "../ServiceSlide";
 import style from './serviceitem.module.scss'
 import classNames from 'classnames/bind';
+import interestApi from "../../../../api/interestApi";
 const cx = classNames.bind(style)
 
-function ServiceItem({ imageList, name, phone, address, imageListTemp, star, typeService, serviceItem, type, typeComponent, id, interestList, previewPage }) {
+function ServiceItem({ imageList, name, phone, address, imageListTemp, star, typeService, serviceItem, type, typeComponent, id, previewPage, wishList }) {
     const isPreviewPage = sessionStorage.getItem('placeTemporary') ? true : false
     const isManagementPage = window.location.pathname.includes('/management')
     const value = useValueContext()
     const dispatch = useDispatch()
     const [hidden, setHidden] = useState(true)
-    const [isInterest, setIsInterest] = useState(false)
+    const [isInterest, setIsInterest] = useState({
+        state: false,
+        id: null
+    })
     const account = useSelector(state => state.accountReducer).user
     const imgRef = useRef()
     
@@ -34,13 +38,17 @@ function ServiceItem({ imageList, name, phone, address, imageListTemp, star, typ
 
     useEffect(() => {
         (async () => {
-            interestList && interestList.forEach((item) => {
-                if (item.placeid === id && account && item.userid === account.id) {
-                    setIsInterest(true)
-                }
+            let id
+            const check = wishList.some((item) => {
+                id = item.id
+                return item.userid === account.id
+            })
+            setIsInterest({
+                state: check,
+                id: id
             })
         })()
-    }, [account, id, interestList])
+    }, [account, id, wishList])
 
     function handelHidden() {
         setHidden(true)
@@ -54,12 +62,16 @@ function ServiceItem({ imageList, name, phone, address, imageListTemp, star, typ
         even.stopPropagation()
         if (account) {
             if (even.target.farthestViewportElement.style.fill !== 'var(--color_heart)') {
+                dispatch(setServiceIdInterest({
+                    id: id,
+                    heartRef: even.target
+                }))
                 value.handleSetBigBox('Danh sách yêu thích của bạn', 'interests')
                 value.handleDisplayBigBox()
-                // even.target.style.fill = 'var(--color_heart)'
             }
             else {
                 even.target.farthestViewportElement.style.fill = 'rgba(0, 0, 0, 0.6)'
+                interestApi.deleteInterestPlace(Number(isInterest.id))
             }
         }
         else {
@@ -72,19 +84,19 @@ function ServiceItem({ imageList, name, phone, address, imageListTemp, star, typ
         if (isPreviewPage) {
             navigate(`/host/management/room/temporary`)
         } else if(isManagementPage) {
-            navigate(`/host/management/room/${id}`)
+            window.open(`/host/management/room/${id}`,'_blank')
         }
         else {
             dispatch(setService(serviceItem))
             localStorage.setItem('service', JSON.stringify(serviceItem))
-            navigate(`/room/${id}`)
+            window.open(`/room/${id}`,'_blank')
         }
     }
 
 
     return (<div onMouseOver={handelDisplay} onMouseLeave={handelHidden} onClick={handleNavigateToRoom} className={`${cx('service_item')} ${typeComponent === "map" ? 'w-[200px] mx-auto' : homePage === "map" ? `hover:scale-1 ${isPreviewPage?'w-[280px]':'w-[90%]'} hover:shadow-normal ${isManagementPage ? '' : 'mb-[40px]'} px-[13px] pt-[13px] pb-[4px]` : "hover:scale-[1.01] hover:shadow-normal mb-[40px] px-[13px] pt-[13px] pb-[4px]"} ${previewPage && 'border-2 border-solid border-[#4c4949]'} flex flex-col justify-center cursor-pointer`}>
         <div className={`relative mb-3 flex justify-center`}>
-            <ServiceSlide imgList={imgList} hidden={hidden} previewPage={previewPage} handleLike={handleLike} isInterest={isInterest}  ref={imgRef} imageList={previewPage ? imageListTemp : imageList} type={type} typeComponent={typeComponent} id={id} />
+            <ServiceSlide imgList={imgList} hidden={hidden} previewPage={previewPage} wishList={wishList} handleLike={handleLike} isInterest={isInterest.state}  ref={imgRef} imageList={previewPage ? imageListTemp : imageList} type={type} typeComponent={typeComponent} id={id} />
         </div>
         <div className={`max1380:flex max1380:flex-col max1380:items-center`}>
             <div className="flex justify-between">
