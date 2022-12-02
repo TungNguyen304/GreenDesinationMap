@@ -37,7 +37,7 @@ function ServiceItem({ imageList, name, phone, address, imageListTemp, star, typ
     }, [])
 
     useEffect(() => {
-        (async () => {
+        wishList && (async () => {
             let id
             const check = wishList.some((item) => {
                 id = item.id
@@ -48,7 +48,7 @@ function ServiceItem({ imageList, name, phone, address, imageListTemp, star, typ
                 id: id
             })
         })()
-    }, [account, id, wishList])
+    }, [account.id, wishList])
 
     function handelHidden() {
         setHidden(true)

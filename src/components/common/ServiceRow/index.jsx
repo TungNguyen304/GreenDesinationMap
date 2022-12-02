@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom'
 import imageApi from '../../../api/imageApi'
 import { useEffect } from 'react'
 
-function ServiceRow({ imageList, place, handleDelete }) {
+function ServiceRow({ imageList, place, setPopup }) {
     const navigate = useNavigate()
     const item = JSON.parse(place)
     const style = {
@@ -76,7 +76,10 @@ function ServiceRow({ imageList, place, handleDelete }) {
                 <td>
                     <div onClick={(e) => {e.stopPropagation()}} className='flex items-center'>
                         <Link to="/host/registerservice" onClick={(e) => { handleUpdatePlace(e) }} className='block px-3 py-2 hover:brightness-90 active:scale-95 rounded-lg mr-2 bg-green-400'><GrUpdate /></Link>
-                        <button data-placeid={item.id} onClick={(e) => { handleDelete(e) }} className='px-3 py-2 hover:brightness-90 active:scale-95 rounded-lg bg-red-600'><RiDeleteBin5Fill className='pointer-events-none' /></button>
+                        <button data-placeid={item.id} onClick={(e) => { setPopup({
+                            state: true,
+                            event: e
+                        }) }} className='px-3 py-2 hover:brightness-90 active:scale-95 rounded-lg bg-red-600'><RiDeleteBin5Fill className='pointer-events-none' /></button>
                     </div>
                 </td>
             </tr>

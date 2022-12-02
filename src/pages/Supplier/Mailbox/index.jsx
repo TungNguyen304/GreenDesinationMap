@@ -49,34 +49,36 @@ function Mailbox({ title, type }) {
             const newMail = []
             let mailList = []
             const data = await notificationApi.getByUser(account.id)
-            loadRef.current.classList.add("hidden")
-            let date = new Date(data.data[0].sentdate).toLocaleDateString()
-            data.data.forEach((item, index) => {
-                if (new Date(item.sentdate).toLocaleDateString() === date) {
-                    mailList.push(item)
-                    if (index === data.data.length - 1) {
+            loadRef.current && loadRef.current.classList.add("hidden")
+            if (data.data.length > 0) {
+                let date = new Date(data.data[0].sentdate).toLocaleDateString()
+                data.data.forEach((item, index) => {
+                    if (new Date(item.sentdate).toLocaleDateString() === date) {
+                        mailList.push(item)
+                        if (index === data.data.length - 1) {
+                            newMail.push({
+                                "date": "Ngày " + date,
+                                "mailList": mailList
+                            })
+                        }
+                    } else {
                         newMail.push({
                             "date": "Ngày " + date,
                             "mailList": mailList
                         })
+                        mailList = [item]
+                        date = new Date(item.sentdate).toLocaleDateString()
+                        if (index === data.data.length - 1) {
+                            newMail.push({
+                                "date": "Ngày " + date,
+                                "mailList": mailList
+                            })
+                        }
                     }
-                } else {
-                    newMail.push({
-                        "date": "Ngày " + date,
-                        "mailList": mailList
-                    })
-                    mailList = [item]
-                    date = new Date(item.sentdate).toLocaleDateString()
-                    if (index === data.data.length - 1) {
-                        newMail.push({
-                            "date": "Ngày " + date,
-                            "mailList": mailList
-                        })
-                    }
-                }
-            })
-            setMails(newMail)
-            setMailStore(newMail)
+                })
+                setMails(newMail)
+                setMailStore(newMail)
+            }
         })()
     }, [account.id])
 

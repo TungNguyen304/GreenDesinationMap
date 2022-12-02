@@ -14,7 +14,6 @@ const cx = classNames.bind(style)
 
 function Service({ typeService }) {
     const searchList = useSelector(state => state.searchReducer.service)
-    const [interestList, setInterestList] = useState([])
     const loadRef = useRef()
     const showRef = useRef()
 
@@ -22,13 +21,6 @@ function Service({ typeService }) {
         // reset scroll
         window.scroll(0, 0);
     })
-
-    // useEffect(() => {
-    //     (async () => {
-    //         const data = await interestApi.getAll()
-    //         setInterestList([...data.data])
-    //     })()
-    // }, [])
 
     const [services, setService] = useState([])
     useEffect(() => {
@@ -47,15 +39,15 @@ function Service({ typeService }) {
                 {
                     typeService === 'search' && searchList && searchList.length ?
                         searchList.map((item) => {
-                            return <ServiceItem interestList={interestList} imageList={item.imagesCollection} serviceItem={item} key={item.id} id={item.id} typeService={item.type} name={item.name} phone={item.phone} star={item.star} address={item.address} />
+                            return <ServiceItem wishList={item.wishList} imageList={item.imagesCollection} serviceItem={item} key={item.id} id={item.id} typeService={item.type} name={item.name} phone={item.phone} star={item.star} address={item.address} />
                         })
                         :
                         services ? services.map(item => {
                             if (typeService === 'noibat') {
-                                return <ServiceItem interestList={interestList} imageList={item.imagesCollection} serviceItem={item} key={item.id} id={item.id} typeService={item.type} name={item.name} phone={item.phone} star={item.star} address={item.address} />
+                                return <ServiceItem wishList={item.wishList} imageList={item.imagesCollection} serviceItem={item} key={item.id} id={item.id} typeService={item.type} name={item.name} phone={item.phone} star={item.star} address={item.address} />
                             }
                             else if (item.type === typeService) {
-                                return <ServiceItem interestList={interestList} imageList={item.imagesCollection} serviceItem={item} key={item.id} id={item.id} typeService={item.type} name={item.name} phone={item.phone} star={item.star} address={item.address} />
+                                return <ServiceItem wishList={item.wishList} imageList={item.imagesCollection} serviceItem={item} key={item.id} id={item.id} typeService={item.type} name={item.name} phone={item.phone} star={item.star} address={item.address} />
                             }
                         }) : <div className="italic mt-[50%]">Danh sách địa điểm trống</div> }
             </div>

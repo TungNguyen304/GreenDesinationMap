@@ -19,30 +19,13 @@ import FloatBox from "../../../components/common/FloatBox";
 import BigLoader from "../../../components/common/BigLoader";
 import imageApi from "../../../api/imageApi";
 import placeFirebase from "../../../firebase/place";
+import ServiceRow from "../../../components/common/ServiceRow";
+import ServiceItem from "../../../components/Home/Service/ServiceItem";
 const cx = classNames.bind(style)
 
 function Management({ title, type }) {
     const loadRef = useRef()
-    const ServiceRow = React.lazy(async () => {
-        return new Promise(resolve => setTimeout(resolve, 2000))
-            .then(
-                () => import('../../../components/common/ServiceRow')
-            )
-            .catch((error) => {
-                console.log(error);
-            })
-    });
-
-    const ServiceItem = React.lazy(async () => {
-        return new Promise(resolve => setTimeout(resolve, 2000))
-            .then(
-                () => import('../../../components/Home/Service/ServiceItem')
-            )
-            .catch((error) => {
-                console.log(error);
-            })
-    });
-
+    const [popup, setPopup] = useState({})
     const account = useSelector(state => state.accountReducer).supplier
     const [serviceList, setServiceList] = useState([])
     const value = useValueContext()
@@ -52,7 +35,7 @@ function Management({ title, type }) {
     useEffect(() => {
         account.id && (async () => {
             const data = await serviceApi.getByUserId(account.id)
-            .catch((err) => {})
+                .catch((err) => { })
             loadRef.current && loadRef.current.classList.add("hidden")
             data && setServiceList([...data.data])
         })()
@@ -68,21 +51,20 @@ function Management({ title, type }) {
 
     const handleDelete = useCallback(async (event) => {
         loadRef.current.classList.remove("hidden")
-        console.log(event.target.dataset.placeid);
-        setServiceList(serviceList.filter((item) => item.id!==Number(event.target.dataset.placeid)))
+        setServiceList(serviceList.filter((item) => item.id !== Number(event.target.dataset.placeid)))
         const data = await imageApi.get(event.target.dataset.placeid)
         data.data.forEach((item) => {
             placeFirebase.delete(item.key)
         })
         serviceApi.delete(event.target.dataset.placeid)
-        .then(() => {
-            alert("Delete success!")
-            loadRef.current.classList.add("hidden")
-        })
-        .catch(() => {
-            alert("Delete failed!")
-        })
-        
+            .then(() => {
+                alert("Delete success!")
+                loadRef.current.classList.add("hidden")
+            })
+            .catch(() => {
+                alert("Delete failed!")
+            })
+
         event.stopPropagation()
     })
 
@@ -121,7 +103,7 @@ function Management({ title, type }) {
                     <Suspense fallback={<Loader />}>
                         <tbody>
                             {serviceList && serviceList.map((item) => {
-                                return <ServiceRow imageList={item.imagesCollection} handleDelete={handleDelete} key={item.id} place={JSON.stringify(item)} />
+                                return <ServiceRow imageList={item.imagesCollection} setPopup={setPopup} key={item.id} place={JSON.stringify(item)} />
                             })}
 
                         </tbody>
@@ -136,7 +118,10 @@ function Management({ title, type }) {
                                     <ServiceItem serviceItem={item} imageList={item.imagesCollection} key={item.id} id={item.id} typeService={item.type} name={item.name} phone={item.phone} star={item.star} address={item.address} />
                                     <div className="flex justify-center mb-[40px]">
                                         <button className='px-3 py-2 hover:brightness-90 active:scale-95 rounded-lg mr-2 bg-green-400'><GrUpdate /></button>
-                                        <button data-placeid={item.id} onClick={(e) => handleDelete(e)} className='px-3 py-2 hover:brightness-90 active:scale-95 rounded-lg bg-red-600'><RiDeleteBin5Fill className="pointer-events-none"/></button>
+                                        <button data-placeid={item.id} onClick={(e) => setPopup({
+                                            state: true,
+                                            event: e
+                                        })} className='px-3 py-2 hover:brightness-90 active:scale-95 rounded-lg bg-red-600'><RiDeleteBin5Fill className="pointer-events-none" /></button>
                                     </div>
                                 </div>
                             })}
@@ -151,10 +136,10 @@ function Management({ title, type }) {
         </div>}
         <Footer />
         <div ref={loadRef} className="">
-            <BigLoader/>
+            <BigLoader />
         </div>
 
-        <div><FloatBox/></div>
+        {popup.state && <FloatBox handleConfirm={() => handleDelete(popup.event)} setPopup={setPopup}/>}
     </div>);
 }
 

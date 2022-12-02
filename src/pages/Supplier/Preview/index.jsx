@@ -37,7 +37,7 @@ function Preview() {
             const listKeyNew = listNew.map((item) => {
                 return item.key
             })
-            currdentData.originImage.forEach((item) => {
+            currdentData.originImage && currdentData.originImage.forEach((item) => {
                 if (!listKeyNew.includes(item)) {
                     placeFirebase.delete(item)
                 }

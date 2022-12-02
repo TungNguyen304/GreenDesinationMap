@@ -21,6 +21,7 @@ const serviceApi = {
         return axiosClient.post(url, data)
     },
     delete: (id) => {
+        console.log(id);
         const url = `/place/deletePlace/${id}`
         return axiosClient.delete(url)
     },

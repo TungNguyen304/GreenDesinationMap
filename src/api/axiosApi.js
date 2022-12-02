@@ -57,13 +57,13 @@ axiosClient.interceptors.response.use(function (response) {
                     "name": item.imagename,
                     "key": item.imagekey
                 }))
-                
-                const wishList = e.wishListItemsCollection.map((item) => {
+                const wishList = response.request.responseURL.includes(`http://localhost:8080/place/findPlacesByWishlistId/`) || response.request.responseURL === 'http://localhost:8080/place/information'
+                ? e.wishListItemsCollection.map((item) => {
                     return {
                         userid: item.wishListsModel.userModel.userid,
                         id: item.wishlistitemid
                     }
-                })
+                }) : []
 
                 const address = (e.road ? e.road + ", " : "") + (e.ward ? e.ward + ", " : "") + (e.district ? e.district : "");
                 return create(e.placeid, e.mapid, e.userid.userid, e.placename, e.road, e.wrad, e.district, e.city, e.phone, address, 
