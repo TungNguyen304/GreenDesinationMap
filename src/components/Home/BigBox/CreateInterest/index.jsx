@@ -5,6 +5,7 @@ import interestApi from "../../../../api/interestApi";
 import { useNavigate } from "react-router-dom";
 
 function CreateInterest(name) {
+    console.log(name);
     const labelRef = useRef()
     const buttonRef = useRef()
     const navigate = useNavigate()
@@ -96,18 +97,17 @@ function CreateInterest(name) {
 
     return (<div className="py-[20px] px-[10px]">
         <div className="mb-11">
-            {/* <input type="text" placeholder="Tên" className="py-4 rounded-md w-full px-3 border border-solid border-normal"/> */}
             <div className="border h-[56px] flex items-center flex-1 px-3 py-4 relative overflow-hidden border-solid border-[#717171] rounded-lg w-full">
                 <div ref={labelRef} style={{ 'transition': 'all 0.15s ease-out' }} className="absolute cursor-text">
                     <label htmlFor="interest" className="text-[#717171] cursor-text select-none">Tên</label>
                 </div>
                 <div className="w-full">
-                    <input ref={inputRef} value={value} onKeyDown={(e) => { name ? handleUpdate(e) : pushInterest(e) }} onFocus={(e) => handleLabelForcus(e)} onChange={(e) => setValue(e.target.value)} onBlur={(e) => handleLabelBlur(e)} className="outline-none w-[80%]" type="text" id="interest" />
+                    <input ref={inputRef} value={value} onKeyDown={(e) => { name.name ? handleUpdate(e) : pushInterest(e) }} onFocus={(e) => handleLabelForcus(e)} onChange={(e) => setValue(e.target.value)} onBlur={(e) => handleLabelBlur(e)} className="outline-none w-[80%]" type="text" id="interest" />
                 </div>
             </div>
         </div>
         <div>
-            {name ?
+            {name.name ?
                 <div className="flex justify-center">
                     <button onClick={(e) => { handleUpdate(e) }} className="px-4 rounded-lg bg-black text-white py-2 mr-3">Update</button>
                     <button onClick={handleDelete} className="px-4 rounded-lg bg-black text-white py-2">Delete</button>
