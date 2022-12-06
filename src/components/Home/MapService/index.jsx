@@ -15,6 +15,7 @@ import { useState } from 'react';
 const cx = classNames.bind(style)
 
 function MapService({ isWishList, ...props }) {
+    console.log(isWishList);
     const loadRef = useRef()
     const showRef = useRef()
     const { handleSetBigBox, handleDisplayBigBox } = useValueContext()
@@ -42,6 +43,7 @@ function MapService({ isWishList, ...props }) {
     useEffect(() => {
         !isWishList && (async() => {
             const data = await serviceApi.getAll()
+            console.log(data);
             loadRef.current && loadRef.current.classList.add("hidden")
             showRef.current && showRef.current.classList.remove("hidden")
             if(data && data.data.length > 0) {
