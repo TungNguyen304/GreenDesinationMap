@@ -109,7 +109,7 @@ function Room({ type, title }) {
 
     function handleSubmitCommentCallBack() {
         var today = new Date();
-        var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+        var date = today.getFullYear() + '-' + formatTime(today.getMonth() + 1) + '-' + formatTime(today.getDate());
         var time = formatTime(today.getHours()) + ":" + formatTime(today.getMinutes()) + ":" + formatTime(today.getSeconds());
         var dateTime = date + 'T' + time;
 
@@ -141,7 +141,6 @@ function Room({ type, title }) {
 
     function handleSubmitComment(event) {
         if (event.type === "keydown") {
-            console.log(event);
             if ((event.code === "Enter" && event.keyCode === 13)) {
                 handleSubmitCommentCallBack()
             }

@@ -20,7 +20,7 @@ function Host({ title, type }) {
     const [positionList, setPositionList] = useState([])
 
     useEffect(() => {
-        (async () => {
+        account.id && (async () => {
             value.loadRef().classList.remove("hidden")
             const data = await serviceApi.getByUserId(account.id)
             value.loadRef().classList.add("hidden")

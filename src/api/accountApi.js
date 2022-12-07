@@ -30,6 +30,7 @@ const accountApi = {
         return axiosClient.delete(url)
     },
     post: (data) => {
+        console.log(data);
         const url = `/api/login`
         return axiosClient.post(url, data)
     },

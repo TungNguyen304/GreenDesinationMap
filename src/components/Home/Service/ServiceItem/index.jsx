@@ -60,7 +60,7 @@ function ServiceItem({ imageList, name, phone, address, imageListTemp, star, typ
 
     function handleLike(even) {
         even.stopPropagation()
-        if (account) {
+        if (account && even.target.farthestViewportElement) {
             if (even.target.farthestViewportElement.style.fill !== 'var(--color_heart)') {
                 dispatch(setServiceIdInterest({
                     id: id,
