@@ -143,7 +143,7 @@ function Room({ type, title }) {
         if (event.type === "keydown") {
             if ((event.code === "Enter" && event.keyCode === 13)) {
                 handleSubmitCommentCallBack()
-            }
+            } 
         } else {
             handleSubmitCommentCallBack()
         }
@@ -155,7 +155,7 @@ function Room({ type, title }) {
             <div className="text-2xl font-semibold">
                 {service.name}
             </div>
-
+ 
             <div className="flex justify-between cursor-pointer mt-3 mb-5">
                 <div className="flex max866:flex-col">
                     <div className="flex items-center">

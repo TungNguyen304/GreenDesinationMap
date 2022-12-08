@@ -1,6 +1,6 @@
 import Map from "../../../components/common/Map";
 import SearchBar from "../../../components/common/Header/SearchBar";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import FormLocation from "../../../components/common/FormLocation";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
@@ -17,12 +17,14 @@ function Location() {
         "hotel": 3,
     }
 
+    
+
     useEffect(() => {
         (async () => {
             const data = await criteriaApi.getByPlaceTypeId(placeTypeId[service.type])
             data.data && sessionStorage.setItem("criteriaList", JSON.stringify(data.data))
         })()
-    }, [service.type])
+    }, [service && service.type])
 
     function handleRegisterLocation(service) {
         if (service.type !== style.style) {
@@ -34,7 +36,9 @@ function Location() {
     }
 
 
-    return (<div style={{ fontFamily: "sans-serif" }}>
+    return (!service ?
+        <Navigate to="/host/registerservice"/>
+    :<div style={{ fontFamily: "sans-serif" }}>
         <div className="flex h-[100vh] relative">
             <div style={{ "backgroundImage": "linear-gradient(to top, #441EA5, #CE247A)" }} className="w-[50%] max966:hidden justify-center items-center px-10 flex">
                 <div className="text-6xl font-bold text-white italic">Hãy xác định vị trí của bạn</div>

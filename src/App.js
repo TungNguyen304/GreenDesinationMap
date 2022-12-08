@@ -50,15 +50,20 @@ function App() {
       const user = localStorage.getItem("user");
       const supplier = localStorage.getItem("supplier");
       if (user) {
-        const userdata = await accountApi.getLogin({}, user).catch((err) => {});
+        const userdata = await accountApi.getLogin(user)
+        .catch((err) => {
+          localStorage.removeItem("user")
+        });
         if (userdata) {
           dispatch(setUser(userdata.data));
         }
       }
       if (supplier) {
         const supplierdata = await accountApi
-          .getLogin({}, supplier)
-          .catch((err) => {});
+          .getLogin(supplier)
+          .catch((err) => {
+            localStorage.removeItem("supplier")
+          });
         if (supplierdata) {
           dispatch(setSupplier(supplierdata.data));
         }

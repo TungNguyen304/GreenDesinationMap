@@ -5,11 +5,12 @@ import { useSelector } from "react-redux";
 import Map from "../../../components/common/Map";
 import BigBox from "../../../components/Home/BigBox";
 import serviceApi from '../../../api/serviceApi'
-
+import NotificationSmall from "../../../components/NotificationSmall";
 import style from './host.module.scss'
 import classNames from 'classnames/bind';
 import { useEffect } from "react";
 import { useState } from "react";
+import notificationApi from "../../../api/notificationApi";
 const cx = classNames.bind(style)
 
 function Host({ title, type }) {
@@ -18,6 +19,7 @@ function Host({ title, type }) {
     const { handleDisplayBigBox } = value
     const show = useSelector(state => state.bigboxReducer.show)
     const [positionList, setPositionList] = useState([])
+    const [notifyList, setNotifyList] = useState([])
 
     useEffect(() => {
         account.id && (async () => {
@@ -26,7 +28,19 @@ function Host({ title, type }) {
             value.loadRef().classList.add("hidden")
             setPositionList(data.data)
         })()
-    }, [])
+    }, [account.id])
+
+    useEffect(() => {
+        (async () => {
+            const data = await notificationApi.getByUser(account.id)
+            const date = new Date()
+            const newData = data.data.filter((item) => {
+                return new Date (item.sentdate).toLocaleDateString() === date.toLocaleDateString()
+            })
+            console.log(newData);
+            setNotifyList(newData)
+        })()
+    }, [account.id])
 
     return (<div>
         <Header />
@@ -36,7 +50,10 @@ function Host({ title, type }) {
                     <div className="text-3xl font-semibold text-white">
                         Hôm nay
                     </div>
-                    <div className="flex overflow-x-visible mt-6 min-h-[122px]">
+                    <div className="grid grid-cols-4 gap-3 overflow-x-visible mt-6 min-h-[122px]">
+                        {notifyList.length > 0 && notifyList.map((item, index) => {
+                            return <NotificationSmall key={item.notificationid} mail={item}/>
+                        })}
                     </div>
                 </div>
             </div>

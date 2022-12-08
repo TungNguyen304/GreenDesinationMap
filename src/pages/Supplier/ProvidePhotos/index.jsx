@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import ImagesIcon from '../../../assets/logo/ImagesIcon.svg'
 import style from './providephotos.module.scss'
 import AddImage from "../../../components/common/AddImage";

@@ -18,36 +18,39 @@ function Login() {
     function handleConditionLogin() {
         (async () => {
             value.loadRef().classList.remove("hidden")
-            const data = await accountApi.post({
+            accountApi.post({
                 "username": usernameRef.current.value,
                 "password": passwordRef.current.value
             })
-                .catch((err) => {
-                    warning3.current.classList.remove('hidden')
-                    warning3.current.classList.add('flex')
-                    value.loadRef().classList.add("hidden")
-                })
-            if (data && data.data.accessToken) {
-                (async () => {
-                    const res = await accountApi.getLogin({}, data.data.accessToken)
-                    if (res && res.data.role === role) {
-                        if(role === 1) {
-                            localStorage.setItem('user', data.data.accessToken)
-                        } else {
-                            localStorage.setItem('supplier', data.data.accessToken)
-                        }
-                        window.location.reload()
+                .then((data) => {
+                    if (data && data.data.accessToken) {
+                        (async () => {
+                            const res = await accountApi.getLogin(data.data.accessToken)
+                            if (res && res.data.role === role) {
+                                if (role === 1) {
+                                    localStorage.setItem('user', data.data.accessToken)
+                                } else {
+                                    localStorage.setItem('supplier', data.data.accessToken)
+                                }
+                                window.location.reload()
+                            } else {
+                                warning3.current.classList.remove('hidden')
+                                warning3.current.classList.add('flex')
+                                value.loadRef().classList.add("hidden")
+                            }
+                        })()
                     } else {
                         warning3.current.classList.remove('hidden')
                         warning3.current.classList.add('flex')
                         value.loadRef().classList.add("hidden")
                     }
-                })()
-            } else {
-                warning3.current.classList.remove('hidden')
-                warning3.current.classList.add('flex')
-                value.loadRef().classList.add("hidden")
-            }
+                })
+                .catch((err) => {
+                    warning3.current.classList.remove('hidden')
+                    warning3.current.classList.add('flex')
+                    value.loadRef().classList.add("hidden")
+                })
+
         })()
 
     }

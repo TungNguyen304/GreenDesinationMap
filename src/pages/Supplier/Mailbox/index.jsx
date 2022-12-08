@@ -23,7 +23,6 @@ function Mailbox({ title, type }) {
     const wrapMenuRef = useRef()
     const value = useValueContext()
     const [mails, setMails] = useState([])
-    const [searchText, setSearchText] = useState("")
     const [mailStore, setMailStore] = useState([])
     const { handleDisplayBigBox } = value
     const [typeMail, setTypeMail] = useState("all")

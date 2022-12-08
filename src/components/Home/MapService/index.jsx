@@ -15,7 +15,6 @@ import { useState } from 'react';
 const cx = classNames.bind(style)
 
 function MapService({ isWishList, ...props }) {
-    console.log(isWishList);
     const loadRef = useRef()
     const showRef = useRef()
     const { handleSetBigBox, handleDisplayBigBox } = useValueContext()
@@ -30,7 +29,7 @@ function MapService({ isWishList, ...props }) {
                 behavior: 'smooth'
             })
         }, 2300)
-    })
+    }, [])
 
     // useEffect(() => {
     //     (async () => {
@@ -84,14 +83,14 @@ function MapService({ isWishList, ...props }) {
                                 : props.typeService==='search' && searchList && searchList.length>0 ? searchList.map((item, index) => {
                                     return <ServiceItem imageList={item.imagesCollection} wishList={item.wishList} key={index} id={item.id} name={item.name} phone={item.phone} address={item.address} star={item.star} typeService={item.type} serviceItem={item}/>
                                 })
-                                : serviceList && serviceList.length > 0 ? serviceList.map((item, index) => {
+                                : serviceList && serviceList.length > 0 && serviceList.map((item, index) => {
                                     if(props.typeService === "noibat") {
                                         return <ServiceItem imageList={item.imagesCollection} wishList={item.wishList} key={index} id={item.id} name={item.name} phone={item.phone} address={item.address} star={item.star} typeService={item.type} serviceItem={item}/>
                                     }
                                     else if(props.typeService === item.type) {
                                         return <ServiceItem imageList={item.imagesCollection} wishList={item.wishList} key={index} id={item.id} name={item.name} phone={item.phone} address={item.address} star={item.star} typeService={item.type} serviceItem={item}/>
                                     }
-                                }) : <div className="italic mt-[50%]">Danh sách địa điểm trống</div>}
+                                })}
                             </div>
                         </div>
                     </div>

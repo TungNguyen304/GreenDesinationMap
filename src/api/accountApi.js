@@ -6,12 +6,10 @@ const accountApi = {
             params
         })
     },
-    getLogin: (params, token) => {
+    getLogin: (token) => {
         axiosClient.defaults.headers.common['Authorization'] = `Bearer ${token}`
         const url = "/user/userInfor"
-        return axiosClient.get(url, {
-            params
-        })
+        return axiosClient.get(url)
     },
     get: (id) => {
         const url = `/getaccounts/${id}`
