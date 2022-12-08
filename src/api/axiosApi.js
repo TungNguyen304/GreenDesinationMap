@@ -108,7 +108,7 @@ axiosClient.interceptors.response.use(function (response) {
         return {
             data: data
         }
-    } if(response.request.responseURL.includes('http://localhost:8080/comment/getCommentByPlaceId')) {
+    } else if(response.request.responseURL.includes('http://localhost:8080/comment/getCommentByPlaceId')) {
         const commentList = response.data.map((item) => {
             return comment(item.commentid, item.userModel.userid, item.userModel.username, item.content, item.userModel.avatar, item.postdate, item.postdate)
         })
@@ -125,6 +125,15 @@ axiosClient.interceptors.response.use(function (response) {
         })
         return {
             data: newCommentList
+        }
+    } else if(response.request.responseURL.includes("http://localhost:8080/notification/getByUserId/")) {
+        const notifyList = response.data.sort((a, b) => {
+            const prev = new Date(a.sentdate)
+            const next = new Date(b.sentdate)
+            return prev - next
+        })
+        return {
+            data: notifyList
         }
     }
     

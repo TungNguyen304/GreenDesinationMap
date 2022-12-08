@@ -48,6 +48,7 @@ function Mailbox({ title, type }) {
             const newMail = []
             let mailList = []
             const data = await notificationApi.getByUser(account.id)
+            console.log(data);
             loadRef.current && loadRef.current.classList.add("hidden")
             if (data.data.length > 0) {
                 let date = new Date(data.data[0].sentdate).toLocaleDateString()
@@ -75,6 +76,7 @@ function Mailbox({ title, type }) {
                         }
                     }
                 })
+                console.log(newMail);
                 setMails(newMail)
                 setMailStore(newMail)
             }
