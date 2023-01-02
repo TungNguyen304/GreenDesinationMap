@@ -270,8 +270,6 @@ function SearchBar({ hidden, ...props }) {
               d++
               return <SearchElement handleRegisterLocation={handleRegisterLocation} key={item?.place_id} item={item} recomment={recomment.current} setSelectPosition={setSelectPosition} positionList={positionList} />
             }
-
-
           }) : <div className='h-full flex justify-center items-center'>Không tìm thấy kết quả tìm kiếm</div>}
 
           {listPlace && listPlace.length !== 0 && d === 0 && <div className='h-full flex justify-center items-center'>Không tìm thấy kết quả tìm kiếm</div>}

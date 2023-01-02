@@ -22,7 +22,7 @@ function ServiceItem({ imageList, name, phone, address, imageListTemp, star, typ
         state: false,
         id: null
     })
-    const account = useSelector(state => state.accountReducer).user
+    const account = useSelector(state => state.accountReducer.user)
     const imgRef = useRef()
     
     const navigate = useNavigate()
@@ -60,7 +60,7 @@ function ServiceItem({ imageList, name, phone, address, imageListTemp, star, typ
 
     function handleLike(even) {
         even.stopPropagation()
-        if (account && even.target.farthestViewportElement) {
+        if (account && account.id && even.target.farthestViewportElement) {
             if (even.target.farthestViewportElement.style.fill !== 'var(--color_heart)') {
                 dispatch(setServiceIdInterest({
                     id: id,

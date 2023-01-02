@@ -82,7 +82,7 @@ function Preview() {
                 "country": "Việt Nam",
                 "city": currdentData.city ? currdentData.city : "",
                 "district": currdentData.district ? currdentData.district : "",
-                "ward": currdentData.ward ? currdentData.ward : "",
+                "ward": currdentData.ward ? currdentData.ward : "", 
                 "description": currdentData.description,
                 "star": 3,
                 "road": currdentData.road ? currdentData.road : "",

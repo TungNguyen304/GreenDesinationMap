@@ -40,7 +40,6 @@ function Interests() {
     //         const data = await imageApi.getAll()
     //         setImageList(data.data);
     //     })();
-
     // }, [])
 
     async function pushServiceInterest(id) {

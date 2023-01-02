@@ -37,6 +37,7 @@ function Management({ title, type }) {
             const data = await serviceApi.getByUserId(account.id)
                 .catch((err) => { })
             loadRef.current && loadRef.current.classList.add("hidden")
+            console.log(data.data);
             data && setServiceList([...data.data])
         })()
     }, [account.id])

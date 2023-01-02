@@ -8,6 +8,7 @@ function SearchElement({item, recomment, positionList, setSelectPosition, handle
         <ListItem
           button
           onClick={() => {
+            console.log(item);
             recomment.classList.add("hidden")
             setSelectPosition && setSelectPosition(item);
             handleRegisterLocation && handleRegisterLocation(item)

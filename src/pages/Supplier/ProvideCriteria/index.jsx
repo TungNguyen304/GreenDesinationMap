@@ -73,7 +73,7 @@ function ProvideCriteria() {
     return (<div>
         <div className={`flex h-[100vh] relative`}>
             <div style={{ "backgroundImage": "linear-gradient(to top, #441EA5, #CE247A)" }} className="w-[50%] max966:hidden flex justify-center items-center px-10">
-                <div className="text-6xl font-bold text-white italic">Tiếp theo, hãy chọn các tiêu chí <span className="text-green-600 underline">xanh</span> mà bạn muốn đăng ký trên ứng dụng của chúng thôi</div>
+                <div className="text-6xl font-bold text-white italic">Tiếp theo, hãy chọn các tiêu chí <span className="text-green-600 underline">xanh</span> mà bạn muốn đăng ký trên ứng dụng của chúng tôi</div>
             </div>
             <div className="w-[50%] max966:w-full h-full flex flex-col justify-center items-center px-[120px] max1100:px-[50px] max477:px-[10px] relative">
                 <div className="w-full">

@@ -49,6 +49,7 @@ axiosClient.interceptors.response.use(function (response) {
     else if((response.request.responseURL.includes(`http://localhost:8080/place/findByUserId/`)) || 
     response.request.responseURL === 'http://localhost:8080/place/information' || response.request.responseURL === 'http://localhost:8080/place/approved' || response.request.responseURL.includes(`http://localhost:8080/place/findPlacesByWishlistId/`)) {
         if(response.data) {
+            console.log(response.data);
             const data = response.data.map((e) => {
                 const startday = new Date(e.startday).toLocaleDateString("vi-VN")
                 const browserday = e.browserday ? new Date(e.browserday).toLocaleDateString("vi-VN") : null
