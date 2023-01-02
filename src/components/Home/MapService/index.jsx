@@ -41,7 +41,7 @@ function MapService({ isWishList, ...props }) {
     const [serviceList, setServiceList] = useState()
     useEffect(() => {
         !isWishList && (async() => {
-            const data = await serviceApi.getAll()
+            const data = await serviceApi.getGreenService()
             console.log(data);
             loadRef.current && loadRef.current.classList.add("hidden")
             showRef.current && showRef.current.classList.remove("hidden")

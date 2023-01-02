@@ -25,7 +25,7 @@ function Service({ typeService }) {
     const [services, setService] = useState([])
     useEffect(() => {
         (async () => {
-            const data = await serviceApi.getAll()
+            const data = await serviceApi.getGreenService()
             loadRef.current && loadRef.current.classList.add("hidden")
             showRef.current && showRef.current.classList.remove("hidden")
             showRef.current && showRef.current.classList.add("grid")

@@ -7,6 +7,12 @@ const serviceApi = {
             params
         })
     },
+    getGreenService: (params) => {
+        const url = '/place/approved'
+        return axiosClient.get(url, { 
+            params
+        })
+    },
     getById: (id) => {
         const url = `/place/${id}`
         return axiosClient.get(url)

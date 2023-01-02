@@ -37,7 +37,6 @@ function Host({ title, type }) {
             const newData = data.data.filter((item) => {
                 return new Date (item.sentdate).toLocaleDateString() === date.toLocaleDateString()
             })
-            console.log(newData);
             setNotifyList(newData)
         })()
     }, [account.id])

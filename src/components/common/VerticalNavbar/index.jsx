@@ -19,8 +19,8 @@ function VerticalNarbar({title, listNavItem, cx, style, setTypeMail}) {
         <div>
             <ul ref={wrapRef} className="mt-5">
                 {listNavItem && listNavItem.map((item, index) => {
-                    return <li className={`${index === 0 ? cx('active') : ''} rounded-lg italic`} onClick={(e) => {handleActive(e, index)}} key={index}>
-                        <div className="flex items-center rounded-lg hover:bg-[#c3c0c0] px-4 pt-[6px] pb-2 mt-2 cursor-pointer">
+                    return <li className={`${index === 0 ? cx('active') : ''} rounded-lg italic hover:!bg-[#c3c0c0]`} onClick={(e) => {handleActive(e, index)}} key={index}>
+                        <div className="flex items-center rounded-lg  px-4 pt-[6px] pb-2 mt-2 cursor-pointer">
                             <item.component className={`text-xl mr-3 shrink-0 ${index === 1 ? 'text-green-600' : index === 2 ? 'text-red-600' : ''}`}/>
                             <span>{item.name}</span>
                         </div>
