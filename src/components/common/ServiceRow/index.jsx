@@ -1,11 +1,9 @@
-import { useState, memo } from 'react'
+import { memo } from 'react'
 import { BsStarFill, BsStarHalf } from 'react-icons/bs'
-import { GrUpdate } from 'react-icons/gr'
+import { AiFillEdit } from 'react-icons/ai'
 import { RiDeleteBin5Fill } from 'react-icons/ri'
 import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
-import imageApi from '../../../api/imageApi'
-import { useEffect } from 'react'
 
 function ServiceRow({ imageList, place, setPopup }) {
     const navigate = useNavigate()
@@ -72,14 +70,18 @@ function ServiceRow({ imageList, place, setPopup }) {
                     })()
                 }</td>
                 <td>{item.startday}</td>
-                <td style={{"textAlign": `${item.browserday ? '' : 'center'}`}}>{item.browserday ? item.browserday : "----"}</td>
+                <td style={{ "textAlign": `${item.browserday ? '' : 'center'}` }}>{item.browserday ? item.browserday : "----"}</td>
                 <td>
-                    <div onClick={(e) => {e.stopPropagation()}} className='flex items-center'>
-                        <Link to="/host/registerservice" onClick={(e) => { handleUpdatePlace(e) }} className='block px-3 py-2 hover:brightness-90 active:scale-95 rounded-lg mr-2 bg-green-400'><GrUpdate /></Link>
-                        <button data-placeid={item.id} onClick={(e) => { setPopup({
-                            state: true,
-                            event: e
-                        }) }} className='px-3 py-2 hover:brightness-90 active:scale-95 rounded-lg bg-red-600'><RiDeleteBin5Fill className='pointer-events-none' /></button>
+                    <div onClick={(e) => { e.stopPropagation() }} className='flex items-center'>
+                        <Link to="/host/registerservice" onClick={(e) => { handleUpdatePlace(e) }} className='block px-3 py-2 hover:brightness-90 active:scale-95 rounded-lg mr-2 bg-green-700'>
+                            <AiFillEdit className='text-white' />
+                        </Link>
+                        <button data-placeid={item.id} onClick={(e) => {
+                            setPopup({
+                                state: true,
+                                event: e
+                            })
+                        }} className='px-3 py-2 hover:brightness-90 active:scale-95 rounded-lg bg-red-600 text-white'><RiDeleteBin5Fill className='pointer-events-none' /></button>
                     </div>
                 </td>
             </tr>
