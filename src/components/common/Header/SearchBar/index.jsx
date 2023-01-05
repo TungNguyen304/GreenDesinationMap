@@ -34,7 +34,7 @@ function SearchBar({ hidden, ...props }) {
 
   useEffect(() => {
     (async () => {
-      const data = await serviceApi.getAll()
+      const data = await serviceApi.getGreenService()
       setPositionList(data.data)
     })()
   }, [])
@@ -131,6 +131,7 @@ function SearchBar({ hidden, ...props }) {
             style={{ backgroundColor: "var(--primary)" }}
             className='h-full rounded-full w-full flex justify-center items-center hover:opacity-90 active:scale-[0.9] p-[5px] slg1250:p-[6px]'
             onClick={(e) => {
+              console.log(district, ward, serviceTypes);
               // Search
               if (typeSearch === 'full') {
                 searchText && handleDisplayTippy(e)
@@ -148,7 +149,8 @@ function SearchBar({ hidden, ...props }) {
                 fetch(`${NOMINATIM_BASE_URL}${queryString}`, requestOptions)
                   .then((response) => response.text())
                   .then((result) => {
-                    setListPlace(JSON.parse(result));
+                    console.log(JSON.parse(result));
+                      setListPlace(JSON.parse(result))
                   })
                   .catch((err) => console.log("err: ", err));
               }
@@ -232,17 +234,20 @@ function SearchBar({ hidden, ...props }) {
         <List className='h-full' component="nav" aria-label="main mailbox folders">
           {listPlace && listPlace.length !== 0 ? listPlace.map((item) => {
             if (district.length && ward.length && serviceTypes.length) {
-              if (district.includes('Quận ' + item.address.city_district) && ward.includes(item.address.suburb) && serviceTypes.includes(item.type)) {
+              if (district.includes(item.address.city_district) && ward.includes(item.address.suburb) && serviceTypes.includes(item.type)) {
                 d++
                 return <SearchElement key={item?.place_id} item={item} recomment={recomment.current} setSelectPosition={setSelectPosition} positionList={positionList} />
               }
             } else if (district.length && ward.length && !serviceTypes.length) {
-              if (district.includes('Quận ' + item.address.city_district) && ward.includes(item.address.suburb)) {
+              if(district.includes(item.address.city_district)) {
+                console.log(ward, item.address.suburb);
+              }
+              if (district.includes(item.address.city_district) && ward.includes(item.address.suburb)) {
                 d++
                 return <SearchElement handleRegisterLocation={handleRegisterLocation} key={item?.place_id} item={item} recomment={recomment.current} setSelectPosition={setSelectPosition} positionList={positionList} />
               }
             } else if (district.length && !ward.length && serviceTypes.length) {
-              if (district.includes('Quận ' + item.address.city_district) && serviceTypes.includes(item.type)) {
+              if (district.includes(item.address.city_district) && serviceTypes.includes(item.type)) {
                 d++
                 return <SearchElement handleRegisterLocation={handleRegisterLocation} key={item?.place_id} item={item} recomment={recomment.current} setSelectPosition={setSelectPosition} positionList={positionList} />
               }
@@ -252,7 +257,7 @@ function SearchBar({ hidden, ...props }) {
                 return <SearchElement handleRegisterLocation={handleRegisterLocation} key={item?.place_id} item={item} recomment={recomment.current} setSelectPosition={setSelectPosition} positionList={positionList} />
               }
             } else if (district.length && !ward.length && !serviceTypes.length) {
-              if (district.includes('Quận ' + item.address.city_district)) {
+              if (district.includes(item.address.city_district)) {
                 d++
                 return <SearchElement handleRegisterLocation={handleRegisterLocation} key={item?.place_id} item={item} recomment={recomment.current} setSelectPosition={setSelectPosition} positionList={positionList} />
               }

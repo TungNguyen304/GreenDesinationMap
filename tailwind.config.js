@@ -117,6 +117,9 @@ module.exports = {
         "min401max866": {
           "min": "401px",
           "max": "866px"
+        },
+        "min1500": {
+          "min": "1500px"
         }
       }
     },

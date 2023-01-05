@@ -98,7 +98,7 @@ function ServiceItem({ imageList, name, phone, address, imageListTemp, star, typ
         <div className={`relative mb-3 flex justify-center`}>
             <ServiceSlide imgList={imgList} hidden={hidden} previewPage={previewPage} wishList={wishList} handleLike={handleLike} isInterest={isInterest.state}  ref={imgRef} imageList={previewPage ? imageListTemp : imageList} type={type} typeComponent={typeComponent} id={id} />
         </div>
-        <div className={`max1380:flex max1380:flex-col max1380:items-center`}>
+        <div className={`max1380:flex max1380:flex-col max1380:items-center min1500:w-[280px] min1500:mx-auto`}>
             <div className="flex justify-between">
                 <span className={`oneline font-semibold text-lg text-[#222222]`}>{name}</span>
                 <span className="flex items-center ml-3">
