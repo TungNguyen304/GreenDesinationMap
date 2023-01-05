@@ -14,6 +14,7 @@ const cx = classNames.bind(style)
 
 function Service({ typeService }) {
     const searchList = useSelector(state => state.searchReducer.service)
+    console.log(searchList);
     const loadRef = useRef()
     const showRef = useRef()
 
@@ -21,7 +22,6 @@ function Service({ typeService }) {
         // reset scroll
         window.scroll(0, 0);
     })
-
     const [services, setService] = useState([])
     useEffect(() => {
         (async () => {

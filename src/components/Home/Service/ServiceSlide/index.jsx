@@ -3,14 +3,13 @@ import { BsHeartFill } from 'react-icons/bs'
 import { useSelector } from 'react-redux';
 import Left from '../../../common/Left'
 import Right from '../../../common/Right'
-import imageApi from '../../../../api/imageApi';
 import React, { useEffect } from 'react';
 import style from './serviceslide.module.scss'
 import classNames from 'classnames/bind';
-import { useState } from 'react';
 const cx = classNames.bind(style)
 
 function ServiceSlide({ typeComponent, imageList, type, previewPage, isInterest, handleLike, hidden, imgList }, ref) {
+    console.log(isInterest);
     const left = useRef()
     const right = useRef()
     const isSupplierPage = window.location.pathname.includes('/host')

@@ -58,7 +58,7 @@ axiosClient.interceptors.response.use(function (response) {
                     "name": item.imagename,
                     "key": item.imagekey
                 }))
-                const wishList = response.request.responseURL.includes(`http://localhost:8080/place/findPlacesByWishlistId/`) || response.request.responseURL === 'http://localhost:8080/place/information'
+                const wishList = response.request.responseURL.includes(`http://localhost:8080/place/findPlacesByWishlistId/`) || response.request.responseURL === 'http://localhost:8080/place/information' || response.request.responseURL === 'http://localhost:8080/place/approved'
                 ? e.wishListItemsCollection.map((item) => {
                     return {
                         userid: item.wishListsModel.userModel.userid,
