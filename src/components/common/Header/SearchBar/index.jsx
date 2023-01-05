@@ -54,6 +54,22 @@ function SearchBar({ hidden, ...props }) {
     }
   }
 
+  function addWard(address) {
+    if(!address.includes("Phường")) {
+      return "Phường " + address
+    }
+
+    return address
+  }
+
+  function addDistrict(address) {
+    if(!address.includes("Quận")) {
+      return "Quận " + address
+    }
+
+    return address
+  }
+
   function handleChangeSearchType() {
     if (changeSearchTypeRef.current.style.left === '0px') {
       changeSearchTypeRef.current.style.left = '50%'
@@ -234,35 +250,35 @@ function SearchBar({ hidden, ...props }) {
         <List className='h-full' component="nav" aria-label="main mailbox folders">
           {listPlace && listPlace.length !== 0 ? listPlace.map((item) => {
             if (district.length && ward.length && serviceTypes.length) {
-              if (district.includes(item.address.city_district) && ward.includes(item.address.suburb) && serviceTypes.includes(item.type)) {
+              if (district.includes(addDistrict(item.address.city_district)) && ward.includes(addWard(item.address.suburb)) && serviceTypes.includes(item.type)) {
                 d++
                 return <SearchElement key={item?.place_id} item={item} recomment={recomment.current} setSelectPosition={setSelectPosition} positionList={positionList} />
               }
             } else if (district.length && ward.length && !serviceTypes.length) {
-              if(district.includes(item.address.city_district)) {
-                console.log(ward, item.address.suburb);
+              if(district.includes(addDistrict(item.address.city_district))) {
+                console.log(ward, addWard(item.address.suburb));
               }
-              if (district.includes(item.address.city_district) && ward.includes(item.address.suburb)) {
+              if (district.includes(addDistrict(item.address.city_district)) && ward.includes(addWard(item.address.suburb))) {
                 d++
                 return <SearchElement handleRegisterLocation={handleRegisterLocation} key={item?.place_id} item={item} recomment={recomment.current} setSelectPosition={setSelectPosition} positionList={positionList} />
               }
             } else if (district.length && !ward.length && serviceTypes.length) {
-              if (district.includes(item.address.city_district) && serviceTypes.includes(item.type)) {
+              if (district.includes(addDistrict(item.address.city_district)) && serviceTypes.includes(item.type)) {
                 d++
                 return <SearchElement handleRegisterLocation={handleRegisterLocation} key={item?.place_id} item={item} recomment={recomment.current} setSelectPosition={setSelectPosition} positionList={positionList} />
               }
             } else if (!district.length && ward.length && serviceTypes.length) {
-              if (ward.includes(item.address.suburb) && serviceTypes.includes(item.type)) {
+              if (ward.includes(addWard(item.address.suburb)) && serviceTypes.includes(item.type)) {
                 d++
                 return <SearchElement handleRegisterLocation={handleRegisterLocation} key={item?.place_id} item={item} recomment={recomment.current} setSelectPosition={setSelectPosition} positionList={positionList} />
               }
             } else if (district.length && !ward.length && !serviceTypes.length) {
-              if (district.includes(item.address.city_district)) {
+              if (district.includes(addDistrict(item.address.city_district))) {
                 d++
                 return <SearchElement handleRegisterLocation={handleRegisterLocation} key={item?.place_id} item={item} recomment={recomment.current} setSelectPosition={setSelectPosition} positionList={positionList} />
               }
             } else if (!district.length && ward.length && !serviceTypes.length) {
-              if (ward.includes(item.address.suburb)) {
+              if (ward.includes(addWard(item.address.suburb))) {
                 d++
                 return <SearchElement handleRegisterLocation={handleRegisterLocation} key={item?.place_id} item={item} recomment={recomment.current} setSelectPosition={setSelectPosition} positionList={positionList} />
               }
