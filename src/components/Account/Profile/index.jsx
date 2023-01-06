@@ -273,7 +273,7 @@ function Profile() {
                                 </datalist>
                             </div>
                             <div className='w-full flex items-center border-b-2 border-solid border-gray-600 mb-5'>
-                                <input onChange={(e) => { setInfo({ ...info, "password": e.target.value }) }} value={info.password} defaultValue={info.password} className='w-full py-2 placeholder:text-gray-600' type="text" placeholder='Password' />
+                                <input onChange={(e) => { setInfo({ ...info, "password": e.target.value }) }} value={info.password} defaultValue={info.password} className='w-full py-2 placeholder:text-gray-600' type="password" placeholder='Password' />
                                 <MdLockOutline />
                             </div>
                             <div onClick={(e) => {
@@ -288,11 +288,11 @@ function Profile() {
                             </div>
                             <div ref={passwordRef} className='hidden'>
                                 <div className='w-full flex items-center border-b-2 border-solid border-gray-600 mb-5'>
-                                    <input onChange={(e) => { setInfo({ ...info, "newPass": e.target.value }) }} className='w-full py-2 placeholder:text-gray-600' type="text" placeholder='New Password' />
+                                    <input onChange={(e) => { setInfo({ ...info, "newPass": e.target.value }) }} className='w-full py-2 placeholder:text-gray-600' type="password" placeholder='New Password' />
                                     <MdLockOutline />
                                 </div>
                                 <div className='w-full flex items-center border-b-2 border-solid border-gray-600 mb-8'>
-                                    <input onChange={(e) => { setInfo({ ...info, "reNewPass": e.target.value }) }} className='w-full py-2 placeholder:text-gray-600' type="text" placeholder='Verify New Password' />
+                                    <input onChange={(e) => { setInfo({ ...info, "reNewPass": e.target.value }) }} className='w-full py-2 placeholder:text-gray-600' type="password" placeholder='Verify New Password' />
                                     <MdLockOutline />
                                 </div>
                             </div>
@@ -351,7 +351,7 @@ function Profile() {
                                 <span>{warnAvt}</span>
                             </div>}
                             <div className='flex justify-between mt-5'>
-                                <input ref={verifyInputRef} className='border border-solid border-black flex-1 pl-3 py-1 rounded-lg' type="text" placeholder='Nhập mật khẩu để xác thực...' />
+                                <input ref={verifyInputRef} className='border border-solid border-black flex-1 pl-3 py-1 rounded-lg' type="password" placeholder='Nhập mật khẩu để xác thực...' />
                                 <button onClick={(e) => handleVerifyPassword(e)} className='ml-3 py-1 px-3 bg-green-600 text-white rounded-lg'>Xác nhận</button>
                             </div>
                         </div>

@@ -100,11 +100,11 @@ function Register() {
                 </datalist>
             </div>
             <div className='w-full flex items-center border-b-2 border-solid border-gray-600 mb-5'>
-                <input onChange={(e) => {setInfo({...info, 'password': e.target.value})}} className='w-full py-2 placeholder:text-gray-600' type="text" placeholder='Password'/>
+                <input onChange={(e) => {setInfo({...info, 'password': e.target.value})}} className='w-full py-2 placeholder:text-gray-600' type="password" placeholder='Password'/>
                 <MdLockOutline/>
             </div>
             <div className='w-full flex items-center border-b-2 border-solid border-gray-600 mb-3'>
-                <input onChange={(e) => {setRepassword(e.target.value)}} className='w-full py-2 placeholder:text-gray-600' type="text" placeholder='Confirm Password'/>
+                <input onChange={(e) => {setRepassword(e.target.value)}} className='w-full py-2 placeholder:text-gray-600' type="password" placeholder='Confirm Password'/>
                 <MdLockOutline/>
             </div>
 
